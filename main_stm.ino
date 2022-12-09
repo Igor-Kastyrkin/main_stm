@@ -72,9 +72,9 @@
 
 #include "privod.h"
 
-//#define _OTLADKA_
+#define _OTLADKA_
 
-#define _EPROM1_
+//#define _EPROM1_
 
 #ifdef _EPROM1_
 
@@ -186,7 +186,7 @@ const unsigned long StartTelEEPROM = 510;
 unsigned long StrTelAddr = StartTelEEPROM;
 const byte TelIncriment = 30;
 #endif
-
+#endif
 
 // Используется при записи как значения по умолчанию
 String currSpeed = "S2";
@@ -196,7 +196,7 @@ String currStpAngl = "K22";
 String currRbStps  = "d65";
 String currMinStepRot = "m" + String(minRbtStep);
 
-#endif
+
 //byte nul_data = 3, one_data = 7, two_data = 11, three_data = 15;//, four_data = 19, six_data = 27;
 
 const unsigned long Com1Rate = 115200L;
@@ -2079,27 +2079,37 @@ void fSendState(StadyWork WorkSt, actions Action, long param)
         break;
       case shakeOn:
         Stp = "K60";
+#ifdef _EPROM1_
         writeString(Stp);
+#endif
         break;
       case shakeOff:
         Stp = "K61";
+#ifdef _EPROM1_
         writeString(Stp);
+#endif
         break;
       case turnLfst:
         Str1 = 'J';
         Str2 = String(param); // конвертируем в строку
         Str1.concat(Str2);
+#ifdef _EPROM1_
         writeString(Str1);
+#endif
         break;
       case turnRfst:
         Str1 = 'H';
         Str2 = String(param); // конвертируем в строку
         Str1.concat(Str2);
+#ifdef _EPROM1_
         writeString(Str1);
+#endif
         break;
       case aPause:
         Stp = "K46";
+#ifdef _EPROM1_
         writeString(Stp);
+#endif
         break;
 
 
@@ -3145,8 +3155,8 @@ void fOtladkaMes(String mes)
 #ifdef _TEL_EEPROM_
   writeTelString(mes);
 #endif
-  lcd.print(mes);
-  //  delay(500);
+//  lcd.print(mes);
+  delay(15);
 }
 
 
@@ -3175,8 +3185,8 @@ void fOtladkaMes(long mes)
   Serial.print(data);
 #endif
 #endif
-  lcd.print(mes);
-  //  delay(1500);
+//  lcd.print(mes);
+    delay(15);
 }
 
 
@@ -3402,10 +3412,10 @@ unsigned strlen1(const char *str)
 
 
 
-#ifdef _EPROM1_
 
 void PlayFromEEPROM(bool zoom)
 {
+#ifdef _EPROM1_
   if (stWork == StRec) return;
   fOtladkaMes("PlayStarts");
   //  byte sizeOfRFdata = 30;
@@ -3451,10 +3461,11 @@ void PlayFromEEPROM(bool zoom)
       zoom = LoopPlay;
     }  // for...
   } while (zoom);
+#endif
   Serial1.println("PlayStops");
 }
 
-#endif
+
 
 
 
