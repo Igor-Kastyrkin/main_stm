@@ -31,7 +31,8 @@ enum motor {telega};
 enum MKmotor {knee, foot, kal, zero};
 enum StadyWork {StRec, StPlay, StWork};
 enum actions {walkFf, walkBk, turnL, turnR, wait, standStil, telCenter, goFast, goSlow,
-			shakeOn, shakeOff, turnLfst, turnRfst, aPause};
+		shakeOn, shakeOff, turnLfst, turnRfst, turnLbst,
+		turnRbst, aPause, UgolL, UgolR};
 
 enum dirflg {left, right, left_right, right_left, middle};
 
