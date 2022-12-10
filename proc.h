@@ -44,11 +44,11 @@ enum leedLeg {leftLeed, rightLeed, noLeed};
 
 
 
-byte rotPlace(		posOfMotors & mot, // структура с исходными данными двигателей
+byte rotPlace(	  posOfMotors & mot, // структура с исходными данными двигателей
                   short minStep,      // угол маленькие шашки, для полного поворота
-                  short newOrient)  ;
+                  short newOrient, regimRaboty &mode)  ;
 
-bool Leg_fn(robot_leg leg, regimRaboty regim, leg_dir dir, posOfMotors&, long lDeep = 0);
+bool Leg_fn(robot_leg leg, regimRaboty &regim, leg_dir dir, posOfMotors&, long lDeep = 0);
 
 bool fBreak(robot_leg leg, MKmotor Uzel, /*RF24&,*/posOfMotors& );
 
@@ -58,7 +58,7 @@ bool change_orient(rot_dir dir, posOfMotors&, float);
 
 bool orient_steps(robot_leg leg, step_dir dir, posOfMotors&, short min_stp);
 
-void StepsManage(/*RF24&,*/posOfMotors&);
+void StepsManage(posOfMotors&,regimRaboty &mode);
 
 void fSendState(StadyWork WorkSt, actions Action,/* RF24&,*/long param = 0/*,posOfMotors&*/);
 
@@ -87,6 +87,6 @@ void fErrorMes(String mes);
 
 void fOtladkaMes(String mes);
 
-bool fShakeHandWithRotation(/*robot_leg leg, */posOfMotors & mot, const short stepAngle = 360);
+bool fShakeHandWithRotation(posOfMotors & mot, const short stepAngle = 360);
 
 #endif

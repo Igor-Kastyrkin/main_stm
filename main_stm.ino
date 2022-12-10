@@ -32,7 +32,7 @@
   При поворотах с дошаганием, делает лишние движения, то есть два
   раза делает шаги вперед.
   Вместо того, чтобы идти назад, всегда идет вперед
-
+  Вначале не поворачивал
 
   Из видео:
   1. После опускания ноги, нажал назад. Он сделал цикл из перемещений тележки
@@ -217,7 +217,7 @@ const unsigned long Com2Rate = 115200L;
 rot_dir directAngle;
 robot_leg rLeg;
 robot_leg old_leg = rLeg;
-regimRaboty mode = fast;
+//regimRaboty mode = fast;
 leg_dir LegUpL = vtianut, LegUpR = vtianut;
 MKmotor uzel;
 //dirflg dir_flg = middle;
@@ -471,6 +471,7 @@ void loop()
 
 byte RF_messege_handle(char *RF_data, posOfMotors & mot)
 {
+  static regimRaboty mode = fast;
   long turn_angle = 0;
   static long stepAngle = calc_angle(30, m_stp); // +++++
   short m_stp = 2;
@@ -536,14 +537,14 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
           //		  fOtladkaMes("maxStepsCount = ");
           //		  fOtladkaMes(maxStepsCount);
           //		  fOtladkaMes("\r\n");
-          walkBackward(stepAngle, mot);
+          walkBackward(stepAngle,mode, mot);
           break;
         case 14: //forward шагаем
           fOtladkaMes("forward");
           //		  fOtladkaMes("maxStepsCount = ");
           //		  fOtladkaMes(maxStepsCount);
           //		  fOtladkaMes("\r\n");
-          walkForward(stepAngle, mot);
+          walkForward(stepAngle,mode, mot);
           break;
         case 19: // telega vpravo
           telega_right();
@@ -676,12 +677,12 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
         case 11: // поворот влево
           //          change_orient(leftA, mot,minRbtStep);
 
-          fStepFf(leed_leg, -minRbtStep);
+    //      fStepFf(leed_leg, -minRbtStep);
           break;
         case 12: // поворот вправо (это назад идти)
           //          change_orient(rightA, mot,minRbtStep);
 
-          fStepFf(leed_leg, minRbtStep);
+   //       fStepFf(leed_leg, minRbtStep);
           break;
         case 40:
           seetUpDown(mot);
@@ -756,7 +757,7 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
           break;
         case 45:
           fOtladkaMes("StandStill");
-          StepsManage(mot);
+          StepsManage(mot, mode);
           break;
         case 46:
           //pause
@@ -782,11 +783,11 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
           break;
         // качаем один раз
         case 60:
-          fShake(mot, 0);
+          fShake(mot,mode, 0);
           fAddInActionInRecordMode(shakeOn);
           break;
         case 61: // переход в исходное после качания
-          fShake(mot, 1);
+          fShake(mot, mode,1);
           fAddInActionInRecordMode(shakeOff);
           break;
         case 62: // переход в исходное после качания
@@ -798,7 +799,7 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
         case 64:
           // поворот вправо
           fAddInActionInRecordMode(wait);
-          rotPlace(mot, minRbtStep, UgolPovorotaR, 0);
+          rotPlace(mot, minRbtStep, UgolPovorotaR, mode);
           // При смене ориентации не стоит отправлять об этом сообщение в ПК,
           // т.к. подтверждение этой операции не требуется
           delay(10);
@@ -810,7 +811,7 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
         case 65:
           // поворот влево
           fAddInActionInRecordMode(wait);
-          rotPlace(mot, minRbtStep, UgolPovorotaL, 0);
+          rotPlace(mot, minRbtStep, UgolPovorotaL, mode);
           // При смене ориентации не стоит отправлять об этом сообщение в ПК,
           // т.к. подтверждение этой операции не требуется
           delay(10);
@@ -822,28 +823,28 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
         case 66:
           // повернуть вправо вперед
           fAddInActionInRecordMode(wait);
-          rotateRightFF(UgolPovorotaR, mot);
+          rotateRightFF(UgolPovorotaR, mode, mot);
           fAddInActionInRecordMode(turnRfst);
           break;
 
         case 67:
           // повернуть влево вперед
           fAddInActionInRecordMode(wait);
-          rotateLeftFF(UgolPovorotaL, mot);
+          rotateLeftFF(UgolPovorotaL, mode, mot);
           fAddInActionInRecordMode(turnRfst);
           break;
 
         case 68:
           // повернуть вправо назад
           fAddInActionInRecordMode(wait);
-          rotateRightBK(UgolPovorotaR, mot);
+          rotateRightBK(UgolPovorotaR,mode,  mot);
           fAddInActionInRecordMode(turnRbst);
           break;
 
         case 69:
           // повернуть влево назад
           fAddInActionInRecordMode(wait);
-          rotateLeftBK(UgolPovorotaL, mot);
+          rotateLeftBK(UgolPovorotaL, mode, mot);
           fAddInActionInRecordMode(turnRbst);
           break;
 
@@ -1000,20 +1001,20 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
         bPause == 1 ? bPause = 0 : bPause = 1;
       }
       break;
-    case 'J': // поворот влево
+/*    case 'J': // поворот влево
       turn_angle = x;
       fAddInActionInRecordMode(wait);
-      rotateLeftFF(turn_angle, mot);
+      rotateLeftFF(turn_angle,mode, mot);
       fAddInActionInRecordMode(turnLfst, turn_angle);
       break;
     case 'H': // поворот вправо
       turn_angle = x;
       fAddInActionInRecordMode(wait);
-      rotateRightFF(turn_angle, mot);
+      rotateRightFF(turn_angle, mode, mot);
       fAddInActionInRecordMode(turnRfst, turn_angle);
 
       break;
-
+*/
     default:
       fErrorMes("unknownCmd:" + String(cmdR));
       fErrorMes(String(RF_data));
@@ -1036,7 +1037,7 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
 
 
 
-byte walkForward(long stepAngle, posOfMotors & mot)
+byte walkForward(long stepAngle, regimRaboty &mode, posOfMotors & mot)
 {
   /*  if (stWork == StRec)
     {
@@ -1054,18 +1055,7 @@ byte walkForward(long stepAngle, posOfMotors & mot)
     {
       // поворачиваемся вперед на правой ноге на нужный угол
       if (orient_steps(stepAngle, right_leg, forward, mot) && (stWork == StWork)) return 1;
-      /*      halfLengthStepsCount++;
-            if (fBreak(not_leg, foot, mot))
-            { // отправляем в ПК информацию о количестве пройденных шагов, направлении движения
-              fSendState(stWork, Actions, halfLengthStepsCount);
-              return 1;
-            }
-            if ((stWork == StPlay) && (halfLengthStepsCount >= maxStepsCount))
-            {
-              //      fSendState(stWork, Actions, radio, mot);
-              fOtladkaMes("Reached");
-              return 0;
-            }*/
+
       // опускаем левую ногу (будем стоять на обоих)
       if (Leg_fn(left_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
       if (fStepsCounter(mot, halfLengthStepsCount)) return 1;
@@ -1077,19 +1067,8 @@ byte walkForward(long stepAngle, posOfMotors & mot)
       if (Leg_fn(right_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
       // поворачиваемся на левой ноге
       if (orient_steps(stepAngle, left_leg, forward, mot) && (stWork == StWork)) return 1;
-      /*      halfLengthStepsCount++;
-            if (fBreak(not_leg, foot, mot))
-            {
-              fSendState(stWork, Actions, halfLengthStepsCount);
-              return 1;
-            }
-            if ((stWork == StPlay) && (halfLengthStepsCount >= maxStepsCount))
-            { // пройденно нужное количество шагов, поэтому выходим
-              //      fSendState(stWork, Actions, radio, mot);
-              fOtladkaMes("Reached");
-              return 0;
-            } */
-      // опускаем правую ногу
+
+     // опускаем правую ногу
       if (Leg_fn(right_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
       if (fStepsCounter(mot, halfLengthStepsCount)) return 1;
       // перевозим тележку вправо
@@ -1284,7 +1263,7 @@ byte walkForward(long stepAngle, posOfMotors & mot)
 
 
 
-byte walkBackward(long stepAngle, posOfMotors & mot)
+byte walkBackward(long stepAngle, regimRaboty &mode, posOfMotors & mot)
 {
   /*
     if (((RightLegCurrentSteps - LeftLegCurrentSteps) < stepsDepthInSteps) && (RightLegCurrentSteps - LeftLegCurrentSteps > 0)) // стоим на правой ноге?
@@ -1755,7 +1734,7 @@ void fCalibration(UART_Serial & lSer, UART_Serial & rSer, posOfMotors & mot)
   delay(15);
   // после калибровки установить режим с поднятыми ногами
   fOtladkaMes("EnergySaveMode");
-  mode = energySaving;
+//  mode = energySaving;
   // установить угол шагания 30 градусов
   fOtladkaMes("30 Degree");
   currStpAngl[1] = '2'; currStpAngl[2] = '2';
@@ -2006,7 +1985,7 @@ bool fBreak(robot_leg leg, MKmotor Uzel, posOfMotors & mot)
 
 
 // опускаем поднятую ногу
-void StepsManage(posOfMotors &mot)
+void StepsManage(posOfMotors &mot, regimRaboty &mode)
 {
   //  fOtladkaMes("StepManage");
   if (LeftLegCurrentSteps != RightLegCurrentSteps)
@@ -2253,8 +2232,10 @@ void fSendState(StadyWork WorkSt, actions Action, long param)
 
 
 */
-bool Leg_fn(robot_leg leg, regimRaboty regim, leg_dir dir, posOfMotors & mot, long lDeep)
+bool Leg_fn(robot_leg leg, regimRaboty &regim, leg_dir dir, posOfMotors & mot, long lDeep)
 {
+// глобальные переменные: LeftLegCurrentSteps, CurrentZero,stepsDepthInSteps,
+// old_leg,RightLegCurrentSteps,LegUpL
   fOtladkaMes("Leg_up/dn");
   old_leg = leg;
   bool out = 0;
@@ -3094,6 +3075,7 @@ bool orient_steps(long stepAngle, robot_leg leg, step_dir dir, posOfMotors & mot
           angleR =  rbOrient * calc_angle(gradus, m_stp) * 2 + stepAngle;
           angleL = -rbOrient * calc_angle(gradus, m_stp) * 2 - stepAngle;
           leed_leg = rightLeed;
+		  fOtladkaMes("VozmozhnoPereputanoNapravlenie");
         }
       }
       RightFootCurrentSteps = angleR;
@@ -3321,12 +3303,14 @@ void fOtladkaMes(long mes)
 
 
 
-//byte fReadData(char *){return 0;}
+
+
+//    -------	ПОВОРОТЫ С ДОШАГИВАНИЕМ  -------
 
 //   posOfMotors & mot,  структура с исходными данными двигателей
 //  short minStep,       угол маленькие шашки, для полного поворота
 //    short newOrient)    на какой итоговый угол нужно повернуться относительно текущего положения
-byte rotPlace(posOfMotors & mot, short minStep, short newOrient, long stepAngle)
+byte rotPlace(posOfMotors & mot, short minStep, short newOrient, regimRaboty &mode)
 {
   // если текущее положение равно новому,  то нужно выйти
   /*
@@ -3337,21 +3321,15 @@ byte rotPlace(posOfMotors & mot, short minStep, short newOrient, long stepAngle)
     }
   */
   //   неважно в какую сторону должен пытаться идти робот
-  //  float oldStepAngle = stepAngle; // запоминаем прежнее значение угла
   fOtladkaMes("AbsUgolDo=" + String(rbOrient));
-  //  fOtladkaMes("newOrient=" + String(newOrient));
-  //  stepAngle = 0;                  // обнуляем его
   short old_Orient = rbOrient;    // запоминаем прежнее значение ориентации
-  //  rot_dir turn_dir;
   // защита от противоположного направления шажков от основного направления поворота
   if (newOrient < 0) // если новое значение угла меньше нуля
   {
-    //   turn_dir = leftA;  // то присваиваем влево
     if (minStep > 0) minStep = - minStep; //
   }
   if (newOrient > 0)
   {
-    //    turn_dir = rightA;
     if (minStep < 0) minStep = abs(minStep); //
   }
 
@@ -3400,7 +3378,6 @@ byte rotPlace(posOfMotors & mot, short minStep, short newOrient, long stepAngle)
         if (Leg_fn(left_leg, mode, vtianut, mot) && (stWork == StWork)) break;
         // поворачиваемся вперед на правой ноге на нужный угол
         if (orient_steps(0, right_leg, dir, mot) && (stWork == StWork)) break;
-        //	    change_orient(turn_dir, mot, minStep);
         // опускаем левую ногу (будем стоять на обоих)
         if (Leg_fn(left_leg, mode, vytianut, mot) && (stWork == StWork)) break;
         //         if (fBreak(left_leg, knee)) break;
@@ -3442,7 +3419,6 @@ byte rotPlace(posOfMotors & mot, short minStep, short newOrient, long stepAngle)
     {
       // поворачиваемся вперед на правой ноге на нужный угол
       orient_steps(0, right_leg, dir, mot);
-      //	  change_orient(turn_dir, mot, old_Orient + newOrient - rbOrient);
       // опускаем левую ногу (будем стоять на обоих)
       Leg_fn(left_leg, mode, vytianut, mot);
       // перевозим тележку влево
@@ -3662,7 +3638,7 @@ bool fstandStill(void)
 
 
 
-
+/*
 
 
 
@@ -3799,7 +3775,7 @@ byte fStepBk(leedLeg leedLgOgj, short angle)
 }
 
 
-
+*/
 
 
 
@@ -4081,10 +4057,10 @@ void foot_rotation(robot_leg leg, short direction, short angle, short times, pos
 // то в другую сторону
 void demo1(void)
 {
-  regimRaboty oldmode = mode;
+//  regimRaboty oldmode = mode;
   posOfMotors mot; // для совместимости
   // rot_dir dir;
-  mode = energySaving;
+  regimRaboty mode = energySaving;
 
   seetUpDown(mot, 1); // привстать
 
@@ -4106,11 +4082,11 @@ void demo1(void)
     if (Leg_fn(left_leg, mode, vytianut, mot) && (stWork == StWork)) goto skip;
   }
 skip:
-  if (oldmode == fast)
-  {
-    seetUpDown(mot, 2); // присесть
-    mode = fast;
-  }
+//  if (oldmode == fast)
+ // {
+ //   seetUpDown(mot, 2); // присесть
+ //   mode = fast;
+ // }
   stWork = StWork;
 }
 
@@ -4132,12 +4108,14 @@ skip:
 // становится в центр
 bool demo2(posOfMotors & mot)
 {
+  regimRaboty mode = energySaving;
+  seetUpDown(mot, 1);
   long stepAngle = calc_angle(1, m_stp);
   stWork = StPlay;
   while (1)
   {
     maxStepsCount = 4;
-    if (walkForward(stepAngle, mot)) break;
+    if (walkForward(stepAngle, mode, mot)) break;
 
     telega_to_center();
 
@@ -4147,7 +4125,7 @@ bool demo2(posOfMotors & mot)
     seetUpDown(mot);
 
     maxStepsCount = 4;
-    if (walkBackward(stepAngle, mot)) break;
+    if (walkBackward(stepAngle, mode, mot)) break;
 
     seetUpDown(mot);
     delay(2000);
@@ -4176,35 +4154,36 @@ bool demo2(posOfMotors & mot)
 
 void demo3(posOfMotors & mot)
 {
+  regimRaboty mode = fast;
   long stepAngle = calc_angle(1, m_stp);
   stWork = StPlay;
   // 4 шага вперед
   maxStepsCount = 4;
-  walkForward(stepAngle, mot);
+  walkForward(stepAngle,mode, mot);
   // поворот влево
   //  oldOrient = rbOrient;
-  rotPlace(mot, 30, 90, stepAngle);
+  rotPlace(mot, 30, 90,  mode);
   Actions = turnL;
 
   // 4 шага вперед
-  walkForward(stepAngle, mot);
+  walkForward(stepAngle,mode, mot);
   // поворот влево
   //  oldOrient = rbOrient;
-  rotPlace(mot, 30, 90, stepAngle);
+  rotPlace(mot, 30, 90,  mode);
   Actions = turnL;
 
   // 4 шага вперед
-  walkForward(stepAngle, mot);
+  walkForward(stepAngle, mode, mot);
   // поворот влево
   //  oldOrient = rbOrient;
-  rotPlace(mot, 30, 90, stepAngle);
+  rotPlace(mot, 30, 90,  mode);
   Actions = turnL;
 
   // 4 шага вперед
-  walkForward(stepAngle, mot);
+  walkForward(stepAngle, mode, mot);
   // поворот влево
   //  oldOrient = rbOrient;
-  rotPlace(mot, 30, 90, stepAngle);
+  rotPlace(mot, 30, 90,  mode);
   Actions = turnL;
 
   stWork = StWork;
@@ -4247,7 +4226,7 @@ long RecordingTime(void)
 // Качаемся из стороны в сторону
 // если режим равен нулю, то качаемся
 // если режим равен 1, то возвращаемся в исходное положение
-byte fShake(posOfMotors & mot, const byte mode1)
+byte fShake(posOfMotors & mot, const regimRaboty &mode, const byte mode1)
 {
   telega_to_center();
   //Если стоим на вытянутых, в режиме экономичном
@@ -4442,7 +4421,7 @@ bool fLegUpToPos(posOfMotors & mot, long pos)
 }
 
 //Поворот вперед на правой ноге если смотреть сзади
-bool rotateRightFF(short stepAngle, posOfMotors & mot)
+bool rotateRightFF(short stepAngle,regimRaboty &mode, posOfMotors & mot)
 {
   fOtladkaMes("PovorotVpravoVpered");
   if (fstandStill())
@@ -4461,7 +4440,7 @@ bool rotateRightFF(short stepAngle, posOfMotors & mot)
   return 1;
 }
 
-bool rotateRightBK(short stepAngle, posOfMotors & mot)
+bool rotateRightBK(short stepAngle,regimRaboty &mode, posOfMotors & mot)
 {
   fOtladkaMes("PovorotVpravoNazad");
 
@@ -4482,7 +4461,7 @@ bool rotateRightBK(short stepAngle, posOfMotors & mot)
 }
 
 
-bool rotateLeftFF(short stepAngle, posOfMotors & mot)
+bool rotateLeftFF(short stepAngle,regimRaboty &mode, posOfMotors & mot)
 {
   fOtladkaMes("PovorotVlevoVpered");
 
@@ -4502,7 +4481,7 @@ bool rotateLeftFF(short stepAngle, posOfMotors & mot)
 }
 
 
-bool rotateLeftBK(short stepAngle, posOfMotors & mot)
+bool rotateLeftBK(short stepAngle,regimRaboty &mode, posOfMotors & mot)
 {
   fOtladkaMes("PovorotVlevoNazad");
   if (fstandStill())
@@ -4677,7 +4656,7 @@ bool fShakeHandWithRotation(posOfMotors & mot, const short stepAngle)
   // {
   // Поднимаем правую ногу если смотреть сзади
   //  if (Leg_fn(left_leg, energySaving, vtianut, mot) && (stWork == StWork)) return 1;
-  mode = energySaving;
+  regimRaboty mode = energySaving;
   if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1;
   // поднимаем на половину высоты
   if (Leg_fn(left_leg, mode, vtianut, mot, midle_pos) && (stWork == StWork)) return 1;
