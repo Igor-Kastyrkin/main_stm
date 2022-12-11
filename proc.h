@@ -48,17 +48,20 @@ byte rotPlace(	  posOfMotors & mot, // структура с исходными 
                   short minStep,      // угол маленькие шашки, для полного поворота
                   short newOrient, regimRaboty &mode)  ;
 
-bool Leg_fn(robot_leg leg, regimRaboty &regim, leg_dir dir, posOfMotors&, long lDeep = 0);
+bool Leg_fn(robot_leg leg, const regimRaboty &regim, leg_dir dir, posOfMotors&,
+const long &CurrentZero, long &LeftLegCurrentSteps,long &RightLegCurrentSteps,
+			const long &stepsDepthInSteps, long lDeep = 0);
 
 bool fBreak(robot_leg leg, MKmotor Uzel, /*RF24&,*/posOfMotors& );
 
 bool fAnswerWait(robot_leg leg, MKmotor Uzel, posOfMotors&);
 
-bool change_orient(rot_dir dir, posOfMotors&, float);
+// bool change_orient(rot_dir dir, posOfMotors&, float);
 
-bool orient_steps(robot_leg leg, step_dir dir, posOfMotors&, short min_stp);
+bool orient_steps(long stepAngle, robot_leg leg, step_dir dir, posOfMotors&, long &RightFootCurrentSteps, 
+   long &LeftFootCurrentSteps, const long &stepsDepthInSteps, const long &RightLegCurrentSteps, const long &LeftLegCurrentSteps);
 
-void StepsManage(posOfMotors&,regimRaboty &mode);
+void StepsManage(posOfMotors&,regimRaboty &mode, long &CurrentZero, long &LeftLegCurrentSteps, long &RightLegCurrentSteps, long &stepsDepthInSteps);
 
 void fSendState(StadyWork WorkSt, actions Action,/* RF24&,*/long param = 0/*,posOfMotors&*/);
 
@@ -77,9 +80,9 @@ byte ReadStream(char&);
 
 long calc_angle(unsigned short,byte);
 
-void telega_to_center(void);
+void telega_to_center(const long &RightLegCurrentSteps, const long &LeftLegCurrentSteps);
 
-byte seetUpDown(posOfMotors & mot, const byte mode = 0);
+byte seetUpDown(posOfMotors & mot, long &CurrentZero,long &LeftLegCurrentSteps, long &RightLegCurrentSteps,  const byte mode = 0);
 
 void fAddInActionInRecordMode(actions Action, long param = 0);
 
