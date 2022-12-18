@@ -134,7 +134,7 @@ class UART_Serial
     //    void prepareMessage1(/*uint8_t dev, */uint8_t cmd, long data, uint8_t length);
     //    void prepareMessage2(/*uint8_t dev, */uint8_t cmd, long data1, long data2, uint8_t length);
     //    void prepareMessage3(/*uint8_t dev, */uint8_t cmd, long data1, long data2, long data3, uint8_t length);
-
+    // переписать юинт8т в чар
     void prepareMessage(uint8_t cmd);
     void prepareMessage(uint8_t cmd, long data);
     //    void prepareMessage(uint8_t cmd, long data1, long data2);

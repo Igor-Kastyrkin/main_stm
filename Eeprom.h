@@ -18,6 +18,7 @@ void writeEEPROM(int deviceaddress, unsigned int eeaddress, byte data);
 
 byte readEEPROM(byte deviceaddress, unsigned int eeaddress);
 
+bool i2cScan(bool&,bool&);
 
 void PlayFromEEPROM(bool zoom);
 

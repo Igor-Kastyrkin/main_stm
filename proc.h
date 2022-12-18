@@ -70,7 +70,7 @@ bool Leg_fn(robot_leg leg, const regimRaboty &regim, leg_dir dir, posOfMotors&,
 
 bool fBreak(robot_leg leg, MKmotor Uzel, /*RF24&,*/posOfMotors& );
 
-bool fAnswerWait(robot_leg leg, MKmotor Uzel, posOfMotors&);
+bool fAnswerWait(robot_leg leg, MKmotor Uzel, posOfMotors&,  char cL='T',  char cR ='T');
 
 // bool change_orient(rot_dir dir, posOfMotors&, float);
 
