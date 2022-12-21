@@ -34,6 +34,11 @@
   Вместо того, чтобы идти назад, всегда идет вперед
   Вначале не поворачивал
 
+  21.12.22
+  Уменьшил задиржку при включении
+  
+  
+  
   Из видео:
   1. После опускания ноги, нажал назад. Он сделал цикл из перемещений тележки
   2. потом вперед и пошел вперед потом опять опустил и стал перемещать туда сюда.
@@ -236,7 +241,9 @@ AccelStepper* motorLink[Motor_number];
 
 #include "math.h"
 
+
 const int baudRateCom1 = 9600;
+
 
 void setup()
 {
@@ -277,7 +284,7 @@ void setup()
   delay(200); // +200
   motorLink[0] = new AccelStepper(AccelStepper::DRIVER, StepPin, DirPin);
 
-  delay(3400); // +3400
+  delay(2000); // +3400
 #ifdef _BUILTIN_LED_ON_
   digitalWrite(LED_BUILTIN, LOW);
 #endif
@@ -308,13 +315,16 @@ void setup()
 #endif
   Serial1.println("");
   Serial1.println("");
-  Serial1.println("-------------------------------------------------------------");
+  Serial1.println("_-_-_-_-_-_-_-_-_-_-_-_");
+  Serial1.println("-_-_-_-_-_-_-_-_-_-_-_-");
+  delay(50);
+  Serial1.println("");
   Serial1.println("Loading..");
   delay(10);
 
 #ifdef _CHKDATA_
   // long waitTimer;
-  delay(6000); // +4000
+  delay(2000); // +6000
   // очистка буфера от возможного мусора
   while ((SerL.handle_serial() < 0) ||
          (SerR.handle_serial() < 0)) {};
@@ -374,6 +384,8 @@ void setup()
     #endif
   */
   
+  
+  //   ————————LOOP—————————
 while(1)
 {
   //  byte sizeOfRFdata = 60;
@@ -729,8 +741,8 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
           }
           if (stWork == StRec)
           {
-            StartRecordTime = millis();
             Serial1.println("RecIsOn");
+            StartRecordTime = millis();
             //           fOtladkaMes("StrAdr1 = " + String(StrAddr));
             StrAddr = StartEEPROM;
             writeString(currSpeed);
@@ -776,8 +788,8 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
           //pause
           //одиночная пауза
           //wait вызывается  всегда, пауза просто вставляется в него
+          bPause? bPause = 0:bPause = 1;
           fAddInActionInRecordMode(aPause);
-          bPause == 1 ? bPause = 0 : bPause = 1;
           break;
         case 50: // обработка команды загрузки данных из ПК
           //       fDload(); // функция загрузки
@@ -803,7 +815,7 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
           fShake(mot, mode,1);
           fAddInActionInRecordMode(shakeOff);
           break;
-        case 62: // переход в исходное после качания
+        case 62: // 
           fRoll(mot);
           break;
         case 63:
@@ -1016,8 +1028,8 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
 
       else if (bPause)
       {
-        do {} while (RecordingTime() < x_l);
-        bPause == 1 ? bPause = 0 : bPause = 1;
+        delay(x_l);
+        bPause = 0;
       }
       break;
 /*    case 'J': // поворот влево
@@ -2077,13 +2089,10 @@ void StepsManage(posOfMotors &mot, regimRaboty &mode)
 // Отправка текущего состояния для записи и воспроизведения
 void fSendState(StadyWork WorkSt, actions Action, long param)
 {
-  // при записи, после того как ПК отправил команду повернуть на МК
-  // он записывает в файл свою команду и ждет от МК сообщение о пройденном
-  // количестве шагов для записи их в файл. После обнуляем кол. шагов
-  // В режиме чтения нужно просто отправить количество пройденных шагов
-  // чтобы ПК знал, что нужно выполнять новое действие.
+  static bool oPause=0;
+  static long lPreviosCmdTime = 0;
   //  char   Str3[50];
-  String out = "";
+//  String out = "";
   if ((WorkSt == StRec))
   {
     String Stp  = "";
@@ -2097,155 +2106,126 @@ void fSendState(StadyWork WorkSt, actions Action, long param)
         //        delay(20);
         Str1 = "s";
         Str2 = String(param); // число шагов конвертируем в строку
-        //       ltoa(halfLengthStepsCount, Str2, 10);
         Str1.concat(Str2);  // добавляем к 's' число шагов и сохраняем в Str1
-        //    Str1 += Str2;
-        //    strcat(Str1, Str2);
 
-#ifdef _EPROM1_
-        //     Str1.toCharArray(Str3, Str1.length() + 1); // конвертируем из String в
-        writeString(Str1);
-        //        fOtladkaMes(readString(StrAddr - incriment));
-        //		Stp.toCharArray(Str3, Stp.length() + 1);
-        writeString(Stp);
-        //        fOtladkaMes(readString(StrAddr - incriment));
-        //	fOtladkaMes("StringAdr2 = " + String(StrAddr));
-
-#endif
-        param = 0;
         break;
-      case walkBk:
+
+	  case walkBk:
         Stp = "K13"; // малая s означает количество пройденных шагов
         Str1 = "s";
         Str2 = String(param); // число шагов конвертируем в строку
-        //        Str1 += Str2;  // добавляем к 's' число шагов и сохраняем в Str1
         Str1.concat(Str2);
-#ifdef _EPROM1_
-        //    Str1.toCharArray(Str3, Str1.length() + 1); // конвертируем из String в
-        writeString(Str1);
-        //        fOtladkaMes(readString(StrAddr - incriment));
-        //	Stp.toCharArray(Str3, Stp.length() + 1);
-        writeString(Stp);
-        //        fOtladkaMes(readString(StrAddr - incriment));
-#endif
         break;
-      //    case constCmd:
-      case turnL:
-#ifdef _EPROM1_
-        Str1 = "K65";
-        writeString(Str1);
-        //        fOtladkaMes(readString(StrAddr - incriment));
 
-#endif
+      case turnL:
+
+        Stp = "K65";
         break;
       case turnR:
-#ifdef _EPROM1_
-        Str1 = "K64";
-        writeString(Str1);
-        //       fOtladkaMes(readString(StrAddr - incriment));
-#endif
-        break;
-      case wait:
-#ifdef _EPROM1_
-        Str1 = "D";
-        Str2 = String(RecordingTime()); // записть текущего времени в память
-        Str1.concat(Str2);
-        // if (withPauses||bPause)
-        writeString(Str1);
-        //       fOtladkaMes(readString(StrAddr - incriment));
-#endif
+        Stp = "K64";
         break;
       case standStil:
         Stp = "K45"; //
-#ifdef _EPROM1_
-        writeString(Stp);
-        //        fOtladkaMes(readString(StrAddr - incriment));
-#endif
 
         break;
       case telCenter:
         Stp = "K18"; //
-#ifdef _EPROM1_
-        writeString(Stp);
-        //        fOtladkaMes(readString(StrAddr - incriment));
-#endif
         break;
+      case shakeOn:
+        Stp = "K60";
+        break;
+      case shakeOff:
+        Stp = "K61";
+        break;
+      case turnLfst:
+        Stp = "K67";
+        break;
+      case turnRfst:
+        Stp = "K66";
+        break;
+      case turnLbst:
+        Stp = "K69";
+        break;
+      case turnRbst:
+        Stp = "K68";
+        break;
+		
+		
+		
+      case wait:
+#ifdef _EPROM1_
+        Stp = "D";
+        Str2 = String(RecordingTime()); // записть текущего времени в память
+        Stp.concat(Str2);
+        // if (withPauses||bPause)
+        writeString(Stp);
+        //       fOtladkaMes(readString(StrAddr - incriment));
+#endif
+        return;
       case goSlow:
         Stp = "K34"; //
 #ifdef _EPROM1_
         writeString(Stp);
         //        fOtladkaMes(readString(StrAddr - incriment));
 #endif
-        break;
+        return;
       case goFast:
         Stp = "K35"; // малая s означает количество пройденных шагов
 #ifdef _EPROM1_
         writeString(Stp);
         //        fOtladkaMes(readString(StrAddr - incriment));
 #endif
-        break;
-      case shakeOn:
-        Stp = "K60";
-#ifdef _EPROM1_
-        writeString(Stp);
-#endif
-        break;
-      case shakeOff:
-        Stp = "K61";
-#ifdef _EPROM1_
-        writeString(Stp);
-#endif
-        break;
-      case turnLfst:
-        Str1 = "K67";
-#ifdef _EPROM1_
-        writeString(Str1);
-#endif
-        break;
-      case turnRfst:
-        Str1 = "K66";
-#ifdef _EPROM1_
-        writeString(Str1);
-#endif
-        break;
-      case turnLbst:
-        Str1 = "K69";
-#ifdef _EPROM1_
-        writeString(Str1);
-#endif
-        break;
-      case turnRbst:
-        Str1 = "K68";
-#ifdef _EPROM1_
-        writeString(Str1);
-#endif
-        break;
+        return;
       case aPause:
         Stp = "K46";
+		oPause = 1;
 #ifdef _EPROM1_
         writeString(Stp);
 #endif
-        break;
+        return;
       case UgolL:
 #ifdef _EPROM1_
-        Str1 = "L";
+        Stp = "L";
         Str2 = String(param); // конвертируем в строку
-        Str1.concat(Str2);
-        writeString(Str1);
+        Stp.concat(Str2);
+        writeString(Stp);
         //        fOtladkaMes(readString(StrAddr - incriment));
 
 #endif
-        break;
+        return;
       case UgolR:
 #ifdef _EPROM1_
-        Str1 = "R";
+        Stp = "R";
         Str2 = String(param); // конвертируем в строку
-        Str1.concat(Str2);
-        writeString(Str1);
+        Stp.concat(Str2);
+        writeString(Stp);
         //       fOtladkaMes(readString(StrAddr - incriment));
 #endif
-        break;
+        return;
+	  default:
+	    fErrorMes("UnknownCommand");
+		Str1 = "";
+		Stp = "";
+		return;
     }
+	// запоминаем время повледней комманды
+	if(oPause)
+	{
+	  String Stp1 = "D";
+	  long lT = millis() - lPreviosCmdTime;
+      Str2 = String(lT); // конвертируем в строку
+      Stp1.concat(Str2);
+#ifdef _EPROM1_
+	  writeString(Stp1);
+#endif
+	}
+#ifdef _EPROM1_
+	if(Str1!="")   writeString(Str1);
+	writeString(Stp);
+#endif
+	
+    lPreviosCmdTime = millis();
+
   }
   /*   //  УСЛОВИЕ НИКОГДА НЕ ВЫПОЛНИТСЯ!!!!!!!!!!!!
     if ((WorkSt == StPlay))
@@ -3354,6 +3334,70 @@ void fOtladkaMes(long mes)
 
 
 
+
+
+
+
+byte rotPlace1(posOfMotors & mot, unsigned short minStep, short newOrient, regimRaboty &mode)
+{
+  int turnTimes = abs(newOrient/minStep);
+  int ostatok   = abs(newOrient%minStep);
+  int gradus = 1;
+  bool bDir;
+  
+  bool bEW = fEastOrWestStandingCalc(mot);
+  if(newOrient<0) bDir = 0; else bDir = 1;
+  
+  fOtladkaMes("turnTimes=" + String(turnTimes));
+  fOtladkaMes("ostatok=" + String(ostatok));
+  fOtladkaMes("bEW=" + String(bEW));
+  fOtladkaMes("bDir=" + String(bDir));
+  
+  
+  if(fTurnToNTimes(mot, minStep, mode, bEW, turnTimes, bDir)) return 1;
+  
+  //второй этап это доехать просто оставшийся угол
+  if(ostatok&&(mot.rbOrient*2*calc_angle(gradus, m_stp) == mot.RightFootCurrentSteps))
+  {
+    // телега справа если смотреть сзади
+    if((pr_telega.dir_flg  ==  left)&&(bDir==0))
+    {
+//    if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1; // ехать влево
+       rotateLeftFF(newOrient, mode, mot);
+    }
+	else if((pr_telega.dir_flg  ==  right)&&(bDir==0))
+	{
+	  rotateLeftBK(newOrient, mode, mot);
+	}
+	else if((pr_telega.dir_flg  ==  middle)&&(bDir==0))
+	{
+	  //левая нога впереди(смотрим влево)?
+	  if(bEW==0) rotateLeftFF(newOrient, mode, mot);
+	  if(bEW==1) rotateLeftBK(newOrient, mode, mot);
+	}
+	
+    else if((pr_telega.dir_flg  ==  left)&&(bDir==1))
+    {
+//    if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1; // ехать влево
+       rotateRightBK(newOrient, mode, mot);
+    }
+	else if((pr_telega.dir_flg  ==  right)&&(bDir==1))
+	{
+	  rotateRightFF(newOrient, mode, mot);
+	}
+	else if((pr_telega.dir_flg  ==  middle)&&(bDir==0))
+	{
+	  //левая нога впереди(смотрим влево)?
+	  if(bEW==0) rotateLeftFF(newOrient, mode, mot);
+	  if(bEW==1) rotateLeftBK(newOrient, mode, mot);
+	}
+  }
+  else if(ostatok)
+  {
+    
+  }
+    
+}
 
 
 
@@ -4672,13 +4716,13 @@ bool fLegUpToPos(posOfMotors & mot, long pos)
 
 
 //Поворот вперед на правой ноге если смотреть сзади
-bool rotateRightFF(short stepAngle,regimRaboty &mode, posOfMotors & mot)
+byte rotateRightFF(short stepAngle,regimRaboty &mode, posOfMotors & mot)
 {
   fOtladkaMes("PovorotVpravoVpered");
   if (fstandStill(mot))
   {
     // защита от топтания на месте
-    if (fChkOrientStpsAvailable(stepAngle, left_leg, forward, mot)) return 1;
+    if (fChkOrientStpsAvailable(stepAngle, left_leg, forward, mot))	return 2;
     // перевозим тележку влево
     if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1;
     if (Leg_fn(right_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
@@ -4693,14 +4737,13 @@ bool rotateRightFF(short stepAngle,regimRaboty &mode, posOfMotors & mot)
 
 
 
-bool rotateRightBK(short stepAngle,regimRaboty &mode, posOfMotors & mot)
+byte rotateRightBK(short stepAngle,regimRaboty &mode, posOfMotors & mot)
 {
   fOtladkaMes("PovorotVpravoNazad");
 
   if (fstandStill(mot))
   {
-
-    if (fChkOrientStpsAvailable(stepAngle, right_leg, backward, mot)) return 1;
+    if (fChkOrientStpsAvailable(stepAngle, right_leg, backward, mot)) return 2;
     // перевозим тележку влево
     if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1;
     if (Leg_fn(left_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
@@ -4714,13 +4757,13 @@ bool rotateRightBK(short stepAngle,regimRaboty &mode, posOfMotors & mot)
 }
 
 
-bool rotateLeftFF(short stepAngle,regimRaboty &mode, posOfMotors & mot)
+byte rotateLeftFF(short stepAngle,regimRaboty &mode, posOfMotors & mot)
 {
   fOtladkaMes("PovorotVlevoVpered");
 
   if (fstandStill(mot))
   {
-    if (fChkOrientStpsAvailable(stepAngle, right_leg, forward, mot)) return 1;
+    if (fChkOrientStpsAvailable(stepAngle, right_leg, forward, mot)) return 2;
     // перевозим тележку влево
     if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1;
     if (Leg_fn(left_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
@@ -4734,12 +4777,12 @@ bool rotateLeftFF(short stepAngle,regimRaboty &mode, posOfMotors & mot)
 }
 
 
-bool rotateLeftBK(short stepAngle,regimRaboty &mode, posOfMotors & mot)
+byte rotateLeftBK(short stepAngle,regimRaboty &mode, posOfMotors & mot)
 {
   fOtladkaMes("PovorotVlevoNazad");
   if (fstandStill(mot))
   {
-    if (fChkOrientStpsAvailable(stepAngle, left_leg, backward, mot)) return 1;
+    if (fChkOrientStpsAvailable(stepAngle, left_leg, backward, mot)) return 2;
     // перевозим тележку влево
     if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1;
     if (Leg_fn(right_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
@@ -5088,6 +5131,74 @@ byte fNoBlockAnswerWait(robot_leg leg, MKmotor Uzel, posOfMotors & mot)
 }
 
 
+// Функция поворота на заданный угол вправо
+// stepAngel - угол поворота, который меняет rbOrient
+// leg = 0 - повернуться на правой ноге, если смотреть спереди
+// leg = 1 - повернуться на левой ноге, если смотреть спереди
+byte fTurnWithStepsR(posOfMotors & mot, short stepAngle, regimRaboty &mode, bool leg)
+{
+  // поворот на правой ноге(которая левая) назад
+  if(leg == 0) return rotateRightBK(stepAngle,mode,mot);
+  // поворот на левой ноге(которая правая) вперед
+  if(leg == 1) return rotateRightFF(stepAngle,mode,mot);
+  return 0;
+}
+
+// Функция поворота на заданный угол влево
+// stepAngel - угол поворота, который меняет rbOrient
+//leg = 1 - повернуться на правой ноге, если смотреть спереди
+//leg = 0 - повернуться на левой ноге, если смотреть спереди
+byte fTurnWithStepsL(posOfMotors & mot, short stepAngle, regimRaboty &mode, bool leg)
+{
+
+  // поворот на левой ноге(которая правая) назад
+  if(leg == 0) 
+  return rotateLeftBK(stepAngle,mode,mot);
+  // поворот на правой ноге(которая левая) вперед
+  if(leg == 1) 
+  return rotateLeftFF(stepAngle,mode,mot);
+  return 0;
+}
+
+
+// FirstLeg - нага спереди 0 - левая 1 - правая
+// если LeftOrRight = 0 значит влево иначе вправо
+bool fTurnToNTimes(posOfMotors & mot, short stepAngle,regimRaboty &mode, bool FirstLeg,
+ int nTimes, bool LeftOrRight)
+{
+  if(LeftOrRight == 0) //влeво
+  {
+    for(int i = 0; i < nTimes; ++i)
+	{
+	  // остаток от деления равен 0 (четное число) первая нога
+	    // повернуться вначале на левой ноге
+	    if(i%2) switch(fTurnWithStepsL(mot, stepAngle, mode, FirstLeg)) 
+		{
+		  case 0: 
+		    return 0; 
+		  break;
+		  case 1: 
+		    return 1;
+		  break;
+		  case 2:
+		    if(fTurnWithStepsL(mot, stepAngle, mode, !FirstLeg)) return 1;
+		  break;
+		}
+	    // потом на правой
+		  else if(fTurnWithStepsL(mot, stepAngle, mode, !FirstLeg)) return 1;
+	}
+  }else if(LeftOrRight == 1) // вправо
+  {
+    for(int i = 0; i < nTimes; ++i)
+	{
+	  // остаток от деления равен 0 (четное число) первая нога
+	    // повернуться вначале на левой ноге
+	    if(i%2) if(fTurnWithStepsR(mot, stepAngle, mode, !FirstLeg)) return 1;
+	    // потом на правой
+		  else if(fTurnWithStepsR(mot, stepAngle, mode,  FirstLeg)) return 1;
+	}
+  }
+}
 
 
 
