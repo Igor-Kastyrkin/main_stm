@@ -132,3 +132,48 @@ byte readEEPROM(byte deviceaddress, unsigned int eeaddress)
   return rdata;
 }
 
+
+bool i2cScan(bool &bEeprom, bool &bDisplay)
+{
+  byte error, address;
+  int nDevices;
+  Serial1.println("I2C_Scanning...");
+  nDevices = 0;
+  bDisplay = 0;
+  bEeprom  = 0;
+  for(address = 1; address < 127; address++) {
+   if(address%10==0) Serial1.print(".");
+    // The i2c_scanner uses the return value of
+    // the Write.endTransmisstion to see if
+    // a device did acknowledge to the address.
+
+    Wire.beginTransmission(address);
+    error = Wire.endTransmission();
+    
+    if (error == 0) {
+      if (address == disk1) {
+      Serial1.println("EEPROM Available");
+      bEeprom = 1;}
+      if(address == 0x3F){
+	  Serial1.println("Display Available");
+	  bDisplay = 1;}
+      nDevices++;
+    }
+    else if (error == 4) {
+//	  delay(50);
+//      Serial1.print("Unknown error at address 0x");
+//      if (address < 16) 
+//        Serial1.print("0");
+//      Serial1.println(address, HEX);
+    }    
+  }
+  if (nDevices == 0)
+    Serial1.println("No I2C devices found"); 
+  else
+    Serial1.println("done");
+  
+  return 0;
+//  delay(5000);           // wait 5 seconds for next scan
+
+
+}

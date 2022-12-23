@@ -58,18 +58,23 @@ int8_t UART_Serial::handle_serial(void)
       delayMicroseconds(byteDelay);
     }
     //label:
-    while (MySerial.available())  // читаем лишний мусор
-    {
-      delayMicroseconds(byteDelay);
-      MySerial.read();
+    if(MySerial.available())
+	{
+	  Serial1.print("Shum:");
+      while (MySerial.available())  // читаем лишний мусор
+      {
+        delayMicroseconds(byteDelay);
+        Serial1.print(MySerial.read());
+	  }										   
+      Serial1.println("");
     }
 #ifdef _OTLADKA1_
-    Serial1.print("Message_in: "); // для отладки
+    Serial1.print("M_in "); // для отладки
     for (int j = 0; j < (Serial_amount - 1); j++)
       Serial1.print(tmp_buffer[j]);
     Serial1.println("_"); // для отладки
-    Serial1.print("Prinyato: "); // для отладки
-    Serial1.println(Serial_amount + "_"); // для отладки
+    Serial1.print("N< "); // для отладки
+    Serial1.println(Serial_amount); // для отладки
 #endif
 
     char CRC; // для хранения расчетной КС
@@ -178,7 +183,15 @@ int8_t UART_Serial::handle_serial(void)
 	  if(command == 'E')
 	  {
 	    long a = dtStrIn.dt.data;
-		String b = "<<LegErr#" + String(a) + ">>_\r\n"; 
+		String b = String("<<LegErr_") /* + String(a)*/ + String(">>_\r\n"); 
+		if(a == 1) Serial1.println("Unknwn cmd");
+		if(a == 2) Serial1.println("EndOfScrew");
+		if(a == 3) Serial1.println("UporMeshaet");
+		if(a == 4) Serial1.println("Unknown err");
+		
+		if(a == 5) Serial1.println("TooBigAngle");
+		if(a == 7) Serial1.println("COM error");
+		if(a == 8) Serial1.println("CRC error");
 		Serial1.println(b);
 		i_ = 0;
 	  }
@@ -256,8 +269,8 @@ void UART_Serial::getString1(char &cmd, long &data)
   cmd  = command;
   data = long(dtStrIn.dt.data);
 #ifdef _OTLADKA1_
-  Serial1.print("Data in: ");
-  Serial1.println(String(data) + "_");
+  Serial1.print("D< ");
+  Serial1.println(String(data));
 #endif
 }
 /*
@@ -323,6 +336,7 @@ void UART_Serial::getString1(char &cmd, long &data)
   #endif
   }
 */
+	// юинт8т переписать в чар	 
 void UART_Serial::prepareMessage(uint8_t cmd)
 {
 #ifdef _LED_ON_
@@ -334,11 +348,11 @@ void UART_Serial::prepareMessage(uint8_t cmd)
   dtStrOut0.dt.command = cmd;
   dtStrOut0.dt.CRC = crc_calc(dtStrOut0.b, 2);
 #ifdef _OTLADKA1_
-  Serial1.print("LENGTH_out: ");
-  Serial1.println("3_");
-  Serial1.print("Message_out: ");
+  Serial1.print("L-> ");
+  Serial1.println("3");
+  Serial1.print("M-> ");
   Serial1.write(dtStrOut0.b, 2 + 1);
-  Serial1.println("_");
+  Serial1.println("");
 #endif
   MySerial.write(dtStrOut0.b, 2 + 1);
   delayMicroseconds(comDelay);
@@ -391,12 +405,12 @@ void UART_Serial::prepareMessage(uint8_t cmd, long data)
   dtStrOut.dt.data = data;
   dtStrOut.dt.CRC = crc_calc(dtStrOut.b, length1);
 #ifdef _OTLADKA1_
-  Serial1.print("LENGTH_out: ");
-  Serial1.println("7_");
+  Serial1.print("L-> ");
+  Serial1.println("7");
 
   Serial1.print("Message_out: ");
   Serial1.write(dtStrOut.b, length1 + 1);
-  Serial1.println("_");
+  Serial1.println("");
 #endif
   MySerial.write(dtStrOut.b, length1 + 1);
   delayMicroseconds(comDelay);
