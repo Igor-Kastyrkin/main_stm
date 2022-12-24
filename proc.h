@@ -49,7 +49,7 @@ enum MKmotor {knee, foot, kal, zero};
 enum StadyWork {StRec, StPlay, StWork};
 enum actions {walkFf, walkBk, turnL, turnR, wait, standStil, telCenter, goFast, goSlow,
 		shakeOn, shakeOff, turnLfst, turnRfst, turnLbst,
-		turnRbst, aPause, UgolL, UgolR};
+		turnRbst, aPause, UgolL, UgolR, DoStep};
 
 enum dirflg {left, right, left_right, right_left, middle};
 

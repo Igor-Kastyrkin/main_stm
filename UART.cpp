@@ -17,7 +17,7 @@
 
 #include "Arduino.h"
 #include "UART.h"
-#define _OTLADKA1_
+//#define _OTLADKA1_
 //#define _LED_ON_
 
 

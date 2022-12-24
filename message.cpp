@@ -3,6 +3,7 @@
 
 //#define _DISP_
 
+#define _OTLADKA_
 
 #ifdef _DISP_
 #include <LiquidCrystal_I2C_STM32.h>
