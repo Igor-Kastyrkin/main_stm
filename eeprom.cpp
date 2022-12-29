@@ -13,6 +13,7 @@ void writeString(String data)
     writeEEPROM(disk1, StrAddr + i, data[i]);
   }
   writeEEPROM(disk1, StrAddr + stringSize, '\0');  //Add termination null character
+  Serial1.println("_Mem_<"+data);
   StrAddr += incriment;
   return;
 };
@@ -60,7 +61,7 @@ String readString(int address)
   }
   data[len] = '\0';
   fOtladkaMes("Done");
-
+  Serial1.println(String(data));
   return String(data);
 }
 

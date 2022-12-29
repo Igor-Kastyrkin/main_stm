@@ -97,7 +97,7 @@
 
 #include "privod.h"
 
-#define _OTLADKA_
+//#define _OTLADKA_
 #include "message.h"
 
 
@@ -1027,11 +1027,14 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
       break;
     case 'D': //
       if (x_l < 0) break;
-      if (withPauses) do {} while (RecordingTime() < x_l);
+	  long prevTime;
+      if (withPauses) do {} while (RecordingTime(prevTime,x_l));//() < x_l);
 
       else if (bPause)
       {
-        delay(x_l);
+	    RecordingTime(prevTime,x_l);
+		Serial1.println("delay " +String(x_l - prevTime));
+        delay(x_l-prevTime);
         bPause = 0;
       }
       break;
@@ -2046,6 +2049,7 @@ void fSendState(StadyWork WorkSt, actions Action, long param)
 {
   static bool oPause = 0;
   static long lPreviosCmdTime = 0;
+  static long xl= 9999999;						  
   //  char   Str3[50];
   //  String out = "";
   if ((WorkSt == StRec))
@@ -2072,6 +2076,14 @@ void fSendState(StadyWork WorkSt, actions Action, long param)
         Str1.concat(Str2);
         break;
 
+      case lUp:
+        Stp = "K15";
+        break;
+	    
+      case rUp:
+        Stp = "K16";
+        break;	    
+		
       case turnL:
 
         Stp = "K65";
@@ -2111,7 +2123,13 @@ void fSendState(StadyWork WorkSt, actions Action, long param)
       case wait:
 #ifdef _EPROM1_
         Stp = "D";
-        Str2 = String(RecordingTime()); // записть текущего времени в память
+        RecordingTime(lPreviosCmdTime, xl);
+		if(bPause)
+		{
+		  Str2 = String(RecordingTime() - lPreviosCmdTime);
+		  bPause = 0;
+		}
+		else Str2 = String(RecordingTime()); // записть текущего времени в память
         Stp.concat(Str2);
         // if (withPauses||bPause)
         writeString(Stp);
@@ -2134,7 +2152,7 @@ void fSendState(StadyWork WorkSt, actions Action, long param)
         return;
       case aPause:
         Stp = "K46";
-        oPause = 1;
+  //      oPause = 1;
 #ifdef _EPROM1_
         writeString(Stp);
 #endif
@@ -2158,6 +2176,7 @@ void fSendState(StadyWork WorkSt, actions Action, long param)
         //       fOtladkaMes(readString(StrAddr - incriment));
 #endif
         return;
+		// угол дошагания
 	  case DoStep:
 #ifdef _EPROM1_
         Stp = "m";
@@ -2174,7 +2193,7 @@ void fSendState(StadyWork WorkSt, actions Action, long param)
         return;
     }
     // запоминаем время повледней комманды
-    if (oPause)
+ /*   if (oPause)
     {
       String Stp1 = "D";
       long lT = millis() - lPreviosCmdTime;
@@ -2183,12 +2202,12 @@ void fSendState(StadyWork WorkSt, actions Action, long param)
 #ifdef _EPROM1_
       writeString(Stp1);
 #endif
-    }
+    }            */
 #ifdef _EPROM1_
     if (Str1 != "")   writeString(Str1);
     writeString(Stp);
 #endif
-
+	Serial1.println("GotPreviosTime!");
     lPreviosCmdTime = millis();
 
   }
@@ -4065,6 +4084,9 @@ void telega_right(posOfMotors& mot)
 void topLeft(posOfMotors & mot)
 {
   fOtladkaMes("Vidvinut-levuyu");
+  
+  fAddInActionInRecordMode(wait);
+  fAddInActionInRecordMode(lUp);
 
   if (fstandStill(mot))
   {
@@ -4102,6 +4124,8 @@ void topLeft(posOfMotors & mot)
 void topRight(posOfMotors & mot)
 {
   fOtladkaMes("Vidvinut-pravuyu");
+  fAddInActionInRecordMode(wait);
+  fAddInActionInRecordMode(rUp);
   // телега справа, если смотреть спереди?
   if (fstandStill(mot)){
 	  moveMassLeft(mot);
@@ -4366,16 +4390,23 @@ void demo3(posOfMotors & mot)
 
 
 
-
-
-
-
-
-
-
-
-
-
+// Функция запоминает предыдущее значение времени
+// и передает его в качестве параметра по ссылке
+byte RecordingTime(long &prevTime, const long &treshold)
+{
+  static long time = 0;
+  prevTime = time;
+  if(millis() - StartRecordTime<treshold)
+  {
+    return 0;
+  }else{
+    time = millis() - StartRecordTime;
+	Serial1.println("prevtime="+String(time));
+    return 1;
+  }
+}
+// Функция запоминает предыдущее значение времени
+// и передает его в качестве параметра по ссылке
 long RecordingTime(void)
 {
   return millis() - StartRecordTime;
