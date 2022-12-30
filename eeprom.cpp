@@ -61,7 +61,7 @@ String readString(int address)
   }
   data[len] = '\0';
   fOtladkaMes("Done");
-//  Serial1.println(String(data));
+  Serial1.println(String(data));
   return String(data);
 }
 

@@ -810,6 +810,8 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
           break;
         case 54: // режим записи с запоминанием времени
           withPauses == 1 ? withPauses = 0 : withPauses = 1;
+		  if(withPauses == 1) Serial1.println("withPauses");
+		  else Serial1.println("nooPauses");
           break;
         // качаем один раз
         case 60:
@@ -1031,7 +1033,7 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
     case 'D': //
       if (x_l < 0) break;
       long prevTime;
-      if (withPauses) do {} while (RecordingTime(prevTime, x_l)); //() < x_l);
+      if (withPauses) do {} while (RecordingTime() < x_l);
 
       else if (bPause)
       {
@@ -2133,7 +2135,7 @@ void fSendState(StadyWork WorkSt, actions Action, long param)
       case wait:
 #ifdef _EPROM1_
         Stp = "D";
-        RecordingTime(lPreviosCmdTime, 0);
+//        RecordingTime(lPreviosCmdTime, 0);
         if (bPause)
         {
           Str2 = String(startTime - endTime);
