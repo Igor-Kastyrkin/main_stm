@@ -20,15 +20,15 @@ const long fullRotationLimit = 22;
 
 
 struct posOfMotors
-{  
+{
   long rbOrient  = 0;  // угол направления движения в градусах
   long CurrentZero = 0;
-  
+
   long LeftLegCurrentSteps   = 0;
   long LeftFootCurrentSteps  = 0;
   long RightLegCurrentSteps  = 0;
   long RightFootCurrentSteps = 0;
-  
+
   long stepsDepthInSteps = 800L * 15L / 4L;  //12800
 
 };

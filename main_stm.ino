@@ -2152,11 +2152,11 @@ void fSendState(StadyWork WorkSt, actions Action, long param)
       case turnRbst:
         Stp = "K68";
         break;
-		
+
 	  case shakeRot:
 	    Stp ="K63";
 		break;
-	
+
 	  case stDn:
 	    Stp = "K40";
 	    break;
@@ -2233,59 +2233,59 @@ void fSendState(StadyWork WorkSt, actions Action, long param)
 	  case Deg10:
 	    Stp = "K20";
 	    break;
-		
+
 	  case Deg20:
 	    Stp = "K21";
 	    break;
-		
+
 	  case Deg30:
 	    Stp = "K22";
 	    break;
-		
+
 	  case Deg45:
 	    Stp = "K23";
 	    break;
-		
+
 	  case Deg60:
 	    Stp = "K24";
 	    break;
-		
+
 	  case Deg70:
 	    Stp = "K25";
 	    break;
-		
+
 	  case Deg80:
 	    Stp = "K26";
 	    break;
-		
+
 	  case Deg90:
 	    Stp = "K27";
 	    break;
-		
+
 	  case H20:
 	    Stp = "K28";
 	    break;
-		
+
 	  case H30:
 	    Stp = "K29";
 	    break;
-		
+
 	  case H50:
 	    Stp = "K30";
 	    break;
-		
+
 	  case H80:
 	    Stp = "K31";
 	    break;
-		
+
 	  case H120:
 	    Stp = "K32";
 	    break;
-		
+
 	  case H160:
 	    Stp = "K33";
 	    break;
-		
+
 	  case H180:
 	    Stp = "K36";
 	    break;
@@ -2297,7 +2297,7 @@ void fSendState(StadyWork WorkSt, actions Action, long param)
 	  case H360:
 	    Stp = "K38";
 	    break;
-		
+
       default:
         fErrorMes("UnknownCommand");
         Str1 = "";
@@ -4736,6 +4736,7 @@ bool fStepsCounter(posOfMotors & mot, unsigned long &hlfStepsCnt)
 byte rotateRightFF(short stepAngle, regimRaboty &mode, posOfMotors & mot)
 {
   fOtladkaMes(">Vpered");
+
   long old_rotSpeed = rotSpeed;
 
   if (fstandStill(mot) || readyForRotLeftFoot(mot))
@@ -4745,7 +4746,7 @@ byte rotateRightFF(short stepAngle, regimRaboty &mode, posOfMotors & mot)
     delay(15);
     SerR.prepareMessage( 'S', rotSpeed);
     delay(15);
-	
+
   // защита от топтания на месте
     if (fChkOrientStpsAvailable(stepAngle, left_leg, forward, mot))	return 2;
     // перевозим тележку влево
@@ -4801,6 +4802,7 @@ byte rotateRightBK(short stepAngle, regimRaboty &mode, posOfMotors & mot)
 byte rotateLeftFF(short stepAngle, regimRaboty &mode, posOfMotors & mot)
 {
   fOtladkaMes("<Vpered");
+
   long old_rotSpeed = rotSpeed;
 
   if (fstandStill(mot) || readyForRotRightFoot(mot))
@@ -5050,7 +5052,7 @@ bool fShakeHandWithRotation(posOfMotors & mot, short stepAngle)
 	delay(15);
     SerL.prepareMessage( 'j', angleL);
 	delay(15);
-    fAnswerWait(left_leg, foot, mot, 'j', 'T'); 
+    fAnswerWait(left_leg, foot, mot, 'j', 'T');
   }
   // задаем скорость и ускорение махания рукой
 

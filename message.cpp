@@ -16,7 +16,7 @@ void fErrorMes(String mes)
   lcd.clear();
 #endif
 #ifdef _NRF24_
-  radio.stopListening();               
+  radio.stopListening();
   char buf[mes.length() + 4];
   mes += "_\r\n";
   mes.toCharArray(buf, mes.length() + 1);
@@ -111,5 +111,3 @@ void fOtladkaMes(long mes)
 #endif
   delay(15);
 }
-
-
