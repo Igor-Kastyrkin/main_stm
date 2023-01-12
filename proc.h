@@ -49,7 +49,10 @@ enum MKmotor {knee, foot, kal, zero};
 enum StadyWork {StRec, StPlay, StWork};
 enum actions {walkFf, walkBk, turnL, turnR, wait, standStil, telCenter, goFast, goSlow,
 		shakeOn, shakeOff, turnLfst, turnRfst, turnLbst,
-		turnRbst, aPause, UgolL, UgolR};
+		turnRbst, aPause, UgolL, UgolR, DoStep, lUp, rUp,
+		shakeRot, stUp, stDn, Deg10, Deg20, Deg30, Deg45,
+		Deg60, Deg70, Deg80, Deg90, H20, H30, H50, H80, H120, H160,
+		H180, H220, H360};
 
 enum dirflg {left, right, left_right, right_left, middle};
 
@@ -70,7 +73,7 @@ bool Leg_fn(robot_leg leg, const regimRaboty &regim, leg_dir dir, posOfMotors&,
 
 bool fBreak(robot_leg leg, MKmotor Uzel, /*RF24&,*/posOfMotors& );
 
-bool fAnswerWait(robot_leg leg, MKmotor Uzel, posOfMotors&);
+bool fAnswerWait(robot_leg leg, MKmotor Uzel, posOfMotors&,  char cL='T',  char cR ='T');
 
 // bool change_orient(rot_dir dir, posOfMotors&, float);
 

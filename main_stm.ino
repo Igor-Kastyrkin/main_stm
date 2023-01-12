@@ -2,6 +2,13 @@
 
 /* глюки
 
+  замечания
+  1. не с первого раза срабатывает кнопка поднятия ноги отдельной командой\
+  2. когда угол дошагания больше угла поворота, он делает лишние движения
+  3. При записи пусть записывается и угол дошагания
+  4. breakSteps не всегда срабатывает
+  5. после принудительной калибровки был неестественный разворот при хотьбе
+
   1.12.22
   1. После остановки воспроизведения не идет запись, так как он думает что находится
   в режиме воспроизведения. И наоборот.
@@ -33,6 +40,18 @@
   раза делает шаги вперед.
   Вместо того, чтобы идти назад, всегда идет вперед
   Вначале не поворачивал
+
+
+  21.12.22
+  Уменьшил задиржку при включении
+  Подумать как сделать, чтобы мог поворачивать, когда стоит не только на двух ногах
+  за счет блокировок подъема ног, если телега не там или по другим событиям
+
+
+  21.12.22
+  Уменьшил задиржку при включении
+
+
 
   Из видео:
   1. После опускания ноги, нажал назад. Он сделал цикл из перемещений тележки
@@ -71,13 +90,16 @@
 #include <stdlib.h>
 
 #define _STEPPER_
-#include <AccelStepper.h>   
+#include "AccelStepper.h"
 #include "UART.h"
 #include "proc.h"
 
+
 #include "privod.h"
 
-#define _OTLADKA_
+//#define _OTLADKA_
+#include "message.h"
+
 
 #define _EPROM1_
 
@@ -88,10 +110,11 @@
 
 #endif
 
+#define _DISP_
 
-
-//#include <LiquidCrystal_I2C_STM32.h>
-
+#ifdef _DISP_
+  #include <LiquidCrystal_I2C_STM32.h>
+#endif
 
 
 #define _CHKDATA_         // проверка обмена с ногами
@@ -142,8 +165,8 @@ unsigned long vytagSpeed = 4500;
 unsigned long  vtagAccel = 6250;
 unsigned long vytagAccel = 8750;
 
-unsigned long  rotSpeed = 3000;
-unsigned long  rotAccel = 3500;
+unsigned long  rotSpeed = 6000;
+unsigned long  rotAccel = 6500;
 
 
 
@@ -153,7 +176,7 @@ unsigned long  rotAccel = 3500;
 //long stepAngle = calc_angle(10, 2); //1111;//555.5555556;//2222.2222;// 10 град, 2 микрошаг
 
 #ifdef _DISP_
-LiquidCrystal_I2C_STM32 lcd(0x3F, 16, 2);
+  LiquidCrystal_I2C_STM32 lcd(0x3F, 16, 2);
 #endif
 
 
@@ -194,6 +217,9 @@ String currStpDpth = "K29";
 String currStpAngl = "K22";
 String currRbStps  = "d65";
 String currMinStepRot = "m" + String(minRbtStep);
+
+long startTime = 0;
+long endTime = 0;
 
 
 //byte nul_data = 3, one_data = 7, two_data = 11, three_data = 15;//, four_data = 19, six_data = 27;
@@ -236,11 +262,14 @@ AccelStepper* motorLink[Motor_number];
 
 #include "math.h"
 
+
 const int baudRateCom1 = 9600;
+
 
 void setup()
 {
   posOfMotors mot;
+  bool bEeprom = 0, bDisplay = 0;
 #ifdef _BUILTIN_LED_ON_
   pinMode(LED_BUILTIN, OUTPUT);
 #endif
@@ -263,7 +292,9 @@ void setup()
 #endif
   // char cmdL = 0x0, cmdR = 0x0;
   pinMode(ENDCAP, INPUT_PULLUP);
+
   delay(500);
+
   pinMode(ENDCAP_R, INPUT_PULLUP);
   delay(500); // +100
   //  pinMode(CS_PIN, OUTPUT);
@@ -274,7 +305,7 @@ void setup()
   delay(200); // +200
   motorLink[0] = new AccelStepper(AccelStepper::DRIVER, StepPin, DirPin);
 
-  delay(3400); // +3400
+  delay(2000); // +3400
 #ifdef _BUILTIN_LED_ON_
   digitalWrite(LED_BUILTIN, LOW);
 #endif
@@ -303,12 +334,18 @@ void setup()
   delay(100);
   Serial3.begin(Com2Rate);
 #endif
+  Serial1.println("");
+  Serial1.println("");
+  Serial1.println("_-_-_-_-_-_-_-_-_-_-_-_");
+  Serial1.println("-_-_-_-_-_-_-_-_-_-_-_-");
+  delay(50);
+  Serial1.println("");
   Serial1.println("Loading..");
   delay(10);
 
 #ifdef _CHKDATA_
   // long waitTimer;
-  delay(6000); // +4000
+  delay(2000); // +6000
   // очистка буфера от возможного мусора
   while ((SerL.handle_serial() < 0) ||
          (SerR.handle_serial() < 0)) {};
@@ -355,6 +392,10 @@ void setup()
 #endif
 
   fCalibration(SerL, SerR, mot);
+  i2cScan(bEeprom, bDisplay);
+  delay(300);
+  if (!bEeprom)  fErrorMes("No EEPROM  Available");
+  if (!bDisplay) fErrorMes("No Display Available");
   fErrorMes("Starting-working");
   /*
     #ifdef SERIAL_USB
@@ -363,133 +404,123 @@ void setup()
     Serial.print("Starting working\r\n");
     #endif
   */
-  
-while(1)
-{
 
 
-
-  //  byte sizeOfRFdata = 60;
-  //  char buff[sizeOfRFdata - 1];
-  bool RadioAval = 0;
-  char RF_data[60] = {'~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '\0'};
-  byte serialAmount = 0;
-  char tmp;
-#ifdef _BUILTIN_LED_ON_
-  if (((millis() - ledPinTimer) > 500) && ledPinActive)
+  //   ————————LOOP—————————
+  while (1)
   {
-    ledPinActive = 0;
-    digitalWrite(LED_BUILTIN, HIGH);
-  } // через заданное время отключаем зеленый светодиод
+    //  byte sizeOfRFdata = 60;
+    //  char buff[sizeOfRFdata - 1];
+    bool RadioAval = 0;
+    char RF_data[60] = {'~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '~', '\0'};
+    byte serialAmount = 0;
+    char tmp;
+#ifdef _BUILTIN_LED_ON_
+    if (((millis() - ledPinTimer) > 500) && ledPinActive)
+    {
+      ledPinActive = 0;
+      digitalWrite(LED_BUILTIN, HIGH);
+    } // через заданное время отключаем зеленый светодиод
 #endif
 
 #ifdef _NRF24_
-  if (radio.available())
+    if (radio.available())
 #else
-  if (Serial1.available())
+    if (Serial1.available())
 #endif
-  {
+    {
 #ifdef _BUILTIN_LED_ON_
-    digitalWrite(LED_BUILTIN, LOW);
-    ledPinActive = 1;
-    ledPinTimer = millis();
+      digitalWrite(LED_BUILTIN, LOW);
+      ledPinActive = 1;
+      ledPinTimer = millis();
 #endif
-    RadioAval = 1;
+      RadioAval = 1;
 
 #ifdef _NRF24_
-    radio.read(&RF_data, sizeof(RF_data));
+      radio.read(&RF_data, sizeof(RF_data));
 #else
 
-    while (Serial1.available() && (serialAmount < 30))
-    {
-      RF_data[serialAmount] = Serial1.read();
-      serialAmount++;
-      delayMicroseconds((10000000 / baudRateCom1) + 500);  //23.7.20 было +50мкс
-    }
-    RF_data[serialAmount] = '\0';
-    while (Serial1.available())
-    {
-      Serial1.read();
-      delay(2);
-      RadioAval = 0;
-    }
-    if (serialAmount < 2) {
-      RadioAval = 0;
-      fOtladkaMes("Amount<2");
-    }
-    if (SerL.handle_serial() < 0) // чего-то принято от левой?
-    {
-      SerL.getString0(tmp); // смотрим чего пришло
-      fErrorMes("LeftLegShum");
-    }
+      while (Serial1.available() && (serialAmount < 30))
+      {
+        RF_data[serialAmount] = Serial1.read();
+        serialAmount++;
+        delayMicroseconds((10000000 / baudRateCom1) + 500);  //23.7.20 было +50мкс
+      }
+      RF_data[serialAmount] = '\0';
+      while (Serial1.available())
+      {
+        Serial1.read();
+        delay(2);
+        RadioAval = 0;
+      }
+      if (serialAmount < 2) {
+        RadioAval = 0;
+        fOtladkaMes("Amount<2");
+      }
+      if (SerL.handle_serial() < 0) // чего-то принято от левой?
+      {
+        SerL.getString0(tmp); // смотрим чего пришло
+        fErrorMes("LeftLegShum");
+      }
 
-    if (SerR.handle_serial() < 0) // чего-то принято от левой?
-    {
-      SerR.getString0(tmp); // смотрим чего пришло
-      fErrorMes("RightLegShum");
-    }
+      if (SerR.handle_serial() < 0) // чего-то принято от левой?
+      {
+        SerR.getString0(tmp); // смотрим чего пришло
+        fErrorMes("RightLegShum");
+      }
 #endif
 
-    if ((RF_data[0] == 'K') && (RF_data[1] == '4') && (RF_data[2] == '3'))
-    {
-      if (stWork == StRec)
+      if ((RF_data[0] == 'K') && (RF_data[1] == '4') && (RF_data[2] == '3'))
       {
-        fErrorMes("ErrorPlayInRecMode");
-        RadioAval = 0;
+        if (stWork == StRec)
+        {
+          fErrorMes("ErrorPlayInRecMode");
+          RadioAval = 0;
+        }
+        else
+        {
+          stWork = StPlay; //3.3.2020
+          //      fStartPlay(LoopPlay);
+          Serial.println("PlayIsOn");
+          PlayFromEEPROM(LoopPlay, mot);
+          stWork == StWork ? stWork = StPlay : stWork = StWork; //10.7.2020
+          RadioAval = 0;
+          //     ledPinActive = 0;
+        }
       }
-      else
-      {
-        stWork = StPlay; //3.3.2020
-        //      fStartPlay(LoopPlay);
-        Serial.println("PlayIsOn");
-        PlayFromEEPROM(LoopPlay, mot);
-        stWork == StWork ? stWork = StPlay : stWork = StWork; //10.7.2020
-        RadioAval = 0;
-        //     ledPinActive = 0;
-      }
+      //   delay(100);
     }
-    //   delay(100);
+
+    if (RadioAval == 1)
+    {
+      fOtladkaMes(">>");
+      RF_messege_handle(RF_data, mot);
+    } // radio.available
+    if (stWork != StPlay)
+      while ((SerL.handle_serial() < 0) || (SerR.handle_serial() < 0)) {};
+
+    //  StepsManage();
+
+
   }
 
-  if (RadioAval == 1)
-  {
-    fOtladkaMes(">>");
-    RF_messege_handle(RF_data, mot);
-  } // radio.available
-  if (stWork != StPlay)
-    while ((SerL.handle_serial() < 0) || (SerR.handle_serial() < 0)) {};
-
-  //  StepsManage();
-
-
-
-}
-  
 }  /*-------------------// END SETUP //---------------------*/
 
 // --ГЛАВНЫЙ ЦИКЛ ПРОГРАММЫ!!!--
-void loop(){} // ------- LOOP --------
+void loop() {} // ------- LOOP --------
 
 byte RF_messege_handle(char *RF_data, posOfMotors & mot)
 {
   static regimRaboty mode = energySaving;
 
- // static long mot.stepsDepthInSteps = (long)stepsPerLegRot * (long)stepDepth / (long)lengthPerLegRot;  //12800
+  // static long mot.stepsDepthInSteps = (long)stepsPerLegRot * (long)stepDepth / (long)lengthPerLegRot;  //12800
 
-//  if(mode == energySaving) mot.CurrentZero = 0;
-//  else mot.CurrentZero = -stepsPerLegRot * fullRotationLimit / 2;
-  long turn_angle = 0;
   static long stepAngle = calc_angle(30, m_stp); // +++++
-  short m_stp = 2;
-  static short UgolPovorotaL;
-  static short UgolPovorotaR;
+  const short m_stp = 2;
+  static short UgolPovorotaL = -30;
+  static short UgolPovorotaR = 30;
   //  fOtladkaMes("Radio_in: "); //    for (unsigned int i = 0; i < sizeOfRFdata; i++) Serial.print((char)RF_data[i]);
   // delay(9);
-  if ((RF_data[0] == 'W') && (RF_data[1] == 'a') && (RF_data[2] == 'k') && (RF_data[3] == 'e'))
-  {
-    fErrorMes("Chek-CS-PIN-on-JDY-40");
-    return 0;
-  }
   char cmdR = RF_data[0];
 
   byte D_Len = strlen(RF_data);
@@ -540,17 +571,11 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
         case 13:
           //		  String OtlMes = "Starting mooving backward"
           fOtladkaMes("backward");
-          //		  fOtladkaMes("maxStepsCount = ");
-          //		  fOtladkaMes(maxStepsCount);
-          //		  fOtladkaMes("\r\n");
-          walkBackward(stepAngle,mode,   mot);
+          walkBackward(stepAngle, mode, mot);
           break;
         case 14: //forward шагаем
           fOtladkaMes("forward");
-          //		  fOtladkaMes("maxStepsCount = ");
-          //		  fOtladkaMes(maxStepsCount);
-          //		  fOtladkaMes("\r\n");
-          walkForward(stepAngle,mode,   mot);
+          walkForward(stepAngle, mode, mot);
           break;
         case 19: // telega vpravo
           telega_right(mot);
@@ -574,86 +599,103 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
           fOtladkaMes("10 Degree");
           currStpAngl[1] = '2'; currStpAngl[2] = '0';
           stepAngle = calc_angle(10, m_stp); //4444L; // 10 град
+          fAddInActionInRecordMode(Deg10);
           break;
         case 21:
           fOtladkaMes("20 Degree");
           currStpAngl[1] = '2'; currStpAngl[2] = '1';
           stepAngle = calc_angle(20, m_stp);
+          fAddInActionInRecordMode(Deg20);
           break;
         case 22:
           fOtladkaMes("30 Degree");
           currStpAngl[1] = '2'; currStpAngl[2] = '2';
           stepAngle = calc_angle(30, m_stp);
+          fAddInActionInRecordMode(Deg30);
           break;
         case 23:
           fOtladkaMes("45 Degree");
           currStpAngl[1] = '2'; currStpAngl[2] = '3';
           stepAngle = calc_angle(45, m_stp);  // 45 град
+          fAddInActionInRecordMode(Deg45);
           break;
         case 24:
           fOtladkaMes("60 Degree");
           currStpAngl[1] = '2'; currStpAngl[2] = '4';
           stepAngle = calc_angle(60, m_stp); // 60 град
+          fAddInActionInRecordMode(Deg60);
           break;
         case 25:
           fOtladkaMes("70 Degree");
           currStpAngl[1] = '2'; currStpAngl[2] = '5';
           stepAngle = calc_angle(70, m_stp); // 70 град
+          fAddInActionInRecordMode(Deg70);
           break;
         case 26:
           fOtladkaMes("80 Degree");
           currStpAngl[1] = '2'; currStpAngl[2] = '6';
           stepAngle = calc_angle(80, m_stp);
+          fAddInActionInRecordMode(Deg80);
           break;
         case 27:
           fOtladkaMes("90 Degree");
           currStpAngl[1] = '2'; currStpAngl[2] = '7';
           stepAngle = calc_angle(90, m_stp); // 90 град
+          fAddInActionInRecordMode(Deg90);
           break;
         case 28: // 6000
           fOtladkaMes("20 mm");
           currStpDpth[0] = 'K'; currStpDpth[1] = '2'; currStpDpth[2] = '8';
           mot.stepsDepthInSteps = stepDephCalc(10L);
+          fAddInActionInRecordMode(H20);
           break;
         case 29: // 12000
           fOtladkaMes("30 mm");
           currStpDpth[0] = 'K'; currStpDpth[1] = '2'; currStpDpth[2] = '9';
           mot.stepsDepthInSteps = stepDephCalc(15L);
+          fAddInActionInRecordMode(H30);
           break;
         case 30: // 18000
           fOtladkaMes("50 mm");
           currStpDpth[0] = 'K'; currStpDpth[1] = '3'; currStpDpth[2] = '0';
           mot.stepsDepthInSteps = stepDephCalc(25L);
+          fAddInActionInRecordMode(H50);
           break;
         case 31: // 24000
           fOtladkaMes("80 mm");
           currStpDpth[0] = 'K'; currStpDpth[1] = '3'; currStpDpth[2] = '1';
           mot.stepsDepthInSteps = stepDephCalc(40L);
+          fAddInActionInRecordMode(H80);
           break;
         case 32:
           fOtladkaMes("120 mm");
           currStpDpth[0] = 'K'; currStpDpth[1] = '3'; currStpDpth[2] = '2';
           mot.stepsDepthInSteps = stepDephCalc(60L);
+          fAddInActionInRecordMode(H120);
           break;
         case 33: //36000
           fOtladkaMes("160 mm");
           currStpDpth[0] = 'K'; currStpDpth[1] = '3'; currStpDpth[2] = '3';
           mot.stepsDepthInSteps = stepDephCalc(80L);
-          break;
+          fAddInActionInRecordMode(H160);
+         break;
         case 36:
           fOtladkaMes("180 mm");
           currStpDpth[0] = 'K'; currStpDpth[1] = '3'; currStpDpth[2] = '6';
           mot.stepsDepthInSteps = stepDephCalc(90L);
+          fAddInActionInRecordMode(H180);
           break;
         case 37:
           fOtladkaMes("220 mm");
           currStpDpth[0] = 'K'; currStpDpth[1] = '3'; currStpDpth[2] = '7';
           mot.stepsDepthInSteps = stepDephCalc(110L);
+          fAddInActionInRecordMode(H220);
           break;
         case 38:
           fOtladkaMes("360 mm");
           currStpDpth[0] = 'K'; currStpDpth[1] = '3'; currStpDpth[2] = '8';
           mot.stepsDepthInSteps = stepDephCalc(180L);
+          fAddInActionInRecordMode(H360);
           break;
         case 34:
           if (stWork == StPlay)
@@ -683,15 +725,17 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
         case 11: // поворот влево
           //          change_orient(leftA, mot,minRbtStep);
 
-    //      fStepFf(leed_leg, -minRbtStep);
+          //      fStepFf(leed_leg, -minRbtStep);
           break;
         case 12: // поворот вправо (это назад идти)
           //          change_orient(rightA, mot,minRbtStep);
 
-   //       fStepFf(leed_leg, minRbtStep);
+          //       fStepFf(leed_leg, minRbtStep);
           break;
         case 40:
+          fAddInActionInRecordMode(wait);
           seetUpDown(mot);
+          fAddInActionInRecordMode(stDn);
           break;
         case 41: //   вытягиваем и втягиваем правую чтобы разработать
           while (1)
@@ -722,8 +766,8 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
           }
           if (stWork == StRec)
           {
-            StartRecordTime = millis();
             Serial1.println("RecIsOn");
+            StartRecordTime = millis();
             //           fOtladkaMes("StrAdr1 = " + String(StrAddr));
             StrAddr = StartEEPROM;
             writeString(currSpeed);
@@ -769,8 +813,8 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
           //pause
           //одиночная пауза
           //wait вызывается  всегда, пауза просто вставляется в него
+          bPause ? bPause = 0 : bPause = 1;
           fAddInActionInRecordMode(aPause);
-          bPause == 1 ? bPause = 0 : bPause = 1;
           break;
         case 50: // обработка команды загрузки данных из ПК
           //       fDload(); // функция загрузки
@@ -786,50 +830,56 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
           break;
         case 54: // режим записи с запоминанием времени
           withPauses == 1 ? withPauses = 0 : withPauses = 1;
+		  if(withPauses == 1) Serial1.println("withPauses");
+		  else Serial1.println("nooPauses");
           break;
         // качаем один раз
-        case 60: 
-          fShake(mot,mode, 0);
+        case 60:
+          fShake(mot, mode, 0);
           fAddInActionInRecordMode(shakeOn);
           break;
         case 61: // переход в исходное после качания
-          fShake(mot, mode,1);
+          fShake(mot, mode, 1);
           fAddInActionInRecordMode(shakeOff);
           break;
-        case 62: // переход в исходное после качания
+        case 62:
           fRoll(mot);
           break;
         case 63:
+          fAddInActionInRecordMode(wait);
           fShakeHandWithRotation(mot, 360);
+		  fAddInActionInRecordMode(shakeRot);
           break;
         case 64:
           // поворот вправо
           fAddInActionInRecordMode(wait);
-		  fOtladkaMes("fSendError");
-          rotPlace(mot, minRbtStep, UgolPovorotaR, mode);
+          fOtladkaMes("UgolPovorotaR=" + String(UgolPovorotaR));
+          rotPlace1(mot, minRbtStep, UgolPovorotaR, mode);
           // При смене ориентации не стоит отправлять об этом сообщение в ПК,
           // т.к. подтверждение этой операции не требуется
-          delay(10);
-          fOtladkaMes(String(mot.rbOrient));
-          delay(10);
+          //          delay(10);
+          //          fOtladkaMes(String(mot.rbOrient));
+          //          delay(10);
           fAddInActionInRecordMode(turnR);
           break;
 
         case 65:
           // поворот влево
           fAddInActionInRecordMode(wait);
-          rotPlace(mot, minRbtStep, UgolPovorotaL, mode);
+          fOtladkaMes("UgolPovorotaL=" + String(UgolPovorotaL));
+          rotPlace1(mot, minRbtStep, UgolPovorotaL, mode);
           // При смене ориентации не стоит отправлять об этом сообщение в ПК,
           // т.к. подтверждение этой операции не требуется
-          delay(10);
-          fOtladkaMes(String(mot.rbOrient));
-          delay(10);
+          //          delay(10);
+          //          fOtladkaMes(String(mot.rbOrient));//
+          //          delay(10);
           fAddInActionInRecordMode(turnL);
           break;
 
         case 66:
           // повернуть вправо вперед
           fAddInActionInRecordMode(wait);
+          fOtladkaMes("UgolPovorotaR=" + String(UgolPovorotaR));
           rotateRightFF(UgolPovorotaR, mode, mot);
           fAddInActionInRecordMode(turnRfst);
           break;
@@ -837,22 +887,25 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
         case 67:
           // повернуть влево вперед
           fAddInActionInRecordMode(wait);
+          fOtladkaMes("UgolPovorotaL=" + String(UgolPovorotaL));
           rotateLeftFF(UgolPovorotaL, mode, mot);
-          fAddInActionInRecordMode(turnRfst);
+          fAddInActionInRecordMode(turnLfst);
           break;
 
         case 68:
           // повернуть вправо назад
           fAddInActionInRecordMode(wait);
-          rotateRightBK(UgolPovorotaR,mode,  mot);
+          fOtladkaMes("UgolPovorotaR=" + String(UgolPovorotaR));
+          rotateRightBK(UgolPovorotaR, mode,  mot);
           fAddInActionInRecordMode(turnRbst);
           break;
 
         case 69:
           // повернуть влево назад
           fAddInActionInRecordMode(wait);
+          fOtladkaMes("UgolPovorotaL=" + String(UgolPovorotaL));
           rotateLeftBK(UgolPovorotaL, mode, mot);
-          fAddInActionInRecordMode(turnRbst);
+          fAddInActionInRecordMode(turnLbst);
           break;
 
       }
@@ -979,6 +1032,7 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
       delay(15);
       SerR.prepareMessage( 'S', x);
       delay(15);
+	  rotSpeed = x;
       break;
 
     case 'W':
@@ -987,6 +1041,7 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
       delay(15);
       SerR.prepareMessage( 'X', x);
       delay(15);
+	  rotAccel = x;
       break;
 
     case 'd':
@@ -997,31 +1052,35 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
       minRbtStep = x;
       currMinStepRot = "m" + String(x);
       fOtladkaMes("MinStp=" + String(x));
+      fAddInActionInRecordMode(DoStep, x);
       break;
     case 'D': //
       if (x_l < 0) break;
+      long prevTime;
       if (withPauses) do {} while (RecordingTime() < x_l);
 
       else if (bPause)
       {
-        do {} while (RecordingTime() < x_l);
-        bPause == 1 ? bPause = 0 : bPause = 1;
+        //	    RecordingTime(prevTime,x_l);
+        Serial1.println("delay " + String(x_l));
+        delay(x_l);
+        bPause = 0;
       }
       break;
-/*    case 'J': // поворот влево
-      turn_angle = x;
-      fAddInActionInRecordMode(wait);
-      rotateLeftFF(turn_angle,mode, mot);
-      fAddInActionInRecordMode(turnLfst, turn_angle);
-      break;
-    case 'H': // поворот вправо
-      turn_angle = x;
-      fAddInActionInRecordMode(wait);
-      rotateRightFF(turn_angle, mode, mot);
-      fAddInActionInRecordMode(turnRfst, turn_angle);
+    /*    case 'J': // поворот влево
+          turn_angle = x;
+          fAddInActionInRecordMode(wait);
+          rotateLeftFF(turn_angle,mode, mot);
+          fAddInActionInRecordMode(turnLfst, turn_angle);
+          break;
+        case 'H': // поворот вправо
+          turn_angle = x;
+          fAddInActionInRecordMode(wait);
+          rotateRightFF(turn_angle, mode, mot);
+          fAddInActionInRecordMode(turnRfst, turn_angle);
 
-      break;
-*/
+          break;
+    */
     default:
       fErrorMes("unknownCmd:" + String(cmdR));
       fErrorMes(String(RF_data));
@@ -1067,20 +1126,20 @@ byte walkForward(long stepAngle, const regimRaboty &mode, posOfMotors & mot)
       if (Leg_fn(left_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
       if (fStepsCounter(mot, halfLengthStepsCount)) return 1;
       // перевозим тележку влево
-      if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1;
+      if (moveMassLeft(mot)) return 1;
       // если стоп в обычном режиме работы, то остановится
-      if (fBreak(not_leg, knee, mot) && (stWork == StWork)) return 1;
+      if ((stWork == StWork) && fBreak(not_leg, knee, mot)) return 1;
       // поднимаем(втягиваем) правую ногу.
       if (Leg_fn(right_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
       // поворачиваемся на левой ноге
       if (orient_steps(stepAngle, left_leg, forward, mot) && (stWork == StWork)) return 1;
 
-     // опускаем правую ногу
+      // опускаем правую ногу
       if (Leg_fn(right_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
       if (fStepsCounter(mot, halfLengthStepsCount)) return 1;
       // перевозим тележку вправо
-      if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1; // ехать вправо
-      if (fBreak(not_leg, knee, mot) && (stWork == StWork)) return 1;
+      if (moveMassRight(mot)) return 1; // ехать вправо
+      if ((stWork == StWork) && fBreak(not_leg, knee, mot)) return 1;
       // поднимаем левую ногу
       if (Leg_fn(left_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
       // слушаем ББ на случай команды стоп выходим из цикла
@@ -1103,8 +1162,8 @@ byte walkForward(long stepAngle, const regimRaboty &mode, posOfMotors & mot)
     {
       //	  Serial1.println("Smotrim_vpravo?");
       //	  delay(30);
-      if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1;
-      if (fBreak(not_leg, knee, mot) && (stWork == StWork)) return 1;
+      if (moveMassRight(mot)) return 1;
+      if ((stWork == StWork) && fBreak(not_leg, knee, mot)) return 1;
       // поднимаем левую ногу
       if (Leg_fn(left_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
       // слушаем ББ на случай команды стоп выходим из цикла
@@ -1131,8 +1190,8 @@ byte walkForward(long stepAngle, const regimRaboty &mode, posOfMotors & mot)
 
     while (1)
     {
-      if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1; // ехать влево
-      if (fBreak(not_leg, knee, mot) && (stWork == StWork)) return 1;
+      if (moveMassLeft(mot)) return 1; // ехать влево
+      if ((stWork == StWork) && fBreak(not_leg, knee, mot)) return 1;
       // поднимаем(втягиваем) правую ногу.
       if (Leg_fn(right_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
       //                if (fBreak(right_leg, knee)) break;
@@ -1155,8 +1214,8 @@ byte walkForward(long stepAngle, const regimRaboty &mode, posOfMotors & mot)
       //                if (fBreak(right_leg, knee)) break;
       if (fStepsCounter(mot, halfLengthStepsCount)) return 1;
       // перевозим тележку вправо
-      if (fBreak(not_leg, knee, mot) && (stWork == StWork)) return 1;
-      if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1; // ехать вправо
+      if ((stWork == StWork) && fBreak(not_leg, knee, mot)) return 1;
+      if (moveMassRight(mot)) return 1; // ехать вправо
       // поднимаем левую ногу
       if (Leg_fn(left_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
       // слушаем ББ на случай команды стоп выходим из цикла
@@ -1208,8 +1267,8 @@ byte walkForward(long stepAngle, const regimRaboty &mode, posOfMotors & mot)
       //                if (fBreak(right_leg, knee)) break;
       if (fStepsCounter(mot, halfLengthStepsCount)) return 1;
       // перевозим тележку вправо
-      if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1; // ехать вправо
-      if (fBreak(not_leg, knee, mot) && (stWork == StWork)) return 1;
+      if (moveMassRight(mot)) return 1; // ехать вправо
+      if ((stWork == StWork) && fBreak(not_leg, knee, mot)) return 1;
       // поднимаем левую ногу
       if (Leg_fn(left_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
       // слушаем ББ на случай команды стоп выходим из цикла
@@ -1233,7 +1292,7 @@ byte walkForward(long stepAngle, const regimRaboty &mode, posOfMotors & mot)
       //                if (fBreak(left_leg, knee)) break;
       if (fStepsCounter(mot, halfLengthStepsCount)) return 1;
       // перевозим тележку влево
-      if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1; // ехать влево
+      if (moveMassLeft(mot)) return 1; // ехать влево
       if (fBreak(not_leg, knee,  mot) && (stWork == StWork)) return 1;
       // поднимаем(втягиваем) правую ногу.
       if (Leg_fn(right_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
@@ -1312,8 +1371,8 @@ byte walkBackward(long stepAngle, const regimRaboty &mode, posOfMotors & mot)
       //                if (fBreak(left_leg, knee)) break;
       if (fStepsCounter(mot, halfLengthStepsCount)) return 1;
       // перевозим тележку влево
-      if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1; // ехать влево
-      if (fBreak(not_leg, knee, mot) && (stWork == StWork)) return 1;
+      if (moveMassLeft(mot)) return 1; // ехать влево
+      if ((stWork == StWork) && fBreak(not_leg, knee, mot)) return 1;
       // поднимаем(втягиваем) правую ногу.
       if (Leg_fn(right_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
       //                if (fBreak(left_leg, foot)) break;
@@ -1336,8 +1395,8 @@ byte walkBackward(long stepAngle, const regimRaboty &mode, posOfMotors & mot)
       if (fStepsCounter(mot, halfLengthStepsCount)) return 1;
       //                if (fBreak(right_leg, knee)) break;
       // перевозим тележку вправо
-      if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1; // ехать вправо
-      if (fBreak(not_leg, knee, mot) && (stWork == StWork)) return 1;
+      if (moveMassRight(mot)) return 1; // ехать вправо
+      if ((stWork == StWork) && fBreak(not_leg, knee, mot)) return 1;
       // поднимаем левую ногу
       if (Leg_fn(left_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
     }
@@ -1351,16 +1410,16 @@ byte walkBackward(long stepAngle, const regimRaboty &mode, posOfMotors & mot)
       oldActions = walkBk;
     }
     /*            if (pr_telega.dir_flg  ==  right)  {
-            if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1; // ехать влево
+            if (moveMassLeft(mot)) return 1; // ехать влево
           } else if (pr_telega.dir_flg  ==  left)
-            if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1; // ехать вправо
+            if (moveMassRight(mot)) return 1; // ехать вправо
     */
     //      if (old_leg == left_leg) // последнее опускание левой ноги на опору?
     // левая нога впереди? (смотрим вправо?)
     if (fEastOrWestStandingCalc(mot) == 0)
     {
-      if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1; // ехать вправо
-      if (fBreak(not_leg, knee, mot) && (stWork == StWork)) return 1;
+      if (moveMassRight(mot)) return 1; // ехать вправо
+      if ((stWork == StWork) && fBreak(not_leg, knee, mot)) return 1;
       // поднимаем левую ногу
       if (Leg_fn(left_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
       // слушаем ББ на случай команды стоп выходим из цикла
@@ -1413,51 +1472,26 @@ byte walkBackward(long stepAngle, const regimRaboty &mode, posOfMotors & mot)
     */
     while (1)
     {
-      if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1; // ехать влево
-      if (fBreak(not_leg, knee, mot) && (stWork == StWork)) return 1;
+      if (moveMassLeft(mot)) return 1; // ехать влево
+      if ((stWork == StWork) && fBreak(not_leg, knee, mot)) return 1;
       // поднимаем(втягиваем) правую ногу.
       if (Leg_fn(right_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
-      //        if (fBreak(right_leg, knee)) break;
       // поворачиваемся на левой ноге
       if (orient_steps(stepAngle, left_leg, backward, mot) && (stWork == StWork)) return 1;
       // опускаем правую ногу
       if (Leg_fn(right_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
-      /*      halfLengthStepsCount++;
-            if (fBreak(not_leg, foot, mot))
-            {
-              fSendState(stWork, Actions, halfLengthStepsCount);
-              return 1;
-            }
-            if ((stWork == StPlay) && (halfLengthStepsCount >= maxStepsCount))
-            {
-              //       fSendState(stWork, Actions, radio, mot);
-              fOtladkaMes("PlayModeMaxStepsReached");
-              return 0;
-            }*/
       if (fStepsCounter(mot, halfLengthStepsCount)) return 1;
       //               if (fBreak(right_leg, knee)) break;
       // перевозим тележку вправо
       //      if (fBreak(not_leg, knee, mot) && (stWork == StWork)) return 1;
-      if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1; // ехать вправо
-      if (fBreak(not_leg, knee, mot) && (stWork == StWork)) return 1;
+      if (moveMassRight(mot)) return 1; // ехать вправо
+      if ((stWork == StWork) && fBreak(not_leg, knee, mot)) return 1;
       // поднимаем левую ногу
       if (Leg_fn(left_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
       // слушаем ББ на случай команды стоп выходим из цикла
       //           if (fBreak(left_leg, knee)) break;
       // поворачиваемся вперед на правой ноге на нужный угол
       if (orient_steps(stepAngle, right_leg, backward, mot) && (stWork == StWork)) return 1;
-      /*      halfLengthStepsCount++;
-            if (fBreak(not_leg, foot, mot))
-            {
-              fSendState(stWork, Actions, halfLengthStepsCount);
-              return 1;
-            }
-            if ((stWork == StPlay) && (halfLengthStepsCount >= maxStepsCount))
-            {
-              //       fSendState(stWork, Actions, radio, mot);
-              fOtladkaMes("PlayModeMaxStepsReached");
-              return 0;
-            } */
       // опускаем левую ногу (будем стоять на обоих)
       if (Leg_fn(left_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
       if (fStepsCounter(mot, halfLengthStepsCount)) return 1;
@@ -1472,48 +1506,23 @@ byte walkBackward(long stepAngle, const regimRaboty &mode, posOfMotors & mot)
     {
       // поворачиваемся на левой ноге
       if (orient_steps(stepAngle, left_leg, backward, mot) && (stWork == StWork)) return 1;
-      /*      halfLengthStepsCount++;
-            if (fBreak(not_leg, foot, mot))
-            {
-              fSendState(stWork, Actions, halfLengthStepsCount);
-              return 1;
-            }
-            if ((stWork == StPlay) && (halfLengthStepsCount >= maxStepsCount))
-            {
-              //      fSendState(stWork, Actions, radio, mot);
-              fOtladkaMes("PlayModeMaxStepsReached");
-              return 0;
-            }
-      */
       // опускаем правую ногу
       if (Leg_fn(right_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
       if (fStepsCounter(mot, halfLengthStepsCount)) return 1;
       // перевозим тележку вправо
-      if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1; // ехать вправо
-      if (fBreak(not_leg, knee, mot) && (stWork == StWork)) return 1;
+      if (moveMassRight(mot)) return 1; // ехать вправо
+      if ((stWork == StWork) && fBreak(not_leg, knee, mot)) return 1;
       // поднимаем левую ногу
       if (Leg_fn(left_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
       // слушаем ББ на случай команды стоп выходим из цикла
       // поворачиваемся вперед на правой ноге на нужный угол
       if (orient_steps(stepAngle, right_leg, backward, mot) && (stWork == StWork)) return 1;
-      /*      halfLengthStepsCount++;
-            if (fBreak(not_leg, foot, mot))
-            {
-              fSendState(stWork, Actions, halfLengthStepsCount);
-              return 1;
-            }
-            if ((stWork == StPlay) && (halfLengthStepsCount >= maxStepsCount))
-            {
-              //        fSendState(stWork, Actions, radio, mot);
-              fOtladkaMes("PlayModeMaxStepsReached");
-              return 0;
-            }*/
       // опускаем левую ногу (будем стоять на обоих)
       if (Leg_fn(left_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
       if (fStepsCounter(mot, halfLengthStepsCount)) return 1;
       // перевозим тележку влево
-      if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1; // ехать влево
-      if (fBreak(not_leg, knee, mot) && (stWork == StWork)) return 1;
+      if (moveMassLeft(mot)) return 1; // ехать влево
+      if ((stWork == StWork) && fBreak(not_leg, knee, mot)) return 1;
       // поднимаем(втягиваем) правую ногу.
       if (Leg_fn(right_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
       //                if (fBreak(right_leg, knee)) break;
@@ -1572,17 +1581,13 @@ int Cal_telega(void)
 bool fCalibration(UART_Serial & lSer, UART_Serial & rSer, posOfMotors & mot)
 {
   char cmdL = 0x0, cmdR = 0x0;
-//  long mot.LeftLegCurrentSteps, mot.RightLegCurrentSteps, mot.rbOrient;
-  
+  //  long mot.LeftLegCurrentSteps, mot.RightLegCurrentSteps, mot.rbOrient;
+
   fOtladkaMes("Starting-calibration");
 #ifdef _BUILTIN_LED_ON_
   digitalWrite(LED_BUILTIN, LOW);
 #endif
-  if (Cal_telega()) 
-  {   fErrorMes("NoTelega");
-	  return 1;
-  }
-  else fOtladkaMes("Telega");// переносим центр на правую ногу
+
   // Калибровка обоих ног
   delay(50);
   lSer.prepareMessage('K'); // вначале вытягиваем левую ногу
@@ -1609,7 +1614,7 @@ bool fCalibration(UART_Serial & lSer, UART_Serial & rSer, posOfMotors & mot)
       }
       else {
         AnswerL = 1;
-        //		  fOtladkaMes("EstOtvetLevoy");
+//        fOtladkaMes("EstOtvetLevoy");
       }
     }
 
@@ -1624,17 +1629,18 @@ bool fCalibration(UART_Serial & lSer, UART_Serial & rSer, posOfMotors & mot)
       }
       else {
         AnswerR = 1;
-        //  		  fOtladkaMes("EstOtvetPravoy");
+
+//        fOtladkaMes("EstOtvetPravoy");
       }
     }
     if (AnswerL && AnswerR)
     {
       mot.LeftLegCurrentSteps = 0;
       mot.RightLegCurrentSteps = 0;
-//      mot.CurrentZero = 0;
+      //      mot.CurrentZero = 0;
       in_cycle = 0;
       cmdL = cmdR = 0;
- //     mot.rbOrient  = 0;
+      //     mot.rbOrient  = 0;
       //      oldOrient = 0;
       break;
     }
@@ -1643,14 +1649,29 @@ bool fCalibration(UART_Serial & lSer, UART_Serial & rSer, posOfMotors & mot)
       fErrorMes("KalibrovkaError");
       return 1;
     }
-    if ((millis() - kal_time) > 5000) // если через 20 секунд не вышли из цикла
+    if ((millis() - kal_time) > 5000) // если через 5 секунд не вышли из цикла
     {
-      if ((AnswerL == 0) && (AnswerL == 0)) fErrorMes("ZhdemObeNogi");
-      else if (AnswerL) fErrorMes("Zhdem pravuyu");
-      else if (AnswerR) fErrorMes("Zhdem levuyu");
-
+      if ((AnswerL == 0) && (AnswerR == 0))
+      {
+        fErrorMes("ZhdemObeNogi");
+        lSer.prepareMessage('K'); // вначале вытягиваем левую ногу
+        rSer.prepareMessage('K'); // потом правую
+      }
+      else if (AnswerL == 0)
+      {
+        fErrorMes("Zhdem pravuyu");
+        lSer.prepareMessage('K'); // вначале вытягиваем левую ногу
+      }
+      else if (AnswerR == 0)
+      {
+        fErrorMes("Zhdem levuyu");
+        rSer.prepareMessage('K'); // потом правую
+      }
+      delay(10);
+      kal_time = kal_time + 5000;
       //		fErrorMes("DolgoNetOtveta");
-      delay(1000);
+
+      //      delay(1000);
       //		break;
       /*
         if (fBreak(not_leg, knee)) break;
@@ -1672,6 +1693,11 @@ bool fCalibration(UART_Serial & lSer, UART_Serial & rSer, posOfMotors & mot)
     }
   }     // in cycle
 
+  if (Cal_telega())
+  { fErrorMes("NoTelega");
+    return 1;
+  }
+//  else fOtladkaMes("Telega");// переносим центр на правую ногу
 
   SerL.prepareMessage( 'P', 14000 / 4);
   delay(15);
@@ -1681,22 +1707,27 @@ bool fCalibration(UART_Serial & lSer, UART_Serial & rSer, posOfMotors & mot)
   // втянем правую
   mot.RightLegCurrentSteps = -stepsPerLegRot * 15L / lengthPerLegRot;
   rSer.prepareMessage( 'h', mot.RightLegCurrentSteps);
-  if (fAnswerWait(right_leg, knee, mot)) return 1;
+  if (fAnswerWait(right_leg, knee, mot, 'T', 'h')) return 1;
   // повернем стопу до концевика
+  delay(50);
   rSer.prepareMessage('g');
   delay(50);
   if (fAnswerWait(right_leg, zero, mot)) return 1;
+  //  fOtladkaMes("->0_Done");
   mot.LeftLegCurrentSteps = -stepsPerLegRot * 15L / lengthPerLegRot;
+  //  fOtladkaMes("LLCS="+String(mot.LeftLegCurrentSteps));
+  delay(30);
   lSer.prepareMessage( 'h', mot.LeftLegCurrentSteps);
-  if (fAnswerWait(left_leg, knee, mot)) return 1;
+  //  fOtladkaMes("$h");
+  if (fAnswerWait(left_leg, knee, mot, 'h', 'T')) return 1;
 
   // двигаем тележку влево
-  pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight());
+  moveMassRight(mot);
   // втягиваем на 30 мм
   // еще втянем левую
   mot.LeftLegCurrentSteps = -stepsPerLegRot * 30L / lengthPerLegRot;
   lSer.prepareMessage( 'h', mot.LeftLegCurrentSteps);
-  if (fAnswerWait(left_leg, knee, mot)) return 1;
+  if (fAnswerWait(left_leg, knee, mot, 'h', 'T')) return 1;
   // повернем стопу до концевика
   lSer.prepareMessage('g');
   delay(50);
@@ -1705,7 +1736,7 @@ bool fCalibration(UART_Serial & lSer, UART_Serial & rSer, posOfMotors & mot)
 
   mot.RightLegCurrentSteps = -stepsPerLegRot * 30L / lengthPerLegRot;
   rSer.prepareMessage( 'h', mot.RightLegCurrentSteps);
-  if (fAnswerWait(right_leg, knee, mot)) return 1;
+  if (fAnswerWait(right_leg, knee, mot, 'T', 'h')) return 1;
 
 
   // двигаемся в исходное положение
@@ -1718,7 +1749,7 @@ bool fCalibration(UART_Serial & lSer, UART_Serial & rSer, posOfMotors & mot)
   rSer.prepareMessage( 'i', mot.RightLegCurrentSteps); // втягиваем
   //mot.CurrentZero = mot.LeftLegCurrentSteps;
   delay(10);
-  if (fAnswerWait(all_legs, knee, mot)) return 1;
+  if (fAnswerWait(all_legs, knee, mot, 'i', 'i')) return 1;
   fOtladkaMes("CalOk");
 
   vtagSpeed  = 4500;
@@ -1727,26 +1758,28 @@ bool fCalibration(UART_Serial & lSer, UART_Serial & rSer, posOfMotors & mot)
   SerR.prepareMessage( 'P', vtagSpeed);
   delay(15);
   // после калибровки установить режим с поднятыми ногами
-  
+
   // скорости и ускорения стоп
   SerL.prepareMessage( 'S', 10000);
   delay(15);
-  
+
   SerL.prepareMessage( 'X', 10000);
   delay(15);
 
   SerR.prepareMessage( 'S', 10000);
   delay(15);
-  
+
   SerR.prepareMessage( 'X', 10000);
   delay(15);
 
-	  
-  fOtladkaMes("EnergySaveMode");
-//  mode = energySaving;
+
+  //  fOtladkaMes("EnergySaveMode");
+  //  mode = energySaving;
   // установить угол шагания 30 градусов
-  fOtladkaMes("30 Degree");
+  //  fOtladkaMes("30 Degree");
+
   currStpAngl[1] = '2'; currStpAngl[2] = '2';
+  delay(20);
   //  stepAngle = calc_angle(30, m_stp);
 
 
@@ -1864,7 +1897,7 @@ bool fBreak(robot_leg leg, MKmotor Uzel, posOfMotors & mot)
               SerL.getString1(cmdL, Data1L);
               if (cmdL == 'A')
               {
-               // mot.LeftLegCurrentSteps = Data1L;
+                // mot.LeftLegCurrentSteps = Data1L;
                 //		fOtladkaMes("ok\r\n");
               } else if (cmdL == 'B')
               {
@@ -1893,8 +1926,8 @@ bool fBreak(robot_leg leg, MKmotor Uzel, posOfMotors & mot)
               SerL.getString1(cmdL, Data1L);
               if (cmdL == 'B')
               {
-//                if (mot.LeftFootCurrentSteps != Data1L)
-//                  fOtladkaMes("LftFtStpsErr");
+                //                if (mot.LeftFootCurrentSteps != Data1L)
+                //                  fOtladkaMes("LftFtStpsErr");
               } else if (cmdL == 'A')
               {
                 fErrorMes("FootNotLegAnswer");
@@ -1930,7 +1963,7 @@ bool fBreak(robot_leg leg, MKmotor Uzel, posOfMotors & mot)
               SerR.getString1(cmdR, Data1R);
               if (cmdR == 'A')
               {
-  //              mot.RightLegCurrentSteps = Data1R;
+                //              mot.RightLegCurrentSteps = Data1R;
                 //			fOtladkaMes("ok\r\n");
               } else if (cmdR == 'B')
               {
@@ -1958,8 +1991,8 @@ bool fBreak(robot_leg leg, MKmotor Uzel, posOfMotors & mot)
               SerR.getString1(cmdR, Data1R);
               if (cmdR == 'B')
               {
-    //            if (mot.RightFootCurrentSteps != Data1R)
-    //              fOtladkaMes("RghtFtStpsErr");
+                //            if (mot.RightFootCurrentSteps != Data1R)
+                //              fOtladkaMes("RghtFtStpsErr");
               } else if (cmdR == 'A')
               {
                 fErrorMes("FootNotLegAnswer");
@@ -2014,13 +2047,13 @@ void StepsManage(posOfMotors &mot, regimRaboty &mode)
       {
         // опускаем левую ногу (будем стоять на обоих)
         Leg_fn(left_leg, mode, vytianut, mot);
-        if (fBreak(left_leg, knee, mot)) return;
+        //      if (fBreak(left_leg, knee, mot)) return;
       }
       if (mot.RightLegCurrentSteps < mot.LeftLegCurrentSteps) //стоим на левой ноге?
       {
         // опускаем правую ногу (будем стоять на обоих)
         Leg_fn(right_leg, mode, vytianut, mot);
-        if (fBreak(right_leg, knee, mot)) return;
+        //      if (fBreak(right_leg, knee, mot)) return;
       }
     }
     /*    if (stWork == StRec)
@@ -2043,13 +2076,11 @@ void StepsManage(posOfMotors &mot, regimRaboty &mode)
 // Отправка текущего состояния для записи и воспроизведения
 void fSendState(StadyWork WorkSt, actions Action, long param)
 {
-  // при записи, после того как ПК отправил команду повернуть на МК
-  // он записывает в файл свою команду и ждет от МК сообщение о пройденном
-  // количестве шагов для записи их в файл. После обнуляем кол. шагов
-  // В режиме чтения нужно просто отправить количество пройденных шагов
-  // чтобы ПК знал, что нужно выполнять новое действие.
+  static bool oPause = 0;
+  static long lPreviosCmdTime = 0;
+  static long xl = 9999999;
   //  char   Str3[50];
-  String out = "";
+  //  String out = "";
   if ((WorkSt == StRec))
   {
     String Stp  = "";
@@ -2063,155 +2094,234 @@ void fSendState(StadyWork WorkSt, actions Action, long param)
         //        delay(20);
         Str1 = "s";
         Str2 = String(param); // число шагов конвертируем в строку
-        //       ltoa(halfLengthStepsCount, Str2, 10);
         Str1.concat(Str2);  // добавляем к 's' число шагов и сохраняем в Str1
-        //    Str1 += Str2;
-        //    strcat(Str1, Str2);
 
-#ifdef _EPROM1_
-        //     Str1.toCharArray(Str3, Str1.length() + 1); // конвертируем из String в
-        writeString(Str1);
-        //        fOtladkaMes(readString(StrAddr - incriment));
-        //		Stp.toCharArray(Str3, Stp.length() + 1);
-        writeString(Stp);
-        //        fOtladkaMes(readString(StrAddr - incriment));
-        //	fOtladkaMes("StringAdr2 = " + String(StrAddr));
-
-#endif
-        param = 0;
         break;
+
       case walkBk:
         Stp = "K13"; // малая s означает количество пройденных шагов
         Str1 = "s";
         Str2 = String(param); // число шагов конвертируем в строку
-        //        Str1 += Str2;  // добавляем к 's' число шагов и сохраняем в Str1
         Str1.concat(Str2);
-#ifdef _EPROM1_
-        //    Str1.toCharArray(Str3, Str1.length() + 1); // конвертируем из String в
-        writeString(Str1);
-        //        fOtladkaMes(readString(StrAddr - incriment));
-        //	Stp.toCharArray(Str3, Stp.length() + 1);
-        writeString(Stp);
-        //        fOtladkaMes(readString(StrAddr - incriment));
-#endif
         break;
-      //    case constCmd:
-      case turnL:
-#ifdef _EPROM1_
-        Str1 = "K65";
-        writeString(Str1);
-        //        fOtladkaMes(readString(StrAddr - incriment));
 
-#endif
+      case lUp:
+        Stp = "K15";
         break;
+
+      case rUp:
+        Stp = "K16";
+        break;
+
+      case turnL:
+        Stp = "K65";
+        break;
+
       case turnR:
-#ifdef _EPROM1_
-        Str1 = "K64";
-        writeString(Str1);
-        //       fOtladkaMes(readString(StrAddr - incriment));
-#endif
+        Stp = "K64";
         break;
-      case wait:
-#ifdef _EPROM1_
-        Str1 = "D";
-        Str2 = String(RecordingTime()); // записть текущего времени в память
-        Str1.concat(Str2);
-        // if (withPauses||bPause)
-        writeString(Str1);
-        //       fOtladkaMes(readString(StrAddr - incriment));
-#endif
-        break;
+
       case standStil:
         Stp = "K45"; //
-#ifdef _EPROM1_
-        writeString(Stp);
-        //        fOtladkaMes(readString(StrAddr - incriment));
-#endif
-
         break;
+
       case telCenter:
         Stp = "K18"; //
-#ifdef _EPROM1_
-        writeString(Stp);
-        //        fOtladkaMes(readString(StrAddr - incriment));
-#endif
         break;
+
+      case shakeOn:
+        Stp = "K60";
+        break;
+
+      case shakeOff:
+        Stp = "K61";
+        break;
+
+      case turnLfst:
+        Stp = "K67";
+        break;
+
+      case turnRfst:
+        Stp = "K66";
+        break;
+
+      case turnLbst:
+        Stp = "K69";
+        break;
+
+      case turnRbst:
+        Stp = "K68";
+        break;
+		
+	  case shakeRot:
+	    Stp ="K63";
+		break;
+	
+	  case stDn:
+	    Stp = "K40";
+	    break;
+
+
+
+
+      case wait:
+#ifdef _EPROM1_
+        Stp = "D";
+//        RecordingTime(lPreviosCmdTime, 0);
+        if (bPause)
+        {
+          Str2 = String(startTime - endTime);
+          bPause = 0;
+        }
+        else Str2 = String(RecordingTime()); // записть текущего времени в память
+        Stp.concat(Str2);
+        // if (withPauses||bPause)
+        writeString(Stp);
+        //       fOtladkaMes(readString(StrAddr - incriment));
+#endif
+        return;
       case goSlow:
         Stp = "K34"; //
 #ifdef _EPROM1_
         writeString(Stp);
         //        fOtladkaMes(readString(StrAddr - incriment));
 #endif
-        break;
+        return;
       case goFast:
         Stp = "K35"; // малая s означает количество пройденных шагов
 #ifdef _EPROM1_
         writeString(Stp);
         //        fOtladkaMes(readString(StrAddr - incriment));
 #endif
-        break;
-      case shakeOn:
-        Stp = "K60";
-#ifdef _EPROM1_
-        writeString(Stp);
-#endif
-        break;
-      case shakeOff:
-        Stp = "K61";
-#ifdef _EPROM1_
-        writeString(Stp);
-#endif
-        break;
-      case turnLfst:
-        Str1 = "K67";
-#ifdef _EPROM1_
-        writeString(Str1);
-#endif
-        break;
-      case turnRfst:
-        Str1 = "K66";
-#ifdef _EPROM1_
-        writeString(Str1);
-#endif
-        break;
-      case turnLbst:
-        Str1 = "K69";
-#ifdef _EPROM1_
-        writeString(Str1);
-#endif
-        break;
-      case turnRbst:
-        Str1 = "K68";
-#ifdef _EPROM1_
-        writeString(Str1);
-#endif
-        break;
+        return;
       case aPause:
         Stp = "K46";
+        //      oPause = 1;
 #ifdef _EPROM1_
         writeString(Stp);
 #endif
-        break;
+        return;
       case UgolL:
 #ifdef _EPROM1_
-        Str1 = "L";
+        Stp = "L";
         Str2 = String(param); // конвертируем в строку
-        Str1.concat(Str2);
-        writeString(Str1);
+        Stp.concat(Str2);
+        writeString(Stp);
         //        fOtladkaMes(readString(StrAddr - incriment));
 
 #endif
-        break;
+        return;
       case UgolR:
 #ifdef _EPROM1_
-        Str1 = "R";
+        Stp = "R";
         Str2 = String(param); // конвертируем в строку
-        Str1.concat(Str2);
-        writeString(Str1);
+        Stp.concat(Str2);
+        writeString(Stp);
+        //       fOtladkaMes(readString(StrAddr - incriment));
+#endif
+        return;
+      // угол дошагания
+      case DoStep:
+#ifdef _EPROM1_
+        Stp = "m";
+        Str2 = String(param); // конвертируем в строку
+        Stp.concat(Str2);
+        writeString(Stp);
         //       fOtladkaMes(readString(StrAddr - incriment));
 #endif
         break;
+	  case Deg10:
+	    Stp = "K20";
+	    break;
+		
+	  case Deg20:
+	    Stp = "K21";
+	    break;
+		
+	  case Deg30:
+	    Stp = "K22";
+	    break;
+		
+	  case Deg45:
+	    Stp = "K23";
+	    break;
+		
+	  case Deg60:
+	    Stp = "K24";
+	    break;
+		
+	  case Deg70:
+	    Stp = "K25";
+	    break;
+		
+	  case Deg80:
+	    Stp = "K26";
+	    break;
+		
+	  case Deg90:
+	    Stp = "K27";
+	    break;
+		
+	  case H20:
+	    Stp = "K28";
+	    break;
+		
+	  case H30:
+	    Stp = "K29";
+	    break;
+		
+	  case H50:
+	    Stp = "K30";
+	    break;
+		
+	  case H80:
+	    Stp = "K31";
+	    break;
+		
+	  case H120:
+	    Stp = "K32";
+	    break;
+		
+	  case H160:
+	    Stp = "K33";
+	    break;
+		
+	  case H180:
+	    Stp = "K36";
+	    break;
+
+	  case H220:
+	    Stp = "K37";
+	    break;
+
+	  case H360:
+	    Stp = "K38";
+	    break;
+		
+      default:
+        fErrorMes("UnknownCommand");
+        Str1 = "";
+        Stp = "";
+        return;
     }
+    // запоминаем время повледней комманды
+    /*   if (oPause)
+       {
+         String Stp1 = "D";
+         long lT = millis() - lPreviosCmdTime;
+         Str2 = String(lT); // конвертируем в строку
+         Stp1.concat(Str2);
+      #ifdef _EPROM1_
+         writeString(Stp1);
+      #endif
+       }            */
+#ifdef _EPROM1_
+    if (Str1 != "")   writeString(Str1);
+    writeString(Stp);
+#endif
+    //	Serial1.println("GotPreviosTime!");
+    //    lPreviosCmdTime = millis();
+
   }
   /*   //  УСЛОВИЕ НИКОГДА НЕ ВЫПОЛНИТСЯ!!!!!!!!!!!!
     if ((WorkSt == StPlay))
@@ -2244,17 +2354,42 @@ void fSendState(StadyWork WorkSt, actions Action, long param)
 */
 bool Leg_fn(robot_leg leg, const regimRaboty &regim, leg_dir dir, posOfMotors & mot, long lDeep)
 {
-// глобальные переменные: mot.LeftLegCurrentSteps, mot.CurrentZero,mot.stepsDepthInSteps,
-// old_leg,mot.RightLegCurrentSteps,LegUpL
+  // глобальные переменные: mot.LeftLegCurrentSteps, mot.CurrentZero,mot.stepsDepthInSteps,
+  // old_leg,mot.RightLegCurrentSteps,LegUpL
+  const char BbITANYTb = 'i';
+  const char BTANYTb = 'h';
   fOtladkaMes("Leg_up/dn");
   old_leg = leg;
   bool out = 0;
-  if((mot.CurrentZero == 0)&&(regim == fast)){
-	  fErrorMes("PEREKLUCHI REGIM!!!");
-	  return 1;
+  if ((mot.CurrentZero == 0) && (regim == fast)) {
+    fErrorMes("PEREKLUCHI REGIM!!!");
+    return 1;
   }
+  if (readyForRotLeftFoot(mot) && (dir == vytianut) && (leg == left_leg))
+  {
+    fErrorMes("WrongLeg1"); return 0;
+  }
+
+  if (readyForRotRightFoot(mot) && (dir == vytianut) && (leg == right_leg))
+  {
+    fErrorMes("WrongLeg2"); return 0;
+  }
+
+  if (readyForRotRightFoot(mot) && (dir == vtianut) && (leg == right_leg))
+  {
+    fErrorMes("WrongLeg3"); return 0;
+  }
+
+  if (readyForRotLeftFoot(mot) && (dir == vtianut) && (leg == left_leg))
+  {
+    fErrorMes("WrongLeg4"); return 0;
+  }
+
+
+
   if (lDeep <= 0) lDeep = mot.stepsDepthInSteps;
   long halfLdeep = lDeep / 2;
+
   if (dir == vytianut)
   {
     if (leg == left_leg) // левая нога
@@ -2263,25 +2398,25 @@ bool Leg_fn(robot_leg leg, const regimRaboty &regim, leg_dir dir, posOfMotors & 
       {
         // вытягивается медленнее, поэтому его выше
         mot.LeftLegCurrentSteps = mot.CurrentZero;// + (mot.stepsDepthInSteps - mot.stepsDepthInSteps / 2.0);
-        SerL.prepareMessage( 'i', mot.CurrentZero); // вытягиваем
+        SerL.prepareMessage( BbITANYTb, mot.CurrentZero); // вытягиваем
         delay(10);
         mot.RightLegCurrentSteps = mot.CurrentZero;// - mot.stepsDepthInSteps / 2.0;
-        SerR.prepareMessage( 'h', mot.CurrentZero); // втягиваем
+        SerR.prepareMessage( BTANYTb, mot.CurrentZero); // втягиваем
         delay(1);
         //       delay(200);
 #ifndef _TIHOHOD_
-        if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) out = 1;
+        if (moveMassLeft(mot)) out = 1;
         pr_telega.fDoezd(*motorLink, telega);
 #endif
-        if (fAnswerWait(all_legs,  knee, mot)) out = 1; //ждем
+        if (fAnswerWait(all_legs,  knee, mot, BbITANYTb, BTANYTb)) out = 1; //ждем
         // не хватает алгоритма приведения переменной вытянуто в соответствие!!!!!!!
       }
       else
       { // energysaving
         mot.LeftLegCurrentSteps = mot.CurrentZero;
-        SerL.prepareMessage( 'i', mot.CurrentZero); // вытягиваем
+        SerL.prepareMessage( BbITANYTb, mot.CurrentZero); // вытягиваем
         delay(1);
-        if (fAnswerWait(left_leg, knee, mot)) out =  1; //ждем
+        if (fAnswerWait(left_leg, knee, mot, BbITANYTb)) out =  1; //ждем
         LegUpL = vytianut; //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       }
     }
@@ -2290,25 +2425,26 @@ bool Leg_fn(robot_leg leg, const regimRaboty &regim, leg_dir dir, posOfMotors & 
       if (regim == fast) // БЫСТРЫЙ РЕЖИМ
       {
         mot.RightLegCurrentSteps = mot.CurrentZero;// + (mot.stepsDepthInSteps - mot.stepsDepthInSteps / 2.0);
-        SerR.prepareMessage( 'i', mot.CurrentZero); // вытягиваем
+        SerR.prepareMessage( BbITANYTb, mot.CurrentZero); // вытягиваем
         delay(10);
         mot.LeftLegCurrentSteps = mot.CurrentZero;// - mot.stepsDepthInSteps / 2.0;
-        SerL.prepareMessage( 'h', mot.CurrentZero); // втягиваем
+        SerL.prepareMessage( BTANYTb, mot.CurrentZero); // втягиваем
         delay(1);
 #ifndef _TIHOHOD_
         //      delay(200);
-        if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) out = 1;
+        if (moveMassRight(mot)) out = 1;
         pr_telega.fDoezd(*motorLink, telega);
 #endif
-        if (fAnswerWait(all_legs,  knee, mot)) out = 1; //ждем
+
+        if (fAnswerWait(all_legs,  knee, mot, BTANYTb, BbITANYTb)) out = 1; //ждем
         // не хватает алгоритма приведения переменной вытянуто в соответствие!!!!!!!
       }
       else
       { // energysaving
         mot.RightLegCurrentSteps = mot.CurrentZero;
-        SerR.prepareMessage( 'i', mot.CurrentZero); // вытягиваем
+        SerR.prepareMessage(BbITANYTb, mot.CurrentZero); // вытягиваем
         delay(1);
-        if (fAnswerWait(right_leg, knee, mot)) out = 1; //ждем
+        if (fAnswerWait(right_leg, knee, mot, 'T', BbITANYTb)) out = 1; //ждем
         LegUpR = vytianut;//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       }
     }
@@ -2320,42 +2456,42 @@ bool Leg_fn(robot_leg leg, const regimRaboty &regim, leg_dir dir, posOfMotors & 
       if (regim == fast) // БЫСТРЫЙ РЕЖИМ
       { //         текущее положение
         mot.RightLegCurrentSteps = mot.CurrentZero + halfLdeep;
-        SerR.prepareMessage( 'i', mot.RightLegCurrentSteps); // вытягиваем
+        SerR.prepareMessage( BbITANYTb, mot.RightLegCurrentSteps); // вытягиваем
         delay(10);
         mot.LeftLegCurrentSteps = mot.CurrentZero - halfLdeep;
-        SerL.prepareMessage( 'h', mot.LeftLegCurrentSteps); // втягиваем
+        SerL.prepareMessage( BTANYTb, mot.LeftLegCurrentSteps); // втягиваем
         delay(1);
-        if (fAnswerWait(all_legs,  knee, mot)) out = 1; //ждем
+        if (fAnswerWait(all_legs,  knee, mot, BTANYTb, BbITANYTb)) out = 1; //ждем
         // не хватает алгоритма приведения переменной вытянуто в соответствие!!!!!!!
       }
       else
       { // energysaving
         mot.LeftLegCurrentSteps = mot.CurrentZero - lDeep;
-        SerL.prepareMessage( 'h', mot.LeftLegCurrentSteps); // втягиваем
+        SerL.prepareMessage(BTANYTb, mot.LeftLegCurrentSteps); // втягиваем
         delay(1);
-        if (fAnswerWait(left_leg, knee, mot)) out = 1; //ждем
+        if (fAnswerWait(left_leg, knee, mot, BTANYTb, 'T')) out = 1; //ждем
         LegUpL = vtianut; //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       }
     }
-    else
+    else if (leg == right_leg)
     { // правая нога
       if (regim == fast) // БЫСТРЫЙ РЕЖИМ
       {
         mot.LeftLegCurrentSteps = mot.CurrentZero + halfLdeep;
-        SerL.prepareMessage( 'i', mot.LeftLegCurrentSteps); // вытягиваем
+        SerL.prepareMessage( BbITANYTb, mot.LeftLegCurrentSteps); // вытягиваем
         delay(10);
         mot.RightLegCurrentSteps = mot.CurrentZero - halfLdeep;
-        SerR.prepareMessage( 'h', mot.RightLegCurrentSteps); // втягиваем
+        SerR.prepareMessage(BTANYTb, mot.RightLegCurrentSteps); // втягиваем
         delay(1);
-        if (fAnswerWait(all_legs,  knee, mot)) out = 1; //ждем
+        if (fAnswerWait(all_legs,  knee, mot, BbITANYTb, BTANYTb)) out = 1; //ждем
         // не хватает алгоритма приведения переменной вытянуто в соответствие!!!!!!!
       }
       else
       { // energysaving
         mot.RightLegCurrentSteps = mot.CurrentZero - lDeep;
-        SerR.prepareMessage( 'h', mot.RightLegCurrentSteps); // втягиваем
+        SerR.prepareMessage(BTANYTb, mot.RightLegCurrentSteps); // втягиваем
         delay(1);
-        if (fAnswerWait(right_leg, knee, mot)) out = 1; //ждем
+        if (fAnswerWait(right_leg, knee, mot, 'T', BTANYTb)) out = 1; //ждем
         LegUpR = vtianut;//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       }
     }
@@ -2441,332 +2577,47 @@ bool Leg_fn(robot_leg leg, const regimRaboty &regim, leg_dir dir, posOfMotors & 
 
 
 //  ------ ОЖИДАНИЕ ОТВЕТА ОТ ПРИВОДА НОГ -----
-bool fAnswerWait(robot_leg leg, MKmotor Uzel, posOfMotors & mot)
+bool fAnswerWait(robot_leg leg, MKmotor Uzel, posOfMotors & mot,  char cL,  char cR)
 {
 
+  //static long old_LeftLegCurrentSteps = mot.LeftLegCurrentSteps;
+  //static long old_RightLegCurrentSteps = mot.RightLegCurrentSteps;
   int k = 0;
   char cmdL = 0x0, cmdR = 0x0;
   const short delay_nrf_pause = 10;
   unsigned long last_time = millis();
-  unsigned long return_time = 60000;  // отсрочка 60 секунд
+  unsigned long return_time = 15000;  // отсрочка 6 секунд
   long Data1L, Data1R;
- // long oldFootData1L = mot.LeftFootCurrentSteps, oldFootData1R = mot.RightFootCurrentSteps;
- // long oldKneeData1L = mot.LeftLegCurrentSteps, oldKneeData1R = mot.RightLegCurrentSteps;
+  bool Leg;
+  if (leg == left_leg)  Leg = 0;
+  if (leg == right_leg) Leg = 1;
 
-  if (leg == left_leg)
-  {
-    if (Uzel == knee)
+  // long oldFootData1L = mot.LeftFootCurrentSteps, oldFootData1R = mot.RightFootCurrentSteps;
+  // long oldKneeData1L = mot.LeftLegCurrentSteps, oldKneeData1R = mot.RightLegCurrentSteps;
+
+  if ((leg == left_leg) || (leg == right_leg))  while (fNoBlockAnsWait(Uzel, mot, Leg) != 0)
     {
-      //	  fOtladkaMes("LftKneeAnswrWt..");
-      while (cmdL != 'A')
-      { // ждем ответ от колена
-        //        if (fBreak(left_leg, knee))  return 1;
-        if ((k % 100) == 0) //остаток от деления равен нулю?
-          //		  fOtladkaMes(".");
-          k++;
-        delay(delay_nrf_pause);
-        if (SerL.handle_serial() > 0) // что-то принято?
-        {
-          SerL.getString1(cmdL, Data1L); // читаем что принято
-          if (cmdL == 'A')
-          {
-            // проверяем положение колена
-            //     fOtladkaMes("LKnee:" + String(Data1L));
-   //         if (mot.LeftLegCurrentSteps != Data1L)
-  //          {
-  //            fErrorMes("MUST BE:" + String(mot.LeftLegCurrentSteps));
-  //           delay(2000);
- //             mot.LeftLegCurrentSteps = Data1L;
-    //        }
-          }
-          else
-          {
-            String errStr = "LftAswrKneeIs:" + String(cmdL);
-            fErrorMes(errStr);
-          }
-        }
-        if (last_time + return_time < millis())
-        {
-          fErrorMes("LEFT-KNEE-TIME-ERROR");
- //         mot.LeftLegCurrentSteps = oldKneeData1L;
-#ifdef STOP_ON_ERROR
-          cmdL = cmdR = 0;
-          return 1;
-#endif
-          break;
-        }
-        pr_telega.fDoezd(*motorLink, telega);
-      }
-    }
-    if (Uzel == foot)
-    {
-      //	  fOtladkaMes("LftFtNswrWt\r\n");
-      k = 0;
-      while (cmdL != 'B')
+      if (k == 1)
       {
-        //        if (fBreak(left_leg, foot)) return 1;
-        if ((k % 100) == 0)   //остаток от деления равен нулю?
-          //	  fOtladkaMes(".");
-          k++;
-        delay(delay_nrf_pause);
-        if (SerL.handle_serial() > 0)
-        {
-          SerL.getString1(cmdL, Data1L);
-          if (cmdL == 'B')
-          {
-            //      fOtladkaMes("LFoot:" + String(Data1L));
-   //         if (mot.LeftFootCurrentSteps != Data1L)
-   //         {
-   //           fErrorMes("MUST-BE:" + String(mot.LeftFootCurrentSteps));
-   //           delay(2000);
-    //          mot.LeftFootCurrentSteps = Data1L;
-    //        }
-            //              fErrorMes("LftFtStpsErr" + String(Data1L));
-          }
-          else
-          {
-            String errStr = "LftNswrFtIs:" + String(Data1L);
-            fOtladkaMes(errStr);
-          }
-        }
-        // в режиме воспроизведения?
-
-        // 	ЭТО НАХРЕН НЕ НАДО !!!!!!!!!
-
-        /*
-            if ((stWork == StPlay) && (oldOrient != mot.rbOrient))
-            { // сравниваем и если узнали что ориентация поменялась,
-              oldOrient = mot.rbOrient;
-              // отправляем подтверждение и угол на который повернулись
-              //          fSendState(stWork, Actions, radio, mot);
-            }
-        */
-        if (last_time + return_time < millis())
-        {
-          fErrorMes("LEFT-FOOT-TIME-ERROR");
-     //     mot.LeftFootCurrentSteps = oldFootData1L;
-#ifdef STOP_ON_ERROR
-          cmdL = cmdR = 0;
-          return 1;
-#endif
-          break;
-        }
-        //        if (digitalRead(ENDCAP) == EC_LOW) // левая стопа левый упор телеги
-        pr_telega.fDoezd(*motorLink, telega);
+        fErrorMes("k = 1");
+        return 1;
       }
-    }
-    if (Uzel == kal)
-    {
-      //	  fOtladkaMes("Clbrtn nswr wt\r\n");
-      k = 0;
-      while (cmdL != 'C')
+      if (last_time + return_time < millis())
       {
-        //        if (fBreak(left_leg, knee)) return 1;    //!!!!!!!!!!!!!!!!
-        if ((k % 100) == 0) //остаток от деления равен нулю?
-          //		  fOtladkaMes(".");
-          k++;
-        delay(delay_nrf_pause);
-        if (SerL.handle_serial() > 0)
-        {
-          SerL.getString0(cmdL);
-          if (cmdL != 'C')
-          {
-            String errStr = "Answer-calibration-is:" + String(cmdL);
-            fErrorMes(errStr);
-          }
-        }
-        if (last_time + return_time < millis())
-        {
-          fErrorMes("CALIBRATION-TIME-ERROR");
+        if (Leg == 0) fErrorMes("LEFT-LEG-TIME-ERROR");
+        else if (Leg == 1) fErrorMes("RIGHT-LEG-TIME-ERROR");
+        else fErrorMes("LEG-TIME-ERROR");
+        //       SerL.prepareMessage( cL, mot.LeftLegCurrentSteps); // втягиваем
+        //       last_time =  millis();
+        //         mot.LeftLegCurrentSteps = oldKneeData1L;
 #ifdef STOP_ON_ERROR
-          cmdL = cmdR = 0;
-          return 1;
+        return 1;
 #endif
-          break;
-        }
-        //       if (digitalRead(ENDCAP) == EC_HIGH)
-        //       fDoezd(telega, 20000L, 15000L);
+        //    break;
       }
+      pr_telega.fDoezd(*motorLink, telega);
     }
-    if (Uzel == zero)
-    {
-      while (cmdL != 'G')
-      {
-        if (SerL.handle_serial() > 0)
-        {
-          SerL.getString0(cmdL);
-          if (cmdL != 'G')
-          {
-            String errStr = "Answer-zero-is:" + String(cmdL);
-            fErrorMes(errStr);
-          }
-        }
-        if (last_time + return_time < millis())
-        {
-          fErrorMes("zero-TIME-ERROR");
-#ifdef STOP_ON_ERROR
-          cmdL = cmdR = 0;
-          return 1;
-#endif
-          break;
-        }
-      }
-    }
-  }
-  if (leg == right_leg)
-  {
-    if (Uzel == knee)
-    {
-      //	  fOtladkaMes("RghtKneeNswrWt..");
-      k = 0;
-      while (cmdR != 'A') {
-        //        if (fBreak(right_leg, knee))  return 1;
-        if ((k % 100) == 0) //остаток от деления равен нулю?
-          //		  fOtladkaMes(".");
-          k++;
-        delay(delay_nrf_pause);
-        if (SerR.handle_serial() > 0)
-        {
-          SerR.getString1(cmdR, Data1R);
-          if (cmdR == 'A')
-          {
-            //         fOtladkaMes("RKnee:" + String(Data1R));
-    //        if (mot.RightLegCurrentSteps != Data1R)
-    //        {
-   //           fErrorMes("MUSTBE:" + String(mot.RightLegCurrentSteps));
-    //          delay(2000);
-    //          mot.RightLegCurrentSteps = Data1R;
-   //         }
-          }
-          else
-          {
-            String errStr = "RGHT-NSWR-KNEE-IS:" + String(Data1L);
-            fErrorMes(errStr);
-          }
-        }
-        if (last_time + return_time < millis())
-        {
-          fErrorMes("RIGHT-KNEE-TIME-ERROR");
-      //    mot.RightLegCurrentSteps = oldKneeData1R;
-#ifdef STOP_ON_ERROR
-          cmdL = cmdR = 0;
-          return 1;
-#endif
-          break;
-        }
-        pr_telega.fDoezd(*motorLink, telega);
-      }
-    }
-    if (Uzel == foot)
-    {
-      //	  fOtladkaMes("RghtFtNswrWt..");
-      k = 0;
-      while (cmdR != 'B')
-      {
-        //        if (fBreak(right_leg, foot)) return 1;
-        if ((k % 100) == 0) //остаток от деления равен нулю?
-          //		  fOtladkaMes(".");
-          k++;
-        delay(delay_nrf_pause);
-        if (SerR.handle_serial() > 0)
-        {
-          SerR.getString1(cmdR, Data1R);
-          if (cmdR == 'B')
-          {
-            //       fOtladkaMes("RFoot: " + String(Data1R));
-   //         if (mot.RightFootCurrentSteps != Data1R)
-     //       {
-     //         fErrorMes("MUST BE: " + String(mot.RightFootCurrentSteps));
-    //          delay(2000);
-   //           mot.RightFootCurrentSteps = Data1R;
-       //     }
-            //              fErrorMes("RgthFtStpsErr");
-          } else
-          {
-            String errStr = "RGHTNswrFtIs" + String(cmdR);
-            fErrorMes(errStr);
-          }
-        }
-
-        //  	ТОЖЕ САМОЕ НАХРЕН НЕ НАДО
-        /*
-            // в режиме воспроизведения?
-            if ((stWork == StPlay) && (oldOrient != mot.rbOrient))
-            { // сравниваем и если узнали что ориентация поменялась,
-              oldOrient = mot.rbOrient;
-              // отправляем подтверждение и угол на который повернулись
-              //          fSendState(stWork, Actions, radio, mot);
-            }
-        */
-        if (last_time + return_time < millis())
-        {
-          fErrorMes("RIGHT-FOOT-TIME-ERROR");
-   //       mot.RightFootCurrentSteps = oldFootData1R;
-#ifdef STOP_ON_ERROR
-          cmdL = cmdR = 0;
-          return 1;
-#endif
-          break;
-        }
-        if (digitalRead(ENDCAP_R) == EC_LOW) // правая стопа, правый упор телеги контролируется
-          pr_telega.fDoezd(*motorLink, telega);
-      }
-    }
-    if (Uzel == kal)
-    {
-      //	  fOtladkaMes("Clbrtn nswr wt\r\n");
-      k = 0;
-      while (cmdR != 'C')
-      {
-        //        if (fBreak(right_leg, knee)) return 1;
-        if ((k % 100) == 0) //остаток от деления равен нулю?
-          //		  fOtladkaMes(".");
-          k++;
-        delay(delay_nrf_pause);
-        if (SerR.handle_serial() > 0)
-
-          SerR.getString0(cmdR);
-        if (last_time + return_time < millis())
-        {
-          fErrorMes("ERROR-CALIBRATION");
-#ifdef STOP_ON_ERROR
-          cmdL = cmdR = 0;
-          return 1;
-#endif
-          break;
-        }
-        if (digitalRead(ENDCAP) == EC_LOW)
-          pr_telega.fDoezd(*motorLink, telega);
-      }
-    }
-
-    if (Uzel == zero)
-    {
-      while (cmdR != 'G')
-      {
-        if (SerR.handle_serial() > 0)
-        {
-          SerR.getString0(cmdR);
-          if (cmdR != 'G')
-          {
-            String errStr = "Answer-zero-is:" + String(cmdR);
-            fErrorMes(errStr);
-          }
-        }
-        if (last_time + return_time < millis())
-        {
-          fErrorMes("zero-TIME-ERROR");
-#ifdef STOP_ON_ERROR
-          cmdL = cmdR = 0;
-          return 1;
-#endif
-          break;
-        }
-      }
-    }
-  }
-
-  if (leg == all_legs)
+  else if (leg == all_legs)
   {
     if (Uzel == knee)
     {
@@ -2785,12 +2636,11 @@ bool fAnswerWait(robot_leg leg, MKmotor Uzel, posOfMotors & mot)
           if (cmdR == 'A')
           {
             //         fOtladkaMes("RKnee: " + String(Data1R));
-     //       if (mot.RightLegCurrentSteps != Data1R)
-    //        {
-   //           fErrorMes("MUST BE: " + String(mot.RightLegCurrentSteps));
-    //          delay(2000);
-    //          mot.RightLegCurrentSteps = Data1R;
-    //        }
+            if (mot.RightLegCurrentSteps != Data1R)
+            {
+              fErrorMes("MUST BE: " + String(mot.RightLegCurrentSteps));
+              delay(2000);
+            }
           }
         }
         if (SerL.handle_serial() > 0)
@@ -2799,12 +2649,12 @@ bool fAnswerWait(robot_leg leg, MKmotor Uzel, posOfMotors & mot)
           if (cmdL == 'A')
           {
             //        fOtladkaMes("LKnee: " + String(Data1L));
- //           if (mot.LeftLegCurrentSteps != Data1L)
-   //         {
-  //            fErrorMes("MUST BE: " + String(mot.LeftLegCurrentSteps));
-   //           delay(2000);
-   //           mot.LeftLegCurrentSteps = Data1L;
-   //         }
+            //           if (mot.LeftLegCurrentSteps != Data1L)
+            //         {
+            //            fErrorMes("MUST BE: " + String(mot.LeftLegCurrentSteps));
+            //           delay(2000);
+            //           mot.LeftLegCurrentSteps = Data1L;
+            //         }
           }
         }
         // в режиме воспроизведения?
@@ -2813,26 +2663,32 @@ bool fAnswerWait(robot_leg leg, MKmotor Uzel, posOfMotors & mot)
           if (cmdR != 'A')
           {
             fErrorMes("RIGHT KNEE TIME ERROR");
- //           mot.RightLegCurrentSteps = oldKneeData1R;
+            //           mot.RightLegCurrentSteps = oldKneeData1R;
+            SerR.prepareMessage( cR, mot.RightLegCurrentSteps); // втягиваем
+            last_time =  millis();
+            cmdR = 0;
           }
           if (cmdL != 'A')
           {
             fErrorMes("LEFT KNEE TIME ERROR");
- //           mot.LeftLegCurrentSteps = oldKneeData1L;
+            //           mot.LeftLegCurrentSteps = oldKneeData1L;
+            SerL.prepareMessage( cL, mot.LeftLegCurrentSteps); // втягиваем
+            last_time =  millis();
+            cmdL = 0;
           }
-          delay(2000);
+          //   delay(2000);
 #ifdef STOP_ON_ERROR
-          cmdL = cmdR = 0;
-          return 1;
+
+          //   return 1;
 #endif
-          break;
+          //    break;
         }
         //        if (digitalRead(ENDCAP_R) == EC_LOW) // правая стопа, правый упор телеги контролируется
         pr_telega.fDoezd(*motorLink, telega);
       }
     }
 
-    if (Uzel == foot)
+    else if (Uzel == foot)
     {
       //	  fOtladkaMes("RghtNdLftFtNswrWt\r\n");
       k = 0;
@@ -2849,13 +2705,12 @@ bool fAnswerWait(robot_leg leg, MKmotor Uzel, posOfMotors & mot)
           if (cmdR == 'B')
           {
             //      fOtladkaMes("RFoot: " + String(Data1R));
- //           if (mot.RightFootCurrentSteps != Data1R)
-  //          {
- //             fErrorMes("MUST BE: " + String(mot.RightFootCurrentSteps));
- //             delay(2000);
- //             mot.RightFootCurrentSteps = Data1R;
-              //              fErrorMes("WrongDataErrRightFoot= " + String(Data1R));
- //           }
+            if (mot.RightFootCurrentSteps != Data1R)
+            {
+              fErrorMes("MUST BE: " + String(mot.RightFootCurrentSteps));
+              delay(2000);
+              mot.RightFootCurrentSteps = Data1R;
+            }
           }
         }
         if (SerL.handle_serial() > 0)
@@ -2863,42 +2718,31 @@ bool fAnswerWait(robot_leg leg, MKmotor Uzel, posOfMotors & mot)
           SerL.getString1(cmdL, Data1L);
           if (cmdL == 'B')
           {
-            //      fOtladkaMes("LFoot: " + String(Data1L));
-   //         if (mot.LeftFootCurrentSteps != Data1L)
-   //         {
-  //            fErrorMes("MUST BE: " + String(mot.LeftFootCurrentSteps));
-   //           delay(2000);
-   //           mot.LeftFootCurrentSteps = Data1L;
-   //         }
-            //              fErrorMes("WrongDataErrLeftFoot= " + String(Data1L));
+            //           fOtladkaMes("LFoot: " + String(Data1L));
+            if (mot.LeftFootCurrentSteps != Data1L)
+            {
+              fErrorMes("MUST BE: " + String(mot.LeftFootCurrentSteps));
+              delay(2000);
+              mot.LeftFootCurrentSteps = Data1L;
+            }
           }
         }
 
-        //     НАХРЕН НЕ НАДО
-        /*
-            // в режиме воспроизведения?
-            if ((stWork == StPlay) && (oldOrient != mot.rbOrient))
-            { // сравниваем и если узнали что ориентация поменялась,
-              oldOrient = mot.rbOrient;
-              // отправляем подтверждение и угол на который повернулись
-              //          fSendState(stWork, Actions, radio, mot);
-            }
-        */
         if (last_time + return_time < millis())
         {
           if (cmdR != 'B')
           {
             fErrorMes("RIGHT FOOT TIME ERROR");
             fErrorMes("RFoot: " + String(Data1R));
-    //        fErrorMes("MUST BE: " + String(mot.RightFootCurrentSteps));
-   //         mot.RightFootCurrentSteps = oldFootData1R;
+            //        fErrorMes("MUST BE: " + String(mot.RightFootCurrentSteps));
+            //         mot.RightFootCurrentSteps = oldFootData1R;
           }
           if (cmdL != 'B')
           {
             fErrorMes("LEFT FOOT TIME ERROR");
-            fErrorMes("LFoot: " + String(Data1L));
-    //        fErrorMes("MUST BE: " + String(mot.LeftFootCurrentSteps));
-    //        mot.LeftFootCurrentSteps = oldFootData1L;
+            //        fErrorMes("LFoot: " + String(Data1L));
+            //        fErrorMes("MUST BE: " + String(mot.LeftFootCurrentSteps));
+            //        mot.LeftFootCurrentSteps = oldFootData1L;
           }
           delay(2000);
 #ifdef STOP_ON_ERROR
@@ -2912,24 +2756,317 @@ bool fAnswerWait(robot_leg leg, MKmotor Uzel, posOfMotors & mot)
       }
     }
   }
+  endTime = millis();
 
-#ifdef _OTLADKA_
-  //  Serial.print("mot.RightFootCurrentSteps: ");
-  //  Serial.println(mot.RightFootCurrentSteps);
-  //  Serial.print("mot.LeftFootCurrentSteps: ");
-  //  Serial.println(mot.LeftFootCurrentSteps);
-  //  Serial.print("mot.RightLegCurrentSteps: ");
-  //  Serial.println(mot.RightLegCurrentSteps);
-  //  Serial.print("mot.LeftLegCurrentSteps: ");
-  //  Serial.println(mot.LeftLegCurrentSteps);
-#endif
-
-  cmdL = cmdR = 0;
+  // cmdL = cmdR = 0;
   return 0;
-} // ===== fAnswerWait =====
+} // ===== fAnswerWait ===
+
+/*
+  if (leg == left_leg)
+  {
+  if (Uzel == knee)
+  {
+    //	  fOtladkaMes("LftKneeAnswrWt..");
+    while (cmdL != 'A')
+    { // ждем ответ от колена
+      //        if (fBreak(left_leg, knee))  return 1;
+      if ((k % 100) == 0) //остаток от деления равен нулю?
+        //		  fOtladkaMes(".");
+        k++;
+      delay(delay_nrf_pause);
+      if (SerL.handle_serial() > 0) // что-то принято?
+      {
+        SerL.getString1(cmdL, Data1L); // читаем что принято
+        if (cmdL == 'A')
+        {
+          // проверяем положение колена
+          fOtladkaMes("LKnee:" + String(Data1L));
+          if (mot.LeftLegCurrentSteps != Data1L)
+          {
+            fErrorMes("MUST BE:" + String(mot.LeftLegCurrentSteps));
+            delay(2000);
+            //              mot.LeftLegCurrentSteps = Data1L;
+          }
+          //	old_LeftLegCurrentSteps = mot.LeftLegCurrentSteps;
+        }
+        else
+        {
+          String errStr = "LftAswrKneeIs:" + String(cmdL);
+          fErrorMes(errStr);
+        }
+      }
+      if (last_time + return_time < millis())
+      {
+        fErrorMes("LEFT-KNEE-TIME-ERROR");
+        SerL.prepareMessage( cL, mot.LeftLegCurrentSteps); // втягиваем
+        last_time =  millis();
+        //         mot.LeftLegCurrentSteps = oldKneeData1L;
+  #ifdef STOP_ON_ERROR
+        cmdL = cmdR = 0;
+        //   return 1;
+  #endif
+        //    break;
+      }
+      pr_telega.fDoezd(*motorLink, telega);
+    }
+  }
+  else if (Uzel == foot)
+  {
+    //	  fOtladkaMes("LftFtNswrWt\r\n");
+    k = 0;
+    while (cmdL != 'B')
+    {
+      //        if (fBreak(left_leg, foot)) return 1;
+      if ((k % 100) == 0)   //остаток от деления равен нулю?
+        //	  fOtladkaMes(".");
+        k++;
+      delay(delay_nrf_pause);
+      if (SerL.handle_serial() > 0)
+      {
+        SerL.getString1(cmdL, Data1L);
+        if (cmdL == 'B')
+        {
+          //      fOtladkaMes("LFoot:" + String(Data1L));
+          //         if (mot.LeftFootCurrentSteps != Data1L)
+          //         {
+          //           fErrorMes("MUST-BE:" + String(mot.LeftFootCurrentSteps));
+          //           delay(2000);
+          //          mot.LeftFootCurrentSteps = Data1L;
+          //        }
+          //              fErrorMes("LftFtStpsErr" + String(Data1L));
+        }
+        else
+        {
+          String errStr = "LftNswrFtIs:" + String(Data1L);
+          fOtladkaMes(errStr);
+        }
+      }
+      // в режиме воспроизведения?
+
+      // 	ЭТО НАХРЕН НЕ НАДО !!!!!!!!!
+
+      if (last_time + return_time < millis())
+      {
+        fErrorMes("LEFT-FOOT-TIME-ERROR");
+        //     mot.LeftFootCurrentSteps = oldFootData1L;
+  #ifdef STOP_ON_ERROR
+        cmdL = cmdR = 0;
+        return 1;
+  #endif
+        break;
+      }
+      //        if (digitalRead(ENDCAP) == EC_LOW) // левая стопа левый упор телеги
+      pr_telega.fDoezd(*motorLink, telega);
+    }
+  }
+  else if (Uzel == kal)
+  {
+    //	  fOtladkaMes("Clbrtn nswr wt\r\n");
+    k = 0;
+    while (cmdL != 'C')
+    {
+      //        if (fBreak(left_leg, knee)) return 1;    //!!!!!!!!!!!!!!!!
+      if ((k % 100) == 0) //остаток от деления равен нулю?
+        //		  fOtladkaMes(".");
+        k++;
+      delay(delay_nrf_pause);
+      if (SerL.handle_serial() > 0)
+      {
+        SerL.getString0(cmdL);
+        if (cmdL != 'C')
+        {
+          String errStr = "Answer-calibration-is:" + String(cmdL);
+          fErrorMes(errStr);
+        }
+      }
+      if (last_time + return_time < millis())
+      {
+        fErrorMes("CALIBRATION-TIME-ERROR");
+  #ifdef STOP_ON_ERROR
+        cmdL = cmdR = 0;
+        return 1;
+  #endif
+        break;
+      }
+      //       if (digitalRead(ENDCAP) == EC_HIGH)
+      //       fDoezd(telega, 20000L, 15000L);
+    }
+  }
+  else if (Uzel == zero)
+  {
+    while (cmdL != 'G')
+    {
+      if (SerL.handle_serial() > 0)
+      {
+        SerL.getString0(cmdL);
+        if (cmdL != 'G')
+        {
+          String errStr = "Answer-zero-is:" + String(cmdL);
+          fErrorMes(errStr);
+        }
+      }
+      if (last_time + return_time < millis())
+      {
+        fErrorMes("zero-TIME-ERROR");
+  #ifdef STOP_ON_ERROR
+        cmdL = cmdR = 0;
+        return 1;
+  #endif
+        break;
+      }
+    }
+  }
+  }
+  else if (leg == right_leg)
+  {
+  if (Uzel == knee)
+  {
+    //	  fOtladkaMes("RghtKneeNswrWt..");
+    k = 0;
+    while (cmdR != 'A') {
+      //        if (fBreak(right_leg, knee))  return 1;
+      if ((k % 100) == 0) //остаток от деления равен нулю?
+        //		  fOtladkaMes(".");
+        k++;
+      delay(delay_nrf_pause);
+      if (SerR.handle_serial() > 0)
+      {
+        SerR.getString1(cmdR, Data1R);
+        if (cmdR == 'A')
+        {
+          //         fOtladkaMes("RKnee:" + String(Data1R));
+          if (mot.RightLegCurrentSteps != Data1R)
+          {
+            fErrorMes("MUSTBE:" + String(mot.RightLegCurrentSteps));
+            delay(2000);
+          }
+        }
+        else
+        {
+          String errStr = "RGHT-NSWR-KNEE-IS:" + String(Data1L);
+          fErrorMes(errStr);
+        }
+      }
+      if (last_time + return_time < millis())
+      {
+        fErrorMes("RIGHT-KNEE-TIME-ERROR");
+        SerR.prepareMessage( cR, mot.RightLegCurrentSteps); // втягиваем
+        last_time =  millis();
+
+        //    mot.RightLegCurrentSteps = oldKneeData1R;
+  #ifdef STOP_ON_ERROR
+        cmdL = cmdR = 0;
+        //    return 1;
+  #endif
+        //       break;
+      }
+      pr_telega.fDoezd(*motorLink, telega);
+    }
+  }
+  else if (Uzel == foot)
+  {
+    //	  fOtladkaMes("RghtFtNswrWt..");
+    k = 0;
+    while (cmdR != 'B')
+    {
+      //        if (fBreak(right_leg, foot)) return 1;
+      if ((k % 100) == 0) //остаток от деления равен нулю?
+        //		  fOtladkaMes(".");
+        k++;
+      delay(delay_nrf_pause);
+      if (SerR.handle_serial() > 0)
+      {
+        SerR.getString1(cmdR, Data1R);
+        if (cmdR == 'B')
+        {
+          //       fOtladkaMes("RFoot: " + String(Data1R));
+          //         if (mot.RightFootCurrentSteps != Data1R)
+          //       {
+          //         fErrorMes("MUST BE: " + String(mot.RightFootCurrentSteps));
+          //          delay(2000);
+          //           mot.RightFootCurrentSteps = Data1R;
+          //     }
+          //              fErrorMes("RgthFtStpsErr");
+        } else
+        {
+          String errStr = "RGHTNswrFtIs" + String(cmdR);
+          fErrorMes(errStr);
+        }
+      }
+
+      if (last_time + return_time < millis())
+      {
+        fErrorMes("RIGHT-FOOT-TIME-ERROR");
+        //       mot.RightFootCurrentSteps = oldFootData1R;
+  #ifdef STOP_ON_ERROR
+        cmdL = cmdR = 0;
+        return 1;
+  #endif
+        break;
+      }
+      if (digitalRead(ENDCAP_R) == EC_LOW) // правая стопа, правый упор телеги контролируется
+        pr_telega.fDoezd(*motorLink, telega);
+    }
+  }
+  else if (Uzel == kal)
+  {
+    //	  fOtladkaMes("Clbrtn nswr wt\r\n");
+    k = 0;
+    while (cmdR != 'C')
+    {
+      //        if (fBreak(right_leg, knee)) return 1;
+      if ((k % 100) == 0) //остаток от деления равен нулю?
+        //		  fOtladkaMes(".");
+        k++;
+      delay(delay_nrf_pause);
+      if (SerR.handle_serial() > 0)
+
+        SerR.getString0(cmdR);
+      if (last_time + return_time < millis())
+      {
+        fErrorMes("ERROR-CALIBRATION");
+  #ifdef STOP_ON_ERROR
+        cmdL = cmdR = 0;
+        return 1;
+  #endif
+        break;
+      }
+      if (digitalRead(ENDCAP) == EC_LOW)
+        pr_telega.fDoezd(*motorLink, telega);
+    }
+  }
+
+  else if (Uzel == zero)
+  {
+    while (cmdR != 'G')
+    {
+      if (SerR.handle_serial() > 0)
+      {
+        SerR.getString0(cmdR);
+        if (cmdR != 'G')
+        {
+          String errStr = "Answer-zero-is:" + String(cmdR);
+          fErrorMes(errStr);
+        }
+      }
+      if (last_time + return_time < millis())
+      {
+        fErrorMes("zero-TIME-ERROR");
+  #ifdef STOP_ON_ERROR
+        cmdL = cmdR = 0;
+        return 1;
+  #endif
+        break;
+      }
+    }
+  }
+  }
+
+  ==
 
 
-
+*/
 
 
 
@@ -2941,8 +3078,8 @@ bool fAnswerWait(robot_leg leg, MKmotor Uzel, posOfMotors & mot)
 
 // ----- ОРИЕНТИРОВАНИЕ В НУЖНОМ НАПРАВЛЕНИИ -----
 /*
-bool change_orient(rot_dir dir, posOfMotors & mot, float min_stp)
-{
+  bool change_orient(rot_dir dir, posOfMotors & mot, float min_stp)
+  {
   fOtladkaMes("min_stp:" + String(min_stp));
   short add_data = min_stp;
   min_stp = min_stp * 444.444444;
@@ -3031,10 +3168,8 @@ bool change_orient(rot_dir dir, posOfMotors & mot, float min_stp)
   }
   //  fOtladkaMes("ChngeOrientSuccess\r\n");
   return 0;
-}// Change_Orient
+  }// Change_Orient
 */
-
-
 
 
 
@@ -3057,7 +3192,9 @@ bool orient_steps(long stepAngle, robot_leg leg, step_dir dir, posOfMotors & mot
   //  угол  = угол в градусах * шагов_на_оборот / 360грд + поворот для шага.
   // angleL - положение стопы относительно калиброванного 0 в тиках.
   // mot.rbOrient - угол направления движения в градусах
-  fOtladkaMes("Povorot");
+  fOtladkaMes("Pov");
+  fOtladkaMes("rbOrient" + String(mot.rbOrient));
+
   const unsigned short gradus = 1;
   long angleR = 0; // куда нужно повернуть правую
   long angleL = 0; // куда нужно повернуть левую
@@ -3089,7 +3226,7 @@ bool orient_steps(long stepAngle, robot_leg leg, step_dir dir, posOfMotors & mot
           angleR =  mot.rbOrient * calc_angle(gradus, m_stp) * 2 + stepAngle;
           angleL = -mot.rbOrient * calc_angle(gradus, m_stp) * 2 - stepAngle;
           leed_leg = rightLeed;
-		  fOtladkaMes("VozmozhnoPereputanoNapravlenie");
+          fOtladkaMes("VozmozhnoPereputanoNapravlenie");
         }
       }
       mot.RightFootCurrentSteps = angleR;
@@ -3097,10 +3234,10 @@ bool orient_steps(long stepAngle, robot_leg leg, step_dir dir, posOfMotors & mot
 
       if (mot.RightFootCurrentSteps == mot.LeftFootCurrentSteps)
       {
-        fOtladkaMes("mot.LeftFootCurrentSteps" + String(mot.LeftFootCurrentSteps));
-        fOtladkaMes("mot.RightFootCurrentSteps" + String(mot.RightFootCurrentSteps));
+        fOtladkaMes("LFCurntSteps" + String(mot.LeftFootCurrentSteps));
+        fOtladkaMes("RFCurntSteps" + String(mot.RightFootCurrentSteps));
         fOtladkaMes("stepAngle" + String(stepAngle));
-        fOtladkaMes("mot.rbOrient" + String(mot.rbOrient));
+        fOtladkaMes("rbOrient" + String(mot.rbOrient));
         SerR.prepareMessage( 'c', mot.RightFootCurrentSteps);
         //         delay(10);
         SerL.prepareMessage( 'c', mot.LeftFootCurrentSteps);
@@ -3128,7 +3265,7 @@ bool orient_steps(long stepAngle, robot_leg leg, step_dir dir, posOfMotors & mot
   //                            - 5           - (-10) = +5 разница между ногами
   else if (leg == right_leg)   // стоим на правой ноге?
   {
-    if (readyForRotRightFoot(mot)) 
+    if (readyForRotRightFoot(mot))
     {
       angleR =  mot.rbOrient * calc_angle(gradus, m_stp) * 2 + stepAngle; // куда нужно повернуть правую
       angleL = -mot.rbOrient * calc_angle(gradus, m_stp) * 2 - stepAngle; // куда нужно повернуть левую
@@ -3156,10 +3293,10 @@ bool orient_steps(long stepAngle, robot_leg leg, step_dir dir, posOfMotors & mot
       // заранее переводим левую стопу в исходное положение
       if (mot.RightFootCurrentSteps == mot.LeftFootCurrentSteps)
       {
-        fOtladkaMes("mot.LeftFootCurrentSteps" + String(mot.LeftFootCurrentSteps));
-        fOtladkaMes("mot.RightFootCurrentSteps" + String(mot.RightFootCurrentSteps));
+        fOtladkaMes("LFCurntStps" + String(mot.LeftFootCurrentSteps));
+        fOtladkaMes("RFCurntStps" + String(mot.RightFootCurrentSteps));
         fOtladkaMes("stepAngle" + String(stepAngle));
-        fOtladkaMes("mot.rbOrient" + String(mot.rbOrient));
+        fOtladkaMes("rbOrient" + String(mot.rbOrient));
         SerR.prepareMessage( 'c', mot.RightFootCurrentSteps);
         //         delay(10);
         SerL.prepareMessage( 'c', mot.LeftFootCurrentSteps);
@@ -3175,6 +3312,7 @@ bool orient_steps(long stepAngle, robot_leg leg, step_dir dir, posOfMotors & mot
         // ждем отработку поворота на правой ноге
         //     if (fAnswerWait(right_leg, foot, mot)) return 1;  //ждем
         //     if (fAnswerWait(left_leg,  foot, mot)) return 1;  //ждем
+        // fOtladkaMes("RFCurntStps" + String(mot.RightFootCurrentSteps));
         if (fAnswerWait(all_legs,  foot, mot)) return 1; //ждем
       }
     }
@@ -3199,116 +3337,44 @@ bool orient_steps(long stepAngle, robot_leg leg, step_dir dir, posOfMotors & mot
 
 
 
-
-
-void fErrorMes(String mes)
+byte rotPlace1(posOfMotors & mot, unsigned short minStep, short newOrient, regimRaboty &mode)
 {
-#ifdef _DISP_
-  lcd.clear();
-#endif
-#ifdef _NRF24_
-  radio.stopListening();                 // отключаем прослушивание
-  char buf[mes.length() + 4];
-  mes += "_\r\n";
-  mes.toCharArray(buf, mes.length() + 1);
-  radio.write(buf, mes.length() + 1);  // отправляем сколько шагов прошли
-  radio.startListening();
-#else
-  delay(mes.length() + 1);
-  mes += "_\r\n";
-  Serial.print(mes);
-  Serial1.print(mes);
-#endif
-  delay(mes.length() + 1);
-  delay(50);
-#ifdef _TEL_EEPROM_
-  writeTelString(mes);
-#endif
-#ifdef _DISP_
-  lcd.print(mes);
-#endif
-  delay(1000);
-  return;
+  int turnTimes = abs(newOrient / minStep);
+  int ostatok   = abs(newOrient % minStep);
+  bool bDir;
+
+  if (turnTimes == 0) fMinStp(mot, minStep, mode);
+
+  bool bEW = fEastOrWestStandingCalc(mot);
+  if (newOrient < 0)
+  { bDir = 0;
+    minStep = -abs(minStep);
+    ostatok = -abs(ostatok);
+  }
+  else bDir = 1;
+
+  fOtladkaMes("AbsUgolDo=" + String(mot.rbOrient));
+  fOtladkaMes("turnTimes=" + String(turnTimes));
+  fOtladkaMes("ostatok=" + String(ostatok));
+  fOtladkaMes("bEW=" + String(bEW));
+  fOtladkaMes("bDir=" + String(bDir));
+
+  //  startTime = millis();
+
+  if (fTurnToNTimes(mot, minStep, mode, bEW, turnTimes, bDir)) return 1;
+
+  fOtladkaMes("AbsUgol=" + String(mot.rbOrient));
+
+  if (bDir == 0) fDoPovorotL(mot, mode, ostatok);
+  else if (bDir == 1) fDoPovorotR(mot, mode, ostatok);
+
+  fOtladkaMes("AbsUgolPosle=" + String(mot.rbOrient));
+
+  endTime = millis();  //второй этап это доехать просто оставшийся угол
+  // проверка, что нога повернута в соответствии с ориентацией
+
+  return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-void fOtladkaMes(String mes)
-{
-#ifdef _DISP_
-  lcd.clear();
-#endif
-#ifdef _OTLADKA_
-  delay(10);
-  delay(mes.length() + 1);
-#ifdef _NRF24_
-  radio.stopListening();                 // отключаем прослушивание
-  char buf[mes.length() + 4];
-  mes += "_\r\n";
-  mes.toCharArray(buf, mes.length() + 1);
-  radio.write(buf, mes.length() + 1);  // отправляем сколько шагов прошли
-  radio.startListening();
-#else
-  mes += "_\r\n";
-  Serial.print(mes);
-  Serial1.print(mes);
-#endif
-  delay(mes.length() + 1);
-  delay(50);
-#endif
-#ifdef _TEL_EEPROM_
-  writeTelString(mes);
-#endif
-#ifdef _DISP_
-  lcd.print(mes);
-#endif
-  delay(15);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-void fOtladkaMes(long mes)
-{
-#ifdef _DISP_
-  lcd.clear();
-#endif
-  String data;
-  data = String(mes) + "_\r\n";
-#ifdef _OTLADKA_
-  Serial.print(data);
-  Serial1.print(data);
-#endif
-#ifdef _DISP_
-  lcd.print(mes);
-#endif
-  delay(15);
-}
-
-
-
-
-
 
 
 
@@ -3340,7 +3406,7 @@ byte rotPlace(posOfMotors & mot, short minStep, short newOrient, regimRaboty &mo
   // защита от противоположного направления шажков от основного направления поворота
   if (newOrient < 0) // если новое значение угла меньше нуля
   {
-    minStep = - abs(minStep); 
+    minStep = - abs(minStep);
   }
   else
   {
@@ -3351,138 +3417,138 @@ byte rotPlace(posOfMotors & mot, short minStep, short newOrient, regimRaboty &mo
   if (oldActions == walkFf) dir = backward;
   if (oldActions == walkBk) dir = forward;
   if ((oldActions != walkFf) && (oldActions != walkBk)) dir = unknown;
-  if(pr_telega.dir_flg  ==  middle);
+  if (pr_telega.dir_flg  ==  middle);
   // цикл пробегает все значения с шагом минимального угла и заканчивается
   // когда остается сделать шаг, меньше минимального заданного значения шага.
   short i = 0;
   short lastPreposition = newOrient - minStep;
-  
-  // сперва нужно встать в ноль, если планируется движение не в ту сторону, 
+
+  // сперва нужно встать в ноль, если планируется движение не в ту сторону,
   // куда смотрим сейчас
-  
+
   // проверяем чтоб не делать лишних движений
-  if (mot.LeftFootCurrentSteps!=mot.RightFootCurrentSteps)
+  if (mot.LeftFootCurrentSteps != -mot.RightFootCurrentSteps)
   {
     if (readyForRotRightFoot(mot))  // стоим на правой ноге
     {
-	    //левая нога впереди(смотрим влево)?
-      if(fEastOrWestStandingCalc(mot) == 0)
-	  {
-	    // нужно повернуться вправо?
-	     if(newOrient<0)
-		 { // поворачиваемся в исходное положение
-           fOtladkaMes("L+|**<|&>");
-	       if (orient_steps(0, right_leg, backward, mot) && (stWork == StWork)) return 1;
-           // опускаем левую ногу (будем стоять на обоих)
-           if (Leg_fn(left_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
-		   // главное потом этой же ногой не сделать движение
-		   // для этого нужно перевезти тележку и в следующей функции
-		   // проверить положение тележки, при этом в следующей функции
-		   // нужно проверять, что тележка не в центре
-           if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1;
-		 }
-	  }// fEastOrWestStandingCalc
-	  // левая нога не впереди
-	  else
-	  {
-	    // нужно повернуться влево?
-	     if(newOrient>0)
-		 {
-           fOtladkaMes("L+|**>|&<");
-	       if (orient_steps(0, right_leg, forward, mot) && (stWork == StWork)) return 1;
-           // опускаем левую ногу (будем стоять на обоих)
-           if (Leg_fn(left_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
-		   // главное потом этой же ногой не сделать движение
-		   // для этого нужно перевезти тележку и в следующей функции
-		   // проверить положение тележки, при этом в следующей функции
-		   // нужно проверять, что тележка не в центре
-           if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1;
-		 }
-	  }
-	}
+      //левая нога впереди(смотрим влево)?
+      if (fEastOrWestStandingCalc(mot) == 0)
+      {
+        // нужно повернуться вправо?
+        if (newOrient < 0)
+        { // поворачиваемся в исходное положение
+          fOtladkaMes("L+|**<|&>");
+          if (orient_steps(0, right_leg, backward, mot) && (stWork == StWork)) return 1;
+          // опускаем левую ногу (будем стоять на обоих)
+          if (Leg_fn(left_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
+          // главное потом этой же ногой не сделать движение
+          // для этого нужно перевезти тележку и в следующей функции
+          // проверить положение тележки, при этом в следующей функции
+          // нужно проверять, что тележка не в центре
+          if (moveMassLeft(mot)) return 1;
+        }
+      }// fEastOrWestStandingCalc
+      // левая нога не впереди
+      else
+      {
+        // нужно повернуться влево?
+        if (newOrient > 0)
+        {
+          fOtladkaMes("L+|**>|&<");
+          if (orient_steps(0, right_leg, forward, mot) && (stWork == StWork)) return 1;
+          // опускаем левую ногу (будем стоять на обоих)
+          if (Leg_fn(left_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
+          // главное потом этой же ногой не сделать движение
+          // для этого нужно перевезти тележку и в следующей функции
+          // проверить положение тележки, при этом в следующей функции
+          // нужно проверять, что тележка не в центре
+          if (moveMassLeft(mot)) return 1;
+        }
+      }
+    }
     else if (readyForRotLeftFoot(mot)) // стоим на левой ноге
     {
-     // правая нога впереди(смотрим вправо)?
-      if(fEastOrWestStandingCalc(mot) == 1)
-	  {
-	    // нужно повернуться влево?
-	     if(newOrient>0)
-		 { 
-           fOtladkaMes("R+|**>|&<");
-		   // поворачиваемся в исходное положение
-	       if (orient_steps(0, left_leg, backward, mot) && (stWork == StWork)) return 1;
-           // опускаем правую. ногу (будем стоять на обоих)
-           if (Leg_fn(right_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
-		   // главное потом этой же ногой не сделать движение
-		   // для этого нужно перевезти тележку и в следующей функции
-		   // проверить положение тележки, при этом в следующей функции
-		   // нужно проверять, что тележка не в центре
-           if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1;
-		 }
-	   }
-	  else
-	  {
-	    // нужно повернуться вправо?
-	     if(newOrient<0)
-		 {
-           fOtladkaMes("R+|**<|&>");
-	       if (orient_steps(0, left_leg, forward, mot) && (stWork == StWork)) return 1;
-           // опускаем правую. ногу (будем стоять на обоих)
-           if (Leg_fn(right_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
-		   // главное потом этой же ногой не сделать движение
-		   // для этого нужно перевезти тележку и в следующей функции
-		   // проверить положение тележки, при этом в следующей функции
-		   // нужно проверять, что тележка не в центре
-           if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1;
-	     }
-	  }
+      // правая нога впереди(смотрим вправо)?
+      if (fEastOrWestStandingCalc(mot) == 1)
+      {
+        // нужно повернуться влево?
+        if (newOrient > 0)
+        {
+          fOtladkaMes("R+|**>|&<");
+          // поворачиваемся в исходное положение
+          if (orient_steps(0, left_leg, backward, mot) && (stWork == StWork)) return 1;
+          // опускаем правую. ногу (будем стоять на обоих)
+          if (Leg_fn(right_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
+          // главное потом этой же ногой не сделать движение
+          // для этого нужно перевезти тележку и в следующей функции
+          // проверить положение тележки, при этом в следующей функции
+          // нужно проверять, что тележка не в центре
+          if (moveMassRight(mot)) return 1;
+        }
+      }
+      else
+      {
+        // нужно повернуться вправо?
+        if (newOrient < 0)
+        {
+          fOtladkaMes("R+|**<|&>");
+          if (orient_steps(0, left_leg, forward, mot) && (stWork == StWork)) return 1;
+          // опускаем правую. ногу (будем стоять на обоих)
+          if (Leg_fn(right_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
+          // главное потом этой же ногой не сделать движение
+          // для этого нужно перевезти тележку и в следующей функции
+          // проверить положение тележки, при этом в следующей функции
+          // нужно проверять, что тележка не в центре
+          if (moveMassRight(mot)) return 1;
+        }
+      }
     }
-    else if(fstandStill(mot))
+    else if (fstandStill(mot))
     {
-	    //левая нога впереди(смотрим влево)?
-      if(fEastOrWestStandingCalc(mot) == 0)
-	  {
-	    // нужно повернуться вправо?
-		if(newOrient<0)
-		 {
-           if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1;
-           if (Leg_fn(left_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
-	       if (orient_steps(0, right_leg, backward, mot) && (stWork == StWork)) return 1;
-           if (Leg_fn(left_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
-           if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1;
-           fOtladkaMes("SS|**<|&>");
-		 }
+      //левая нога впереди(смотрим влево)?
+      if (fEastOrWestStandingCalc(mot) == 0)
+      {
+        // нужно повернуться вправо?
+        if (newOrient < 0)
+        {
+          if (moveMassRight(mot)) return 1;
+          if (Leg_fn(left_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
+          if (orient_steps(0, right_leg, backward, mot) && (stWork == StWork)) return 1;
+          if (Leg_fn(left_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
+          if (moveMassLeft(mot)) return 1;
+          fOtladkaMes("SS|**<|&>");
+        }
       }
-	  else
-	  {
-		if(newOrient>0)
-		{
-           if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1;
-           if (Leg_fn(right_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
-	       if (orient_steps(0, left_leg, backward, mot) && (stWork == StWork)) return 1;
-           if (Leg_fn(right_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
-           if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1;
-           fOtladkaMes("SS|**>|&<");
-		}
+      else
+      {
+        if (newOrient > 0)
+        {
+          if (moveMassLeft(mot)) return 1;
+          if (Leg_fn(right_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
+          if (orient_steps(0, left_leg, backward, mot) && (stWork == StWork)) return 1;
+          if (Leg_fn(right_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
+          if (moveMassRight(mot)) return 1;
+          fOtladkaMes("SS|**>|&<");
+        }
       }
-	}
-	// когда нужно повернуться из других положений, эту функцию выполняет код далее
+    }
+    // когда нужно повернуться из других положений, эту функцию выполняет код далее
     fOtladkaMes("1end");
   }
-  
-  
+
+
   // если одна нога повернута сильнее, чем нужно повернуть в этой функции то цикл for пропускаем.
-  if((abs(mot.rbOrient) + abs(lastPreposition))<abs(mot.LeftFootCurrentSteps/(calc_angle(1L, m_stp) * 2)-abs(mot.rbOrient)))
+  if ((abs(lastPreposition) + abs(mot.rbOrient)) < abs(mot.LeftFootCurrentSteps / (calc_angle(1L, m_stp) * 2)))
   {
     fOtladkaMes("rbOrient:" + String(mot.rbOrient));
-    fOtladkaMes("lastPreposition:" + String(lastPreposition));
-    fOtladkaMes("lastPreposition:" + String(lastPreposition));
-    fOtladkaMes("LeftFootCurrentSteps:" + String(mot.LeftFootCurrentSteps/(calc_angle(1L, m_stp) * 2)));
-    fOtladkaMes(String(abs(lastPreposition))+">"+String(abs(mot.LeftFootCurrentSteps/(calc_angle(1L, m_stp) * 2)-2*mot.rbOrient)));
-	
-    lastPreposition =0;
+    fOtladkaMes("lstPrepsition:" + String(lastPreposition));
+    //    fOtladkaMes("lastPreposition:" + String(lastPreposition));
+    fOtladkaMes("LFCurntStps:" + String(mot.LeftFootCurrentSteps / (calc_angle(1L, m_stp) * 2)));
+    fOtladkaMes(String(abs(lastPreposition)) + "<" + String(abs(mot.LeftFootCurrentSteps / (calc_angle(1L, m_stp) * 2)) - abs(2 * mot.rbOrient)));
+
+    lastPreposition = 0;
   }
-  if(abs(lastPreposition) < abs(i))  fOtladkaMes("2 step");
+  if (abs(lastPreposition) < abs(i))  fOtladkaMes("2 step");
 
   for (i = 0; abs(lastPreposition) > abs(i); i += minStep)
   {
@@ -3499,7 +3565,7 @@ byte rotPlace(posOfMotors & mot, short minStep, short newOrient, regimRaboty &mo
       // опускаем левую ногу (будем стоять на обоих)
       if (Leg_fn(left_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
       // перевозим тележку влево
-      if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1;
+      if (moveMassLeft(mot)) return 1;
       // поднимаем(втягиваем) правую ногу.
       if (Leg_fn(right_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
     } else if (readyForRotLeftFoot(mot)) // стоим на левой ноге
@@ -3510,18 +3576,18 @@ byte rotPlace(posOfMotors & mot, short minStep, short newOrient, regimRaboty &mo
       // опускаем правую ногу
       if (Leg_fn(right_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
       // перевозим тележку вправо
-      if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1; // ехать вправо
+      if (moveMassRight(mot)) return 1; // ехать вправо
       // поднимаем левую ногу
       if (Leg_fn(left_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
     } else if (fstandStill(mot))  // стоим на обоих ногах
     {
-	// если условно правая нога впереди(которая левая на самом деле)
-		// если шли вперед	
-			// если newOrient больше 0
-				// тогда тележку влево
-				// тогда поворачиваемся вправо
-	// иначе 
-		// 
+      // если условно правая нога впереди(которая левая на самом деле)
+      // если шли вперед
+      // если newOrient больше 0
+      // тогда тележку влево
+      // тогда поворачиваемся вправо
+      // иначе
+      //
       if (pr_telega.dir_flg  ==  right)  {
         // поднимаем(втягиваем) левую ногу.
         if (Leg_fn(left_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
@@ -3530,7 +3596,7 @@ byte rotPlace(posOfMotors & mot, short minStep, short newOrient, regimRaboty &mo
         // опускаем левую ногу (будем стоять на обоих)
         if (Leg_fn(left_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
         //         if (fBreak(left_leg, knee)) break;
-        if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1; // ехать влево
+        if (moveMassLeft(mot)) return 1; // ехать влево
         fOtladkaMes("SS|&^");
       } else if (pr_telega.dir_flg  ==  left)
       {
@@ -3541,12 +3607,12 @@ byte rotPlace(posOfMotors & mot, short minStep, short newOrient, regimRaboty &mo
         //	    change_orient(turn_dir, mot, minStep);
         // опускаем правую ногу
         if (Leg_fn(right_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
-        if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1; // ехать вправо
+        if (moveMassRight(mot)) return 1; // ехать вправо
         fOtladkaMes("SS|&^");
       }
       else if (pr_telega.dir_flg  ==  middle)
       {
-        if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1; // ехать влево
+        if (moveMassLeft(mot)) return 1; // ехать влево
         // поднимаем(втягиваем) правую ногу.
         if (Leg_fn(right_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
         // поворачиваемся на левой ноге
@@ -3554,7 +3620,7 @@ byte rotPlace(posOfMotors & mot, short minStep, short newOrient, regimRaboty &mo
         //	    change_orient(turn_dir, mot, minStep);
         // опускаем правую ногу
         if (Leg_fn(right_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
-        if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1; // ехать вправо
+        if (moveMassRight(mot)) return 1; // ехать вправо
         fOtladkaMes("SS|&^");
       }
     }
@@ -3572,101 +3638,101 @@ byte rotPlace(posOfMotors & mot, short minStep, short newOrient, regimRaboty &mo
     if (readyForRotRightFoot(mot))  // стоим на правой ноге
     {
       // поворачиваемся вперед на правой ноге на нужный угол
-      if(orient_steps(0, right_leg, dir, mot)) return 1;
+      if (orient_steps(0, right_leg, dir, mot)) return 1;
       // опускаем левую ногу (будем стоять на обоих)
-      if(Leg_fn(left_leg, mode, vytianut, mot)) return 1;
+      if (Leg_fn(left_leg, mode, vytianut, mot)) return 1;
       // перевозим тележку влево
-      if(pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1;
+      if (moveMassLeft(mot)) return 1;
       // поднимаем(втягиваем) правую ногу.
-      if(Leg_fn(right_leg, mode, vtianut, mot)) return 1;
+      if (Leg_fn(right_leg, mode, vtianut, mot)) return 1;
     } else if (readyForRotLeftFoot(mot)) // стоим на левой ноге
     {
       // поворачиваемся на левой ноге
-      if(orient_steps(0, left_leg, dir, mot)) return 1;
+      if (orient_steps(0, left_leg, dir, mot)) return 1;
       // 	  change_orient(turn_dir, mot, old_Orient + newOrient - mot.rbOrient);
       // опускаем правую ногу
-      if(Leg_fn(right_leg, mode, vytianut, mot)) return 1;
+      if (Leg_fn(right_leg, mode, vytianut, mot)) return 1;
       // перевозим тележку вправо
-      if(pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1; // ехать вправо
+      if (moveMassRight(mot)) return 1; // ехать вправо
       // поднимаем левую ногу
-      if(Leg_fn(left_leg, mode, vtianut, mot)) return 1;
+      if (Leg_fn(left_leg, mode, vtianut, mot)) return 1;
     } else if (fstandStill(mot))  // стоим на обоих ногах
     {
       if (pr_telega.dir_flg  ==  right)  {
         // поднимаем(втягиваем) левую ногу.
-        if(Leg_fn(left_leg, mode, vtianut, mot)) return 1;
+        if (Leg_fn(left_leg, mode, vtianut, mot)) return 1;
         // поворачиваемся вперед на правой ноге на нужный угол
-        if(orient_steps(0, right_leg, dir, mot)) return 1;
+        if (orient_steps(0, right_leg, dir, mot)) return 1;
         // 	    change_orient(turn_dir, mot, old_Orient + newOrient - mot.rbOrient);
         // опускаем левую ногу (будем стоять на обоих)
-        if(Leg_fn(left_leg, mode, vytianut, mot)) return 1;
+        if (Leg_fn(left_leg, mode, vytianut, mot)) return 1;
         //         if (fBreak(left_leg, knee)) break;
-        if(pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1; // ехать влево
+        if (moveMassLeft(mot)) return 1; // ехать влево
       } else if (pr_telega.dir_flg  ==  left)
       {
         // поднимаем(втягиваем) правую ногу.
-        if(Leg_fn(right_leg, mode, vtianut, mot)) return 1;
+        if (Leg_fn(right_leg, mode, vtianut, mot)) return 1;
         // поворачиваемся на левой ноге
-        if(orient_steps(0, left_leg, dir, mot)) return 1;
+        if (orient_steps(0, left_leg, dir, mot)) return 1;
         // 	    change_orient(turn_dir, mot, old_Orient + newOrient - mot.rbOrient);
         // опускаем правую ногу
-        if(Leg_fn(right_leg, mode, vytianut, mot)) return 1;
-        if(pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1; // ехать вправо
+        if (Leg_fn(right_leg, mode, vytianut, mot)) return 1;
+        if (moveMassRight(mot)) return 1; // ехать вправо
       }
       else if (pr_telega.dir_flg  ==  middle)
       {
-		if(dir == forward){
-	  //левая нога впереди(смотрим влево)?
-         if(fEastOrWestStandingCalc(mot) == 0)
-		 {
-   	       if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1; // ехать влево
-          // поднимаем(втягиваем) левую ногу.
-           if(Leg_fn(right_leg, mode, vtianut, mot)) return 1;
-           // поворачиваемся вперед на правой ноге на нужный угол
-           if(orient_steps(0, left_leg, forward, mot)) return 1;
-           // опускаем левую ногу (будем стоять на обоих)
-           if(Leg_fn(right_leg, mode, vytianut, mot)) return 1;
-        //         if (fBreak(left_leg, knee)) break;
-//        if(pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1; // ехать влево
-		 }	//правая нога впереди(смотрим вправо)?
-		 else if(fEastOrWestStandingCalc(mot) == 1)
-		 {
-  	       if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1; // ехать влево
-		   // поднимаем(втягиваем) правую ногу.
-           if(Leg_fn(left_leg, mode, vtianut, mot)) return 1;
-           // поворачиваемся вперед на правой ноге на нужный угол
-           if(orient_steps(0, right_leg, forward, mot)) return 1;
-           // опускаем левую ногу (будем стоять на обоих)
-           if(Leg_fn(left_leg, mode, vytianut, mot)) return 1;
-		 }
-		}else if(dir == backward)
-		{
-	  //левая нога впереди(смотрим влево)?
-         if(fEastOrWestStandingCalc(mot) == 0)
-		 {
-  	       if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1; 
-		   // поднимаем(втягиваем) левую ногу.
-           if(Leg_fn(left_leg, mode, vtianut, mot)) return 1;
-           // поворачиваемся вперед на правой ноге на нужный угол
-           if(orient_steps(0, right_leg, backward, mot)) return 1;
-           // опускаем левую ногу (будем стоять на обоих)
-           if(Leg_fn(left_leg, mode, vytianut, mot)) return 1;
-        //         if (fBreak(left_leg, knee)) break;
-//        if(pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1; // ехать влево
-		 }	//правая нога впереди(смотрим вправо)?
-		 else if(fEastOrWestStandingCalc(mot) == 1)
-		 {
-  	       if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1; // ехать влево
-		   // поднимаем(втягиваем) правую ногу.
-           if(Leg_fn(right_leg, mode, vtianut, mot)) return 1;
-           // поворачиваемся вперед на правой ноге на нужный угол
-           if(orient_steps(0, left_leg, backward, mot)) return 1;
-           // опускаем левую ногу (будем стоять на обоих)
-           if(Leg_fn(right_leg, mode, vytianut, mot)) return 1;
-		
-	  	  }
-	    }
-	  }
+        if (dir == forward) {
+          //левая нога впереди(смотрим влево)?
+          if (fEastOrWestStandingCalc(mot) == 0)
+          {
+            if (moveMassLeft(mot)) return 1; // ехать влево
+            // поднимаем(втягиваем) левую ногу.
+            if (Leg_fn(right_leg, mode, vtianut, mot)) return 1;
+            // поворачиваемся вперед на правой ноге на нужный угол
+            if (orient_steps(0, left_leg, forward, mot)) return 1;
+            // опускаем левую ногу (будем стоять на обоих)
+            if (Leg_fn(right_leg, mode, vytianut, mot)) return 1;
+            //         if (fBreak(left_leg, knee)) break;
+            //        if(moveMassLeft(mot)) return 1; // ехать влево
+          }	//правая нога впереди(смотрим вправо)?
+          else if (fEastOrWestStandingCalc(mot) == 1)
+          {
+            if (moveMassRight(mot)) return 1; // ехать влево
+            // поднимаем(втягиваем) правую ногу.
+            if (Leg_fn(left_leg, mode, vtianut, mot)) return 1;
+            // поворачиваемся вперед на правой ноге на нужный угол
+            if (orient_steps(0, right_leg, forward, mot)) return 1;
+            // опускаем левую ногу (будем стоять на обоих)
+            if (Leg_fn(left_leg, mode, vytianut, mot)) return 1;
+          }
+        } else if (dir == backward)
+        {
+          //левая нога впереди(смотрим влево)?
+          if (fEastOrWestStandingCalc(mot) == 0)
+          {
+            if (moveMassRight(mot)) return 1;
+            // поднимаем(втягиваем) левую ногу.
+            if (Leg_fn(left_leg, mode, vtianut, mot)) return 1;
+            // поворачиваемся вперед на правой ноге на нужный угол
+            if (orient_steps(0, right_leg, backward, mot)) return 1;
+            // опускаем левую ногу (будем стоять на обоих)
+            if (Leg_fn(left_leg, mode, vytianut, mot)) return 1;
+            //         if (fBreak(left_leg, knee)) break;
+            //        if(moveMassLeft(mot)) return 1; // ехать влево
+          }	//правая нога впереди(смотрим вправо)?
+          else if (fEastOrWestStandingCalc(mot) == 1)
+          {
+            if (moveMassLeft(mot)) return 1; // ехать влево
+            // поднимаем(втягиваем) правую ногу.
+            if (Leg_fn(right_leg, mode, vtianut, mot)) return 1;
+            // поворачиваемся вперед на правой ноге на нужный угол
+            if (orient_steps(0, left_leg, backward, mot)) return 1;
+            // опускаем левую ногу (будем стоять на обоих)
+            if (Leg_fn(right_leg, mode, vytianut, mot)) return 1;
+
+          }
+        }
+      }
     }
     fOtladkaMes("3end");
   }
@@ -3745,9 +3811,11 @@ void PlayFromEEPROM(bool zoom,  posOfMotors& mot)
       }
     }
   */
+  unsigned int str_number = (unsigned)readString(0).toInt();
+
   StartRecordTime = millis();
   do {
-    for (StrAddr = StartEEPROM; StrAddr < (unsigned)(readString(0).toInt()); StrAddr += incriment)
+    for (StrAddr = StartEEPROM; StrAddr < str_number; StrAddr += incriment)
     {
       if (stWork != StPlay)
       {
@@ -3787,17 +3855,16 @@ bool readyForRotLeftFoot(posOfMotors& mot)
   {
 #ifdef _OTLADKA_
 #ifdef SERIAL_USB
-    Serial1.print("LEFT FOOT BLOCKED\r\n");
-	fOtladkaMes("mot.RightLegCurrentSteps:"+String(mot.RightLegCurrentSteps));
-	fOtladkaMes("mot.LeftLegCurrentSteps:"+String(mot.LeftLegCurrentSteps));
-	fOtladkaMes("mot.stepsDepthInSteps:"+String(mot.stepsDepthInSteps));
-	
+    //  Serial1.print("LFTBLK\r\n");
+    //	fOtladkaMes("RLCurntStps:"+String(mot.RightLegCurrentSteps));
+    // fOtladkaMes("LLCurntStps:"+String(mot.LeftLegCurrentSteps));
+    // fOtladkaMes("stpsDpthInStps:"+String(mot.stepsDepthInSteps));
+
 #endif
 #endif
     return 0;
   }
 }
-
 
 
 
@@ -3813,10 +3880,11 @@ bool readyForRotRightFoot(posOfMotors& mot)
   {
 #ifdef _OTLADKA_
 #ifdef SERIAL_USB
-    Serial1.print("RIGHT FOOT BLOCKED\r\n");
-	fOtladkaMes("mot.RightLegCurrentSteps:"+String(mot.RightLegCurrentSteps));
-	fOtladkaMes("mot.LeftLegCurrentSteps:"+String(mot.LeftLegCurrentSteps));
-	fOtladkaMes("mot.stepsDepthInSteps:"+String(mot.stepsDepthInSteps));
+
+    //   Serial1.print("RFTBLK\r\n");
+    //	fOtladkaMes("RLCurntStps:"+String(mot.RightLegCurrentSteps));
+    // fOtladkaMes("LLCurntStps:"+String(mot.LeftLegCurrentSteps));
+    // fOtladkaMes("stpsDpthInStps:"+String(mot.stepsDepthInSteps));
 
 #endif
 #endif
@@ -3840,7 +3908,7 @@ bool fstandStill(posOfMotors& mot)
   {
 #ifdef _OTLADKA_
 #ifdef SERIAL_USB
-    Serial1.print("STANDING ON ONE LEG\r\n");
+    //   Serial1.print("STANDING ON ONE LEG\r\n");
 #endif
 #endif
     return 0;
@@ -3859,8 +3927,8 @@ bool fstandStill(posOfMotors& mot)
 
 
 
-byte fStepFf(leedLeg leedLgOgj, short angle)
-{
+  byte fStepFf(leedLeg leedLgOgj, short angle)
+  {
   posOfMotors mot; // для совместимости
   rot_dir dir;
   leedLeg leed_leg1 = leedLgOgj;
@@ -3887,7 +3955,7 @@ byte fStepFf(leedLeg leedLgOgj, short angle)
     pr_telega.fDoezd(*motorLink, telega); // телега доезжает если необходимо
     if (leed_leg1 == leftLeed)   // левая нога впереди?
     {
-      if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1; // ехать влево
+      if (moveMassLeft(mot)) return 1; // ехать влево
       // поднимаем(втягиваем) правую ногу.
       if (Leg_fn(right_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
       // поворачиваемся на левой ноге
@@ -3900,12 +3968,12 @@ byte fStepFf(leedLeg leedLgOgj, short angle)
       // опускаем правую ногу
       if (Leg_fn(right_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
       // перевозим тележку вправо
-      //      if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1; // ехать вправо
+      //      if (moveMassRight(mot)) return 1; // ехать вправо
     }
     if (leed_leg1 == rightLeed)
     {
       // поднимаем(втягиваем) левую ногу.
-      if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1; // ехать вправо
+      if (moveMassRight(mot)) return 1; // ехать вправо
       if (Leg_fn(left_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
       // поворачиваемся на правой ноге
       //      if (orient_steps(right_leg, forward, mot) && (stWork == StWork)) return 1;
@@ -3917,11 +3985,11 @@ byte fStepFf(leedLeg leedLgOgj, short angle)
       // опускаем левую ногу
       if (Leg_fn(left_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
       // перевозим тележку вправо
-      //     if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1; // ехать влево
+      //     if (moveMassLeft(mot)) return 1; // ехать влево
     }
   }
   return 0;
-}
+  }
 
 
 
@@ -3933,8 +4001,8 @@ byte fStepFf(leedLeg leedLgOgj, short angle)
 
 
 
-byte fStepBk(leedLeg leedLgOgj, short angle)
-{
+  byte fStepBk(leedLeg leedLgOgj, short angle)
+  {
   posOfMotors mot; // для совместимости
   rot_dir dir;
   leedLeg leed_leg1 = leedLgOgj;
@@ -3947,7 +4015,7 @@ byte fStepBk(leedLeg leedLgOgj, short angle)
     pr_telega.fDoezd(*motorLink, telega);
     if (leed_leg1 == leftLeed)
     {
-      if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1; // ехать вправо
+      if (moveMassRight(mot)) return 1; // ехать вправо
       // поднимаем(втягиваем) левую ногу.
       if (Leg_fn(left_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
       // поворачиваемся на правой ноге
@@ -3960,11 +4028,11 @@ byte fStepBk(leedLeg leedLgOgj, short angle)
       // опускаем левую ногу
       if (Leg_fn(left_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
       // перевозим тележку вправо
-      //      if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1; // ехать влево
+      //      if (moveMassLeft(mot)) return 1; // ехать влево
     }
     if (leed_leg1 == rightLeed)
     {
-      if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1; // ехать влево
+      if (moveMassLeft(mot)) return 1; // ехать влево
       // поднимаем(втягиваем) правую ногу.
       if (Leg_fn(right_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
       // поворачиваемся на левой ноге
@@ -3977,7 +4045,7 @@ byte fStepBk(leedLeg leedLgOgj, short angle)
       // опускаем правую ногу
       if (Leg_fn(right_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
       // перевозим тележку вправо
-      //    if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1; // ехать вправо
+      //    if (moveMassRight(mot)) return 1; // ехать вправо
     }
     if (leed_leg1 == noLeed)
     {
@@ -3989,7 +4057,7 @@ byte fStepBk(leedLeg leedLgOgj, short angle)
     fOtladkaMes("PlsStandStill");
   }
   return 0;
-}
+  }
 
 
 */
@@ -4008,7 +4076,12 @@ byte fStepBk(leedLeg leedLgOgj, short angle)
 // 1 - привстать, 2 - присесть.
 byte seetUpDown(posOfMotors & mot, const byte mode)
 {
-  if (!mode) HalfPos == 1 ? HalfPos = 0 : HalfPos = 1;
+  if (!mode)
+  {
+    HalfPos == 1 ? HalfPos = 0 : HalfPos = 1;
+    if (mot.LeftLegCurrentSteps == 0) HalfPos = 1;
+    else HalfPos = 0;
+  }
   else mode == 1 ? HalfPos = 0 : HalfPos = 1;
 
   if (HalfPos)
@@ -4059,8 +4132,11 @@ void telega_to_center(posOfMotors& mot)
           fSendState(stWork, Actions, 0);
         }
     */
+    fAddInActionInRecordMode(wait);
+    pr_telega.RotateStpsOnly(motorLink[0], telega, 0L);
     fAddInActionInRecordMode(telCenter);
-    pr_telega.RotateStpsOnly(motorLink[0], telega, 0L); //
+    endTime = millis();
+
   }
 }
 
@@ -4091,11 +4167,6 @@ void telega_left(posOfMotors& mot)
 
 
 
-
-
-
-
-
 void telega_right(posOfMotors& mot)
 {
   if (fstandStill(mot))
@@ -4113,14 +4184,21 @@ void telega_right(posOfMotors& mot)
 
 
 
-
-
 void topLeft(posOfMotors & mot)
 {
   fOtladkaMes("Vidvinut-levuyu");
 
-  if (fstandStill(mot)) pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight());
-  else if (readyForRotLeftFoot(mot)) return; // если стоим на левой ноге, то выходим
+  fAddInActionInRecordMode(wait);
+
+  if (fstandStill(mot))
+  {
+    moveMassRight(mot);
+    LegUpL = vtianut;
+  }
+  else {
+    if (readyForRotLeftFoot(mot)) return; // если стоим на левой ноге, то выходим
+    LegUpL = vytianut;
+  }
   LegUpL == vtianut ? LegUpL = vytianut : LegUpL = vtianut;
   if (LegUpL == vytianut) {
     mot.LeftLegCurrentSteps = mot.CurrentZero - mot.stepsDepthInSteps;
@@ -4135,6 +4213,8 @@ void topLeft(posOfMotors & mot)
     SerL.prepareMessage( 'i', mot.LeftLegCurrentSteps); // втягиваем
     if (fAnswerWait(left_leg, knee, mot)) return;
   }
+  fAddInActionInRecordMode(lUp);
+  return;
 }
 
 
@@ -4148,9 +4228,16 @@ void topLeft(posOfMotors & mot)
 void topRight(posOfMotors & mot)
 {
   fOtladkaMes("Vidvinut-pravuyu");
+  fAddInActionInRecordMode(wait);
   // телега справа, если смотреть спереди?
-  if (fstandStill(mot)) pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft());
-  else if (readyForRotRightFoot(mot)) return; // если стоим на правой ноге, то выходим
+  if (fstandStill(mot)) {
+    moveMassLeft(mot);
+    LegUpR = vtianut;
+  }
+  else {
+    if (readyForRotRightFoot(mot)) return; // если стоим на правой ноге, то выходим
+    LegUpR = vytianut;
+  }
   LegUpR == vtianut ? LegUpR = vytianut : LegUpR = vtianut;
   if (LegUpR == vytianut)
   {
@@ -4166,10 +4253,9 @@ void topRight(posOfMotors & mot)
     SerR.prepareMessage( 'i', mot.RightLegCurrentSteps); // втягиваем
     if (fAnswerWait(right_leg, knee, mot)) return;
   }
-  return ;
+  fAddInActionInRecordMode(rUp);
+  return;
 }
-
-
 
 
 
@@ -4270,8 +4356,8 @@ void foot_rotation(robot_leg leg, short direction, short angle, short times, pos
 // то в другую сторону
 void demo1(posOfMotors& mot)
 {
-//  regimRaboty oldmode = mode;
-//  posOfMotors mot; // для совместимости
+  //  regimRaboty oldmode = mode;
+  //  posOfMotors mot; // для совместимости
   // rot_dir dir;
   regimRaboty mode = energySaving;
 
@@ -4280,14 +4366,14 @@ void demo1(posOfMotors& mot)
   if (fstandStill(mot))
   {
     pr_telega.fDoezd(*motorLink, telega);
-    if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) goto skip; // ехать влево
+    if (moveMassLeft(mot)) goto skip; // ехать влево
     // поднимаем(втягиваем) правую ногу.
     if (Leg_fn(right_leg, mode, vtianut, mot) && (stWork == StWork)) goto skip;
     foot_rotation(right_leg, 0, 30, 2, mot);
     // опускаем правую ногу
     if (Leg_fn(right_leg, mode, vytianut, mot) && (stWork == StWork)) goto skip;
     // телега едет вправо
-    if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) goto skip ;
+    if (moveMassRight(mot)) goto skip ;
     // поднимаем(втягиваем) левую ногу.
     if (Leg_fn(left_leg, mode, vtianut, mot) && (stWork == StWork)) goto skip;
     foot_rotation(left_leg, 0, 30, 2, mot);
@@ -4295,11 +4381,11 @@ void demo1(posOfMotors& mot)
     if (Leg_fn(left_leg, mode, vytianut, mot) && (stWork == StWork)) goto skip;
   }
 skip:
-//  if (oldmode == fast)
- // {
- //   seetUpDown(mot, 2); // присесть
- //   mode = fast;
- // }
+  //  if (oldmode == fast)
+  // {
+  //   seetUpDown(mot, 2); // присесть
+  //   mode = fast;
+  // }
   stWork = StWork;
 }
 
@@ -4372,14 +4458,14 @@ void demo3(posOfMotors & mot)
   stWork = StPlay;
   // 4 шага вперед
   maxStepsCount = 4;
-  walkForward(stepAngle,mode, mot);
+  walkForward(stepAngle, mode, mot);
   // поворот влево
   //  oldOrient = mot.rbOrient;
   rotPlace(mot, 30, 90,  mode);
   Actions = turnL;
 
   // 4 шага вперед
-  walkForward(stepAngle,mode,  mot);
+  walkForward(stepAngle, mode,  mot);
   // поворот влево
   //  oldOrient = mot.rbOrient;
   rotPlace(mot, 30, 90,  mode);
@@ -4408,16 +4494,23 @@ void demo3(posOfMotors & mot)
 
 
 
-
-
-
-
-
-
-
-
-
-
+// Функция запоминает предыдущее значение времени
+// и передает его в качестве параметра по ссылке
+byte RecordingTime(long &prevTime, const long &treshold)
+{
+  static long time = 0;
+  prevTime = time;
+  if (millis() - StartRecordTime < treshold)
+  {
+    return 0;
+  } else {
+    time = millis() - StartRecordTime;
+    Serial1.println("prevtime=" + String(time));
+    return 1;
+  }
+}
+// Функция запоминает предыдущее значение времени
+// и передает его в качестве параметра по ссылке
 long RecordingTime(void)
 {
   return millis() - StartRecordTime;
@@ -4539,6 +4632,7 @@ void fAddInActionInRecordMode(actions Action, long param)
     //  {
     //    if(Action == wait)
     //	{
+    startTime = millis();
     Actions = Action;
     fSendState(stWork, Actions, param);
     //    }
@@ -4596,8 +4690,9 @@ bool fStepsCounter(posOfMotors & mot, unsigned long &hlfStepsCnt)
   //  if (fBreak(not_leg, foot, mot))
   if (fBreak(not_leg, knee, mot))
   {
-    fErrorMes("Break_steps");
+    //    fErrorMes("Break_steps");
     fSendState(stWork, Actions, hlfStepsCnt);
+    //	endTime = millis();
     return 1;
   }
   if (maxStepsCount < 0) return 1;
@@ -4615,10 +4710,10 @@ bool fStepsCounter(posOfMotors & mot, unsigned long &hlfStepsCnt)
 
 
 /*
-// pos - в миллиметрах
-// возвр. 1 если ошибка
-bool fLegUpToPos(posOfMotors & mot, long pos)
-{
+  // pos - в миллиметрах
+  // возвр. 1 если ошибка
+  bool fLegUpToPos(posOfMotors & mot, long pos)
+  {
   if (pos < (- stepsPerLegRot * fullRotationLimit))
   {
     fErrorMes("OutOfRange");
@@ -4632,90 +4727,137 @@ bool fLegUpToPos(posOfMotors & mot, long pos)
   SerR.prepareMessage( 'i', mot.RightLegCurrentSteps); // втягиваем
   if (fAnswerWait(right_leg, knee, mot)) return 1;
   return 0;
-}
+  }
 */
 
 
 //Поворот вперед на правой ноге если смотреть сзади
-bool rotateRightFF(short stepAngle,regimRaboty &mode, posOfMotors & mot)
+
+byte rotateRightFF(short stepAngle, regimRaboty &mode, posOfMotors & mot)
 {
-  fOtladkaMes("PovorotVpravoVpered");
-  if (fstandStill(mot))
+  fOtladkaMes(">Vpered");
+  long old_rotSpeed = rotSpeed;
+
+  if (fstandStill(mot) || readyForRotLeftFoot(mot))
   {
-    // защита от топтания на месте
-    if (fChkOrientStpsAvailable(stepAngle, left_leg, forward, mot)) return 1;
+    rotSpeed = 5000;
+    SerL.prepareMessage( 'S', rotSpeed);
+    delay(15);
+    SerR.prepareMessage( 'S', rotSpeed);
+    delay(15);
+	
+  // защита от топтания на месте
+    if (fChkOrientStpsAvailable(stepAngle, left_leg, forward, mot))	return 2;
     // перевозим тележку влево
-    if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1;
+    if (moveMassLeft(mot)) return 1;
     if (Leg_fn(right_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
     mot.rbOrient += stepAngle;
     if (orient_steps(0 , left_leg, forward, mot) && (stWork == StWork)) return 1;
     if (Leg_fn(right_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
-
+    rotSpeed=old_rotSpeed;
+    SerL.prepareMessage( 'S', rotSpeed);
+    delay(15);
+    SerR.prepareMessage( 'S', rotSpeed);
+    delay(15);
     return 0;
-  }
+  } else fErrorMes("OnTwoLegs");
   return 1;
 }
 
 
 
-bool rotateRightBK(short stepAngle,regimRaboty &mode, posOfMotors & mot)
+byte rotateRightBK(short stepAngle, regimRaboty &mode, posOfMotors & mot)
 {
-  fOtladkaMes("PovorotVpravoNazad");
+  fOtladkaMes(">Nazad");
+  long old_rotSpeed = rotSpeed;
 
-  if (fstandStill(mot))
+  if (fstandStill(mot) || readyForRotRightFoot(mot))
   {
-
-    if (fChkOrientStpsAvailable(stepAngle, right_leg, backward, mot)) return 1;
+    rotSpeed = 5000;
+    SerL.prepareMessage( 'S', rotSpeed);
+    delay(15);
+    SerR.prepareMessage( 'S', rotSpeed);
+    delay(15);
+    if (fChkOrientStpsAvailable(stepAngle, right_leg, backward, mot)) return 2;
     // перевозим тележку влево
-    if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1;
+    if (moveMassRight(mot)) return 1;
     if (Leg_fn(left_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
     mot.rbOrient += stepAngle;
     if (orient_steps(0, right_leg, backward, mot) && (stWork == StWork)) return 1;
     if (Leg_fn(left_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
+    rotSpeed=old_rotSpeed;
+    SerL.prepareMessage( 'S', rotSpeed);
+    delay(15);
+    SerR.prepareMessage( 'S', rotSpeed);
+    delay(15);
 
     return 0;
-  }
+  } else fErrorMes("OnTwoLegs");
   return 1;
 }
 
 
-bool rotateLeftFF(short stepAngle,regimRaboty &mode, posOfMotors & mot)
-{
-  fOtladkaMes("PovorotVlevoVpered");
 
-  if (fstandStill(mot))
+byte rotateLeftFF(short stepAngle, regimRaboty &mode, posOfMotors & mot)
+{
+  fOtladkaMes("<Vpered");
+  long old_rotSpeed = rotSpeed;
+
+  if (fstandStill(mot) || readyForRotRightFoot(mot))
   {
-    if (fChkOrientStpsAvailable(stepAngle, right_leg, forward, mot)) return 1;
+    rotSpeed = 5000;
+    SerL.prepareMessage( 'S', rotSpeed);
+    delay(15);
+    SerR.prepareMessage( 'S', rotSpeed);
+    delay(15);
+    if (fChkOrientStpsAvailable(stepAngle, right_leg, forward, mot)) return 2;
     // перевозим тележку влево
-    if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1;
+    if (moveMassRight(mot)) return 1;
     if (Leg_fn(left_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
-    mot.rbOrient -= stepAngle;
-    if (orient_steps(0, right_leg, backward, mot) && (stWork == StWork)) return 1;
+    mot.rbOrient += stepAngle;
+    if (orient_steps(0, right_leg, forward, mot) && (stWork == StWork)) return 1;
     if (Leg_fn(left_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
+    rotSpeed=old_rotSpeed;
+    SerL.prepareMessage( 'S', rotSpeed);
+    delay(15);
+    SerR.prepareMessage( 'S', rotSpeed);
+    delay(15);
 
     return 0;
-  }
+  } else fErrorMes("OnTwoLegs");
   return 1;
 }
 
 
-bool rotateLeftBK(short stepAngle,regimRaboty &mode, posOfMotors & mot)
+byte rotateLeftBK(short stepAngle, regimRaboty &mode, posOfMotors & mot)
 {
-  fOtladkaMes("PovorotVlevoNazad");
-  if (fstandStill(mot))
+  fOtladkaMes("<Nazad");
+  long old_rotSpeed = rotSpeed;
+  if (fstandStill(mot) || readyForRotLeftFoot(mot))
   {
-    if (fChkOrientStpsAvailable(stepAngle, left_leg, backward, mot)) return 1;
+    rotSpeed = 5000;
+    SerL.prepareMessage( 'S', rotSpeed);
+    delay(15);
+    SerR.prepareMessage( 'S', rotSpeed);
+    delay(15);
+    if (fChkOrientStpsAvailable(stepAngle, left_leg, backward, mot)) return 2;
     // перевозим тележку влево
-    if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1;
+    if (moveMassLeft(mot)) return 1;
     if (Leg_fn(right_leg, mode, vtianut, mot) && (stWork == StWork)) return 1;
-    mot.rbOrient -= stepAngle;
+    mot.rbOrient += stepAngle;
     if (orient_steps(0, left_leg, backward, mot) && (stWork == StWork)) return 1;
     if (Leg_fn(right_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
+    rotSpeed=old_rotSpeed;
+    SerL.prepareMessage( 'S', rotSpeed);
+    delay(15);
+    SerR.prepareMessage( 'S', rotSpeed);
+    delay(15);
 
     return 0;
-  }
+  } else fErrorMes("OnTwoLegs");
   return 1;
 }
+
 
 // stepAngle - 	в микрошагах привода
 // возвращает 0 - если поворот возможен, 1 - если нет.
@@ -4753,7 +4895,7 @@ bool fChkOrientStpsAvailable(long stepAngle, robot_leg leg, step_dir dir, posOfM
     }
   } else if (leg == right_leg)   // стоим на правой ноге?
   {
-    if (readyForRotLeftFoot(mot)) 
+    if (readyForRotLeftFoot(mot))
     {
       angleR =  mot.rbOrient * calc_angle(gradus, m_stp) * 2 + stepAngle; // куда нужно повернуть правую
       angleL = -mot.rbOrient * calc_angle(gradus, m_stp) * 2 - stepAngle; // куда нужно повернуть левую
@@ -4791,7 +4933,7 @@ bool moveLegToPos(robot_leg leg, short pos, posOfMotors & mot)
   {
     //    ft = 1;
     // перевозим тележку на опорную ногу
-    if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1;
+    if (moveMassLeft(mot)) return 1;
     // проверяем, чтоб нога не двигалась за пределеы отведенной области
     // отведенная область это область от равного положения ног
     // до максимальной возможной втянутости
@@ -4815,7 +4957,7 @@ bool moveLegToPos(robot_leg leg, short pos, posOfMotors & mot)
   {
     //   ft = 1;
     // перевозим тележку на опорную ногу
-    if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1;
+    if (moveMassRight(mot)) return 1;
     // проверяем, чтоб нога не двигалась за пределеы отведенной области
     // отведенная область это область от равного положения ног
     // до максимальной возможной втянутости
@@ -4861,7 +5003,7 @@ bool fShakeHand(robot_leg leg, const byte shakeCnt, posOfMotors & mot)
   return 0;
 }
 
-bool fShakeHandWithRotation(posOfMotors & mot, const short stepAngle)
+bool fShakeHandWithRotation(posOfMotors & mot, short stepAngle)
 {
   const long midle_pos =  stepsPerLegRot * fullRotationLimit *  2  / 3;
   const short upDnMove = (stepsPerLegRot * fullRotationLimit / 10) - 5;
@@ -4875,11 +5017,11 @@ bool fShakeHandWithRotation(posOfMotors & mot, const short stepAngle)
   // Поднимаем правую ногу если смотреть сзади
   //  if (Leg_fn(left_leg, energySaving, vtianut, mot) && (stWork == StWork)) return 1;
   regimRaboty mode = energySaving;
-  if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1;
+  if (moveMassRight(mot)) return 1;
   // поднимаем на половину высоты
   if (Leg_fn(left_leg, mode, vtianut, mot, midle_pos) && (stWork == StWork)) return 1;
   // меняем ориентацию, чтобы повернуть на 360 градусов
-  mot.rbOrient -= stepAngle;
+  mot.rbOrient += stepAngle;
   // Чтоб махать рукой, нужно исходить из средней позиции ноги
   //  mot.CurrentZero = mot.LeftLegCurrentSteps;
   long angleR = 0; // куда нужно повернуть правую
@@ -4895,15 +5037,20 @@ bool fShakeHandWithRotation(posOfMotors & mot, const short stepAngle)
 
 
 
-  if (readyForRotLeftFoot(mot))
+  if (readyForRotRightFoot(mot))
   {
-    angleR =  mot.rbOrient * calc_angle(gradus, m_stp); // куда нужно повернуть правую
-    angleL = -mot.rbOrient * calc_angle(gradus, m_stp); // куда нужно повернуть левую
+    angleR =  mot.rbOrient * calc_angle(gradus, m_stp) * 2; // куда нужно повернуть правую
+    angleL = -mot.rbOrient * calc_angle(gradus, m_stp) * 2; // куда нужно повернуть левую
 
     mot.RightFootCurrentSteps = angleR;
     mot.LeftFootCurrentSteps  = angleL;
     // начинаем крутиться на правой ноге
-    SerR.prepareMessage( 'c', mot.RightFootCurrentSteps);
+    fOtladkaMes("RightFootCurrentSteps" + String(mot.RightFootCurrentSteps));
+    SerR.prepareMessage( 'c', angleR);
+	delay(15);
+    SerL.prepareMessage( 'j', angleL);
+	delay(15);
+    fAnswerWait(left_leg, foot, mot, 'j', 'T'); 
   }
   // задаем скорость и ускорение махания рукой
 
@@ -4930,7 +5077,7 @@ bool fShakeHandWithRotation(posOfMotors & mot, const short stepAngle)
   while (fNoBlockAnswerWait(right_leg, foot, mot))
   {
     if ((-midle_pos - upDnMove) < -stepsPerLegRot * fullRotationLimit) break;
-    if (fBreak(left_leg, foot, mot)) break;
+    if (fBreak(right_leg, foot, mot)) break;   //left
     mot.LeftLegCurrentSteps =    - midle_pos - upDnMove;
     SerL.prepareMessage( 'h', mot.LeftLegCurrentSteps); // вытягиваем
     if (fAnswerWait(left_leg, knee, mot)) break;
@@ -4957,11 +5104,80 @@ bool fShakeHandWithRotation(posOfMotors & mot, const short stepAngle)
   delay(15);
   SerL.prepareMessage( 'Q', vytagSpeed);
   delay(15);
-
+  StepsManage(mot, mode);
   return 0;
 }
 
 
+// LeftOrRight  - левый-0 правый-1
+byte fNoBlockAnsWait(MKmotor &Uzel, posOfMotors & mot, bool LeftOrRight)
+{
+
+  unsigned long last_time = millis();
+  unsigned long return_time = 6000;  // отсрочка 6 секунд
+  long Data1, motData = 0;
+  char letter = 'G';
+  switch (Uzel)
+  {
+    case knee:
+      letter = 'A';
+      if (LeftOrRight == 0) motData = mot.LeftLegCurrentSteps;
+      else motData = mot.RightLegCurrentSteps;
+      break;
+    case foot:
+      letter = 'B';
+      if (LeftOrRight == 0) motData = mot.LeftFootCurrentSteps;
+      else motData = mot.RightFootCurrentSteps;
+      break;
+    case kal:
+      letter = 'C';
+      break;
+    case zero:
+      letter = 'G';
+      break;
+    default:
+      fErrorMes("UnknownLeg");
+  }
+  static int k = 0;
+#ifdef _OTLADKA_
+  if ((k % 300) == 0)
+  { //остаток от деления равен нулю?
+    Serial1.print(".");
+    k++;
+  }
+#endif
+  static char cmdX = 0x0;
+  if (cmdX != letter)
+  { // ждем ответ от колена
+    //        if (fBreak(left_leg, knee))  return 1;
+    //    delay(delay_nrf_pause);
+    if (LeftOrRight == 0) {
+      if (SerL.handle_serial() > 0)
+        SerL.getString1(cmdX, Data1);
+    } // читаем что принято
+    else if (SerR.handle_serial() > 0) SerR.getString1(cmdX, Data1);
+    if (cmdX == letter)
+    {
+      // проверяем положение колена
+      //     fOtladkaMes("LKnee:" + String(Data1L));
+      if ((motData != Data1) && ((letter == 'A') || (letter == 'B')))
+      {
+        fErrorMes("MUST BE:" + String(motData));
+        delay(2000);
+      }
+      cmdX = 0x0;
+      return 0;
+    }
+    else if (cmdX != 0x0)
+    {
+      String errStr = "LftAswrKneeIs:" + String(cmdX);
+      fErrorMes(errStr);
+      cmdX = 0x0;
+      return 2;
+    }
+  }
+  return 8;
+}
 
 
 // ФУНКЦИЯ ВОЗВРАЩАЕТ:
@@ -5003,12 +5219,12 @@ byte fNoBlockAnswerWait(robot_leg leg, MKmotor Uzel, posOfMotors & mot)
         {
           // проверяем положение колена
           //     fOtladkaMes("LKnee:" + String(Data1L));
- //         if (mot.LeftLegCurrentSteps != Data1L)
- //         {
-  //          fErrorMes("MUST BE:" + String(mot.LeftLegCurrentSteps));
- //           delay(2000);
-            //              mot.LeftLegCurrentSteps = Data1L;
-  //        }
+          //         if (mot.LeftLegCurrentSteps != Data1L)
+          //         {
+          //          fErrorMes("MUST BE:" + String(mot.LeftLegCurrentSteps));
+          //           delay(2000);
+          //              mot.LeftLegCurrentSteps = Data1L;
+          //        }
           cmdX = 0x0;
           return 0;
         }
@@ -5029,12 +5245,12 @@ byte fNoBlockAnswerWait(robot_leg leg, MKmotor Uzel, posOfMotors & mot)
         if (cmdX == letter)
         {
           //         fOtladkaMes("RKnee:" + String(Data1R));
-  //        if (mot.RightLegCurrentSteps != Data1R)
-  //        {
-   //         fErrorMes("MUSTBE:" + String(mot.RightLegCurrentSteps));
-   //         delay(2000);
-            //              mot.RightLegCurrentSteps = Data1R;
-   //       }
+          //        if (mot.RightLegCurrentSteps != Data1R)
+          //        {
+          //         fErrorMes("MUSTBE:" + String(mot.RightLegCurrentSteps));
+          //         delay(2000);
+          //              mot.RightLegCurrentSteps = Data1R;
+          //       }
           cmdX = 0x0;
           return 0;
         }
@@ -5053,9 +5269,219 @@ byte fNoBlockAnswerWait(robot_leg leg, MKmotor Uzel, posOfMotors & mot)
 }
 
 
+// Функция поворота на заданный угол вправо
+// stepAngel - угол поворота, который меняет rbOrient
+// leg = 0 - повернуться на правой ноге, если смотреть спереди
+// leg = 1 - повернуться на левой ноге, если смотреть спереди
+byte fTurnWithStepsR(posOfMotors & mot, short stepAngle, regimRaboty &mode, bool leg)
+{
+  fOtladkaMes("TurnR");
+  // поворот на правой ноге(которая левая) назад
+  if (leg == 0) return rotateRightBK(stepAngle, mode, mot);
+  // поворот на левой ноге(которая правая) вперед
+  if (leg == 1) return rotateRightFF(stepAngle, mode, mot);
+  return 0;
+}
+
+// Функция поворота на заданный угол влево
+// stepAngel - угол поворота, который меняет rbOrient
+//leg = 1 - повернуться на правой ноге, если смотреть спереди
+//leg = 0 - повернуться на левой ноге, если смотреть спереди
+byte fTurnWithStepsL(posOfMotors & mot, short stepAngle, regimRaboty &mode, bool leg)
+{
+  fOtladkaMes("TurnL");
+  // поворот на левой ноге(которая правая) назад
+  if (leg == 0)
+    return rotateLeftBK(stepAngle, mode, mot);
+  // поворот на правой ноге(которая левая) вперед
+  if (leg == 1)
+    return rotateLeftFF(stepAngle, mode, mot);
+  return 0;
+}
+
+
+// FirstLeg - нага спереди 0 - левая 1 - правая
+// если LeftOrRight = 0 значит влево иначе вправо
+bool fTurnToNTimes(posOfMotors & mot, short stepAngle, regimRaboty &mode, bool FirstLeg,
+                   int nTimes, bool LeftOrRight)
+{
+
+
+  if (LeftOrRight == 0) //влeво
+  {
+    for (int i = 0; i < nTimes; ++i)
+    {
+      // остаток от деления равен 0 (четное число) первая нога
+      // повернуться вначале на левой ноге
+      if (i % 2) switch (fTurnWithStepsL(mot, stepAngle, mode, FirstLeg))
+        {
+          case 0:
+            //          return 0;
+            //         fOtladkaMes("turn0L");
+            break;
+          case 1:
+            fOtladkaMes("turn1L");
+            return 1;
+          case 2:
+            fOtladkaMes("turn2L");
+            if (fTurnWithStepsL(mot, stepAngle, mode, !FirstLeg)) return 1;
+            break;
+        }
+      // потом на правой
+      else switch (fTurnWithStepsL(mot, stepAngle, mode, !FirstLeg))
+        {
+          case 0:
+            //         fOtladkaMes("turn0L");
+            break;
+          case 1:
+            fOtladkaMes("turn1L");
+            return 1;
+          case 2:
+            fOtladkaMes("turn2L");
+            if (fTurnWithStepsL(mot, stepAngle, mode, FirstLeg)) return 1;
+            break;
+        }
+    }
+  } else if (LeftOrRight == 1) // вправо
+  {
+    for (int i = 0; i < nTimes; ++i)
+    {
+      // остаток от деления равен 0 (четное число) первая нога
+      // повернуться вначале на левой ноге
+      if (i % 2) switch (fTurnWithStepsR(mot, stepAngle, mode, !FirstLeg))
+        {
+          case 0:
+            //		  return 0;
+            fOtladkaMes("turn0R");
+            break;
+          case 1:
+            fOtladkaMes("turn1R");
+            return 1;
+          case 2:
+            fOtladkaMes("turn2R");
+            if (fTurnWithStepsL(mot, stepAngle, mode, FirstLeg)) return 1;
+            break;
+        }
+      // потом на правой
+      else switch (fTurnWithStepsR(mot, stepAngle, mode,  FirstLeg))
+        {
+          case 0:
+            fOtladkaMes("turn0R");
+            break;
+          case 1:
+            fOtladkaMes("turn1R");
+            return 1;
+          case 2:
+            fOtladkaMes("turn2R");
+            if (fTurnWithStepsL(mot, stepAngle, mode, FirstLeg)) return 1;
+            break;
+        }
+    }
+  }
+  return 0;
+}
 
 
 
+
+//
+
+// поворот до нужного угла с котролем какой ногой ходил последний раз
+// ostatok - насколько нужно довернуть относительно текущего положения в градусах
+// bDir - поворачиваемся влево или вправо
+byte fDoPovorotL(posOfMotors & mot, regimRaboty &mode, const int ostatok)
+{
+
+  bool bEW = fEastOrWestStandingCalc(mot);
+  int gradus = 1;
+
+  // если есть остаток и ориентация ноги соответсвует ориентации робота
+  // телега справа если смотреть сзади
+  if (ostatok && (mot.rbOrient * 2 * calc_angle(gradus, m_stp) == mot.RightFootCurrentSteps))
+  {
+    switch (pr_telega.dir_flg)
+    {
+      case left:
+        if (rotateLeftFF(ostatok, mode, mot)) return 1;
+        break;
+      case right:
+        if (rotateLeftBK(ostatok, mode, mot))  return 1;
+        break;
+      case middle:
+        if (bEW == 0) if (rotateLeftFF(ostatok, mode, mot))  return 1;
+        if (bEW == 1) if (rotateLeftBK(ostatok, mode, mot))  return 1;
+        break;
+      default:
+        fErrorMes("unknown");
+    }
+    return 0;
+  }
+  fOtladkaMes("BezOst");
+  return 2;
+}
+
+
+byte fMinStp(posOfMotors & mot, unsigned short minStep, regimRaboty &mode)
+{
+  fErrorMes("Small angle");
+  return 1;
+}
+
+
+byte fDoPovorotR(posOfMotors & mot, regimRaboty &mode, const int ostatok)
+{
+  bool bEW = fEastOrWestStandingCalc(mot);
+  int gradus = 1;
+
+  if (ostatok && (mot.rbOrient * 2 * calc_angle(gradus, m_stp) == mot.RightFootCurrentSteps))
+  {
+    switch (pr_telega.dir_flg)
+    {
+      case left:
+        if (rotateRightBK(ostatok, mode, mot))  return 1;
+        break;
+      case right:
+        if (rotateRightFF(ostatok, mode, mot))  return 1;
+        break;
+      case middle:
+        if (bEW == 0) if (rotateRightFF(ostatok, mode, mot))  return 1;
+        if (bEW == 1) if (rotateRightBK(ostatok, mode, mot))  return 1;
+        break;
+      default:
+        fErrorMes("unknown");
+
+    }
+    return 0;
+  }
+  return 2;
+}
+
+
+byte moveMassLeft(posOfMotors & mot)
+{
+  if (mot.RightLegCurrentSteps <= mot.LeftLegCurrentSteps)
+  {
+    if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1;
+  } else
+  {
+    fErrorMes("Can'tMoveMassToLeft");
+    return 2;
+  }
+  return 0;
+}
+
+byte moveMassRight(posOfMotors & mot)
+{
+  if (mot.RightLegCurrentSteps >= mot.LeftLegCurrentSteps)
+  {
+    if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1;
+  } else
+  {
+    fErrorMes("Can'tMoveMassToRight");
+    return 2;
+  }
+  return 0;
+}
 
 /*
   byte ReadStream(char *dataOut)

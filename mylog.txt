@@ -1,0 +1,8229 @@
+CalOk_
+EnergySaveMode_
+30 Degree_
+Starting-working_
+>>_
+AccelFoots=5000_
+<<_
+>>_
+SpeedFoots=6500_
+<<_
+>>_
+forward_
+RIGHT FOOT BLOCKED
+Leg_up/dn_
+<<LegErr#3>>_
+
+>>_
+forward_
+RIGHT FOOT BLOCKED
+Leg_up/dn_
+<<LegErr#3>>_
+
+LEFT KNEE TIME ERROR_
+<<_
+>>_
+Stop_
+<<_
+CalOk_
+EnergySaveMode_
+30 Degree_
+Starting-working_
+>>_
+<<_
+>>_
+STANDING ON ONE LEG
+<<_
+>>_
+STANDING ON ONE LEG
+<<_
+>>_
+STANDING ON ONE LEG
+<<_
+>>_
+STANDING ON ONE LEG
+<<_
+>>_
+STANDING ON ONE LEG
+<<_
+>>_
+AbsUgolDo=0_
+rbOrient10_
+RIGHT FOOT BLOCKED
+LEFT FOOT BLOCKED
+Leg_up/dn_
+<<LegErr#3>>_
+
+LEFT KNEE TIME ERROR_
+RIGHT FOOT BLOCKED
+Povorot_
+VozmozhnoPereputanoNapravlenie_
+LeftFootCurrentSteps0_
+RightFootCurrentSteps0_
+stepAngle0_
+rbOrient0_
+Leg_up/dn_
+Leg_up/dn_
+<<LegErr#3>>_
+
+RIGHT KNEE TIME ERROR_
+AbsUgolPosle=0_
+0_
+<<_
+>>_
+Stop_
+<<_
+>>_
+STANDING ON ONE LEG
+<<_
+>>_
+SpeedFoots=6500_
+<<_
+>>_
+STANDING ON ONE LEG
+<<_
+>>_
+STANDING ON ONE LEG
+<<_
+>>_
+<<_
+>>_
+<<_
+>>_
+STANDING ON ONE LEG
+<<_
+>>_
+STANDING ON ONE LEG
+<<_
+>>_
+STANDING ON ONE LEG
+<<_
+>>_
+STANDING ON ONE LEG
+<<_
+>>_
+STANDING ON ONE LEG
+<<_
+>>_
+STANDING ON ONE LEG
+<<_
+>>_
+STANDING ON ONE LEG
+<<_
+>>_
+<<_
+>>_
+<<_
+>>_
+<<_
+>>_
+<<_
+<<LegErr#1>>_
+
+Starting-calibration_
+CalOk_
+EnergySaveMode_
+30 Degree_
+Starting-working_
+>>_
+backward_
+RIGHT FOOT BLOCKED
+Leg_up/dn_
+<<LegErr#3>>_
+
+LEFT KNEE TIME ERROR_
+one: _
+<<_
+>>_
+Stop_
+<<_
+>>_
+<<_
+>>_
+<<_
+>>_
+<<_
+>>_
+forward_
+RIGHT FOOT BLOCKED
+Leg_up/dn_
+Done: _
+Povorot_
+Leg_up/dn_
+Done: _
+Leg_up/dn_
+Done: _
+Povorot_
+Leg_up/dn_
+Done: _
+BreakOK=1_
+Break_steps_
+<<_
+>>_
+SpeedFoots=6500_
+<<_
+>>_
+AccelFoots=5000_
+<<_
+>>_
+forward_
+RIGHT FOOT BLOCKED
+Leg_up/dn_
+Done: _
+Povorot_
+Leg_up/dn_
+Done: _
+Leg_up/dn_
+Done: _
+Povorot_
+Leg_up/dn_
+Done: _
+BreakOK=1_
+Break_steps_
+<<_
+>>_
+RecIsOn
+PlayStarts_
+ReadEprom_
+CalOk_
+EnergySaveMode_
+30 Degree_
+Starting-working_
+PlayStarts_
+ReadEprom_
+Done_
+NmbOfStrgs= 130_
+ReadEprom_
+Done_
+ReadEprom_
+Done_
+StrAdr= 10_
+buf= S2_
+SpeedLegs=2_
+<<_
+ReadEprom_
+Done_
+ReadEprom_
+Done_
+StrAdr= 20_
+buf= A2_
+AccelLegs=2_
+<<_
+ReadEprom_
+Done_
+ReadEprom_
+Done_
+StrAdr= 30_
+buf= K29_
+30 mm_
+<<_
+ReadEprom_
+Done_
+ReadEprom_
+Done_
+StrAdr= 40_
+buf= K22_
+30 Degree_
+<<_
+ReadEprom_
+Done_
+ReadEprom_
+Done_
+StrAdr= 50_
+buf= m10_
+MinStp=10_
+<<_
+ReadEprom_
+Done_
+ReadEprom_
+Done_
+StrAdr= 60_
+buf= D12183_
+<<_
+ReadEprom_
+Done_
+ReadEprom_
+Done_
+StrAdr= 70_
+buf= s3_
+maxStepsCount=3_
+<<_
+ReadEprom_
+Done_
+ReadEprom_
+Done_
+StrAdr= 80_
+buf= K14_
+forward_
+RIGHT FOOT BLOCKED
+Leg_up/dn_
+Done: _
+Povorot_
+Leg_up/dn_
+Done: _
+Leg_up/dn_
+Done: _
+Povorot_
+Leg_up/dn_
+Done: _
+BreakOK=1_
+Break_steps_
+<<_
+ReadEprom_
+Done_
+stWork != StPlay_
+PlayStops
+>>_
+SpeedFoots=6500_
+<<_
+>>_
+AccelFoots=10000_
+<<_
+>>_
+SpeedFoots=10500_
+<<_
+>>_
+ErrorRecInPlayMode_
+>>_
+backward_
+RIGHT FOOT BLOCKED
+Leg_up/dn_
+Done: _
+Povorot_
+Leg_up/dn_
+Done: _
+Leg_up/dn_
+Done: _
+Povorot_
+Leg_up/dn_
+Done: _
+BreakOK=1_
+<<_
+>>_
+RecIsOn
+<<_
+>>_
+backward_
+InfSendState_
+RIGHT FOOT BLOCKED
+Leg_up/dn_
+Done: _
+Povorot_
+Leg_up/dn_
+Done: _
+Leg_up/dn_
+Done: _
+Povorot_
+Leg_up/dn_
+Done: _
+BreakOK=1_
+Break_steps_
+InfSendState_
+<<_
+>>_
+forward_
+InfSendState_
+RIGHT FOOT BLOCKED
+Leg_up/dn_
+Done: _
+Povorot_
+Leg_up/dn_
+Done: _
+Leg_up/dn_
+Done: _
+Povorot_
+Leg_up/dn_
+Done: _
+BreakOK=1_
+Break_steps_
+InfSendState_
+<<_
+>>_
+RecIsOff
+<<_
+PlayStarts_
+ReadEprom_
+Done_
+NmbOfStrgs= 120_
+ReadEprom_
+Done_
+ReadEprom_
+Done_
+StrAdr= 10_
+buf= S2_
+SpeedLegs=2_
+<<_
+ReadEprom_
+Done_
+ReadEprom_
+Done_
+StrAdr= 20_
+buf= A2_
+AccelLegs=2_
+<<_
+ReadEprom_
+Done_
+ReadEprom_
+Done_
+StrAdr= 30_
+buf= K29_
+30 mm_
+<<_
+ReadEprom_
+Done_
+ReadEprom_
+Done_
+StrAdr= 40_
+buf= K22_
+30 Degree_
+<<_
+ReadEprom_
+Done_
+ReadEprom_
+Done_
+StrAdr= 50_
+buf= m10_
+MinStp=10_
+<<_
+ReadEprom_
+Done_
+ReadEprom_
+Done_
+StrAdr= 60_
+buf= D4063_
+<<_
+ReadEprom_
+Done_
+ReadEprom_
+Done_
+StrAdr= 70_
+buf= s2_
+maxStepsCount=2_
+<<_
+ReadEprom_
+Done_
+ReadEprom_
+Done_
+StrAdr= 80_
+buf= K13_
+backward_
+RIGHT FOOT BLOCKED
+Leg_up/dn_
+Done: _
+Povorot_
+Leg_up/dn_
+Done: _
+Leg_up/dn_
+Done: _
+Povorot_
+Leg_up/dn_
+Done: _
+PlMdMxStpsRched_
+<<_
+ReadEprom_
+Done_
+ReadEprom_
+Done_
+StrAdr= 90_
+buf= D17723_
+<<_
+ReadEprom_
+Done_
+ReadEprom_
+Done_
+StrAdr= 100_
+buf= s3_
+maxStepsCount=3_
+<<_
+ReadEprom_
+Done_
+ReadEprom_
+Done_
+StrAdr= 110_
+buf= K14_
+forward_
+RIGHT FOOT BLOCKED
+Leg_up/dn_
+Done: _
+Povorot_
+Leg_up/dn_
+Done: _
+Leg_up/dn_
+Done: _
+Povorot_
+Leg_up/dn_
+Done: _
+PlMdMxStpsRched_
+<<_
+ReadEprom_
+Done_
+PlayStops
+>>_
+<<_
+>>_
+<<_
+>>_
+<<_
+>>_
+<<_
+>>_
+<<_
+>>_
+<<_
+>>_
+backward_
+RIGHT FOOT BLOCKED
+Leg_up/dn_
+Done: _
+Povorot_
+Leg_up/dn_
+Done: _
+Leg_up/dn_
+Done: _
+Povorot_
+Leg_up/dn_
+Done: _
+Leg_up/dn_
+Done: _
+Povorot_
+Leg_up/dn_
+Done: _
+BreakOK=1_
+<<_
+>>_
+backward_
+LEFT FOOT BLOCKED
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+BreakOK=1_
+Break_steps_
+<<_
+>>_
+SpeedFoots=6500_
+<<_
+>>_
+SpeedFoots=6500_
+<<_
+>>_
+AccelFoots=5000_
+<<_
+>>_
+AccelFoots=10000_
+<<_
+>>_
+forward_
+LEFT FOOT BLOCKED
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+Leg_up/dn_
+Done: 0_
+Povorot_
+LEFT FOOT BLOCKED
+<RIGHT TURN TERM ERROR>_
+Leg_up/dn_
+Done: 0_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+Leg_up/dn_
+Done: 0_
+Povorot_
+LEFT FOOT BLOCKED
+<RIGHT TURN TERM ERROR>_
+Leg_up/dn_
+Done: 0_
+BreakOK=1_
+Break_steps_
+<<_
+>>_
+Stop_
+<<_
+<<LegErr#8>>_
+
+Starting-calibration_
+CalOk_
+EnergySaveMode_
+30 Degree_
+Starting-working_
+>>_
+AccelFoots=-26072_
+<<_
+>>_
+SpeedFoots=11500_
+<<_
+>>_
+backward_
+LEFT FOOT BLOCKED
+RightLegCurrentSteps:0_
+LeftLegCurrentSteps:0_
+stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+Leg_up/dn_
+Done: 0_
+Povorot_
+LEFT FOOT BLOCKED
+RightLegCurrentSteps:0_
+LeftLegCurrentSteps:-3000_
+stepsDepthInSteps:3000_
+<RIGHT TURN TERM ERROR>_
+Leg_up/dn_
+Done: 0_
+BreakOK=1_
+<<_
+>>_
+AccelFoots=10000_
+<<_
+CalOk_
+EnergySaveMode_
+30 Degree_
+Starting-working_
+>>_
+AccelFoots=10000_
+<<_
+>>_
+SpeedFoots=10500_
+<<_
+>>_
+backward_
+RIGHT FOOT BLOCKED
+RightLegCurrentSteps:0_
+LeftLegCurrentSteps:0_
+stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+BreakOK=1_
+<<_
+>>_
+forward_
+RIGHT FOOT BLOCKED
+RightLegCurrentSteps:0_
+LeftLegCurrentSteps:0_
+stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+BreakOK=1_
+<<_
+Starting-calibration_
+Loading..
+<<LegErr#8>>_
+
+<<LegErr#8>>_
+
+Starting-calibration_
+Loading..
+CRC ERROR_
+Starting-calibration_
+>>_
+AbsUgolDo=0_
+rbOrient=10_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+SS|&^_
+2run_
+3start_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+mot.LeftFootCurrentSteps0_
+mot.RightFootCurrentSteps0_
+stepAngle0_
+mot.rbOrient0_
+Leg_up/dn_
+Done: 0_
+3end_
+AbsUgolPosle=0_
+0_
+<<_
+>>_
+AbsUgolDo=0_
+rbOrient=10_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+SS|&^_
+2run_
+3start_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+mot.LeftFootCurrentSteps0_
+mot.RightFootCurrentSteps0_
+stepAngle0_
+mot.rbOrient0_
+Leg_up/dn_
+Done: 0_
+3end_
+AbsUgolPosle=0_
+0_
+<<_
+>>_
+<<_
+>>_
+<<_
+>>_
+AbsUgolDo=0_
+rbOrient=10_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+SS|&^_
+2run_
+rbOrient=20_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+SS|&^_
+2run_
+rbOrient=30_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+SS|&^_
+2run_
+rbOrient=40_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+SS|&^_
+2run_
+3start_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+3end_
+AbsUgolPosle=45_
+45_
+<<_
+>>_
+MinStp=15_
+<<_
+>>_
+AbsUgolDo=45_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+1end_
+rbOrient=30_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+SS|&^_
+2run_
+rbOrient=15_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+<<LegErr#8>>_
+
+Leg_up/dn_
+Done: 0_
+SS|&^_
+2run_
+rbOrient=0_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+mot.LeftFootCurrentSteps0_
+mot.RightFootCurrentSteps0_
+stepAngle0_
+mot.rbOrient0_
+Leg_up/dn_
+Done: 0_
+SS|&^_
+2run_
+3start_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+3end_
+AbsUgolPosle=-15_
+-15_
+<<_
+>>_
+forward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+BreakOK=1_
+Break_steps_
+<<_
+>>_
+<<_
+>>_
+AbsUgolDo=-15_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+1end_
+rbOrient:-15_
+lastPreposition:15_
+lastPreposition:15_
+LeftFootCurrentSteps:3316_
+15>60_
+3start_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+3end_
+AbsUgolPosle=15_
+15_
+<<_
+>>_
+forward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+<<LegErr#8>>_
+
+>>_
+<<_
+>>_
+<<_
+>>_
+AbsUgolDo=0_
+rbOrient=-10_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+SS|&^_
+2run_
+rbOrient=-20_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+SS|&^_
+2run_
+rbOrient=-30_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+SS|&^_
+2run_
+rbOrient=-40_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+SS|&^_
+2run_
+3start_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+3end_
+AbsUgolPosle=-45_
+-45_
+<<_
+>>_
+<<_
+>>_
+forward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+BreakOK=1_
+Break_steps_
+<<_
+>>_
+AbsUgolDo=-45_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+1end_
+rbOrient:-45_
+lastPreposition:-35_
+lastPreposition:-35_
+LeftFootCurrentSteps:3284_
+35>119_
+3start_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+3end_
+AbsUgolPosle=-90_
+-90_
+<<_
+Starting-calibration_
+Telega_
+CalOk_
+EnergySaveMode_
+30 Degree_
+Starting-working_
+>>_
+forward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+BreakOK=1_
+Break_steps_
+<<_
+>>_
+AbsUgolDo=0_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+1end_
+rbOrient:0_
+lastPreposition:-10_
+lastPreposition:-10_
+LeftFootCurrentSteps:-1666_
+10>15_
+AbsUgolPosle=0_
+0_
+<<_
+>>_
+AbsUgolDo=0_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+1end_
+rbOrient:0_
+lastPreposition:-10_
+lastPreposition:-10_
+LeftFootCurrentSteps:-1666_
+10>15_
+AbsUgolPosle=0_
+0_
+<<_
+>>_
+<<_
+>>_
+AbsUgolDo=0_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+mot.LeftFootCurrentSteps0_
+mot.RightFootCurrentSteps0_
+stepAngle0_
+mot.rbOrient0_
+Leg_up/dn_
+Done: 0_
+SS|**>|&<_
+1end_
+3start_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+3end_
+AbsUgolPosle=10_
+10_
+<<_
+Loading..
+CRC error
+<<LegErr#8>>_
+
+Starting-calibration_
+Telega_
+CalOk_
+EnergySaveMode_
+30 Degree_
+Starting-working_
+>>_
+forward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+BreakOK=1_
+<<_
+>>_
+forward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+BreakOK=1_
+Break_steps_
+<<_
+>>_
+<<_
+>>_
+PovorotVpravoVpered_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+<<_
+>>_
+PovorotVpravoVpered_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+AccelFoots=7000_
+<<_
+>>_
+PovorotVpravoVpered_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+Stop_
+<<_
+>>_
+AccelFoots=5000_
+<<_
+>>_
+PovorotVpravoVpered_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+<<_
+>>_
+PovorotVlevoVpered_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+PovorotVlevoNazad_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+PovorotVlevoVpered_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+PovorotVlevoVpered_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+<<_
+>>_
+PovorotVlevoVpered_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+PovorotVlevoNazad_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+PovorotVlevoNazad_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+PovorotVpravoVpered_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+PovorotVlevoNazad_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+<<_
+>>_
+PovorotVlevoNazad_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+AccelFoots=5000_
+<<_
+>>_
+PovorotVlevoVpered_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+PovorotVpravoNazad_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+PovorotVpravoNazad_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+PovorotVlevoNazad_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+mot.LeftFootCurrentSteps0_
+mot.RightFootCurrentSteps0_
+stepAngle0_
+mot.rbOrient0_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+AbsUgolDo=0_
+rbOrient=10_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+SS|&^_
+2run_
+3start_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+mot.LeftFootCurrentSteps0_
+mot.RightFootCurrentSteps0_
+stepAngle0_
+mot.rbOrient0_
+Leg_up/dn_
+Done: 0_
+3end_
+AbsUgolPosle=0_
+0_
+<<_
+>>_
+<<_
+>>_
+<<_
+>>_
+PovorotVlevoNazad_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+<<_
+>>_
+<<_
+>>_
+PovorotVpravoNazad_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+mot.LeftFootCurrentSteps0_
+mot.RightFootCurrentSteps0_
+stepAngle0_
+mot.rbOrient0_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+PovorotVpravoNazad_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+RecIsOn
+>>_
+<<_
+>>_
+<<_
+>>_
+MinStp=15_
+<<_
+>>_
+AbsUgolDo=0_
+rbOrient=15_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+SS|&^_
+2run_
+3start_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+mot.LeftFootCurrentSteps0_
+mot.RightFootCurrentSteps0_
+stepAngle0_
+mot.rbOrient0_
+Leg_up/dn_
+Done: 0_
+3end_
+AbsUgolPosle=0_
+0_
+<<_
+>>_
+forward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+BreakOK=1_
+Break_steps_
+<<_
+>>_
+AbsUgolDo=0_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+1end_
+rbOrient=15_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+SS|&^_
+2run_
+3start_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+3end_
+AbsUgolPosle=30_
+30_
+<<_
+>>_
+AbsUgolDo=30_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+1end_
+rbOrient:30_
+lastPreposition:-15_
+LeftFootCurrentSteps:-30_
+15>90_
+AbsUgolPosle=30_
+30_
+<<_
+>>_
+<<_
+>>_
+PovorotVlevoNazad_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+<<_
+>>_
+forward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+BreakOK=1_
+Break_steps_
+<<_
+>>_
+AbsUgolDo=-15_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+SS|**<|&>_
+1end_
+rbOrient=-30_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+SS|&^_
+2run_
+3start_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+3end_
+AbsUgolPosle=-45_
+-45_
+<<_
+>>_
+RecIsOn
+>>_
+RecIsOn
+Unknwn cmd
+<<LegErr#1>>_
+
+Starting-calibration_
+Telega_
+CalOk_
+EnergySaveMode_
+30 Degree_
+Starting-working_
+>>_
+<<_
+>>_
+RecIsOn
+Starting-working_
+>>_
+RecIsOn
+Loading..
+Starting-calibration_
+Telega_
+CalOk_
+EnergySaveMode_
+30 Degree_
+Scanning...
+Loading..
+Unknwn cmd
+<<LegErr#1>>_
+
+Starting-calibration_
+Telega_
+CalOk_
+EnergySaveMode_
+30 Degree_
+Scanning...
+Loading..
+Unknwn cmd
+<<LegErr#1>>_
+
+Starting-calibration_
+Telega_
+CalOk_
+EnergySaveMode_
+30 Degree_
+Scanning...
+Unknwn cmd
+<<LegErr#1>>_
+
+Starting-calibration_
+Telega_
+CalOk_
+EnergySaveMode_
+30 Degree_
+Scanning...
+Telega_
+CalOk_
+EnergySaveMode_
+30 Degree_
+Scanning...
+........EEPROM Available
+....done
+No Display Available_
+Starting-working_
+CRC error
+<<LegErr#8>>_
+
+Starting-calibration_
+Telega_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+KalibrovkaError_
+Scanning...
+........EEPROM Available
+....done
+No Display Available_
+Starting-working_
+>>_
+Loading..
+CRC error
+<<LegErr#8>>_
+
+CRC error
+<<LegErr#8>>_
+
+Starting-calibration_
+Telega_
+CalOk_
+EnergySaveMode_
+30 Degree_
+Scanning...
+Loading..
+CRC error
+<<LegErr#8>>_
+
+CRC error
+<<LegErr#8>>_
+
+Starting-calibration_
+Telega_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+Loading..
+CRC error
+<<LegErr#8>>_
+
+Starting-calibration_
+Telega_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+KalibrovkaError_
+Scanning...
+CRC error
+<<LegErr#8>>_
+
+CRC error
+<<LegErr#8>>_
+
+Starting-calibration_
+Telega_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+KalibrovkaError_
+Scanning...
+Loading..
+CRC error
+Starting-calibration_
+Telega_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+Loading..
+CRC error
+Starting-calibration_
+Telega_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+ZhdemObeNogi_
+Loading..
+CRC error
+CRC error
+Starting-calibration_
+Telega_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Loading..
+CRC error
+Starting-calibration_
+Telega_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Loading..
+SerialAvailable_
+Message_in: E   _
+Prinyato: ge_out: 
+CRC OK_
+CRC error
+<<LegErr_>>_
+
+SerialAvailable_
+Message_in: E   _
+Prinyato: ge_out: 
+CRC OK_
+CRC error
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+LENGTH_out: 3_
+Message_out: K3_
+LENGTH_out: 3_
+Message_out: K3_
+SerialAvailable_
+Message_in: C_
+Prinyato: essage_out: 
+CRC OK_
+Zhdem levuyu_
+LENGTH_out: 3_
+Message_out: K3_
+SerialAvailable_
+Message_in: C_
+Prinyato: essage_out: 
+CRC OK_
+Zhdem levuyu_
+LENGTH_out: 3_
+Message_out: K3_
+SerialAvailable_
+Message_in: C_
+Prinyato: essage_out: 
+CRC OK_
+Zhdem levuyu_
+LENGTH_out: 3_
+Message_out: K3_
+SerialAvailable_
+Message_in: C_
+Prinyato: essage_out: 
+CRC OK_
+Zhdem levuyu_
+LENGTH_out: 3_
+Message_out: K3_
+SerialAvailable_
+Message_in: C_
+Prinyato: essage_out: 
+CRC OK_
+SerialALoading..
+SerialAvailable_
+Message_in: E   _
+Prinyato: ge_out: 
+CRC OK_
+Unknwn cmd
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+LENGTH_out: 3_
+Message_out: K3_
+LENGTH_out: 3_
+Message_out: K3_
+SerialAvailable_
+Message_in: C_
+Prinyato: essage_out: 
+CRC OK_
+Zhdem levuyu_
+LENGTH_out: 3_
+Message_out: K3_
+SerialAvailable_
+Message_in: C_
+Prinyato: essage_out: 
+CRC OK_
+Zhdem levuyu_
+LENGTH_out: 3_
+Message_out: K3_
+SerialAvailable_
+Message_in: C_
+Prinyato: essage_out: 
+CRC OK_
+Zhdem levuyu_
+LENGTH_out: 3_
+Message_out: K3_
+SerialAvailable_
+Message_in: C_
+Prinyato: essage_out: 
+CRC OK_
+Zhdem levuyu_
+LENGTH_out: 3_
+Message_out: K3_
+SerialAvailable_
+Message_in: C_
+Prinyato: essage_out: 
+CRC OK_
+Zhdem levuyu_
+LENGTH_out: 3_
+Message_out: K3_
+SerialAvailable_
+Message_in: C_
+Prinyato: essage_out: 
+CRC OK_
+Zhdem levuyu_
+LENGTH_out: 3_
+Message_out: K3_
+SerialAvailable_
+Message_in: C_
+Prinyato: essage_out: 
+CRC OK_
+Zhdem levuyu_
+Zhdem levuyu_
+LENGTH_out: 3_
+Message_out: K3_
+SerialAvailable_
+Message_in: C_
+Prinyato: essage_out: 
+CRC OK_
+Zhdem levuyu_
+LENGTH_out: 3_
+Message_out: K3_
+SerialAvailable_
+Message_in: C_
+Prinyato: essage_out: 
+CRC OK_
+Zhdem levuyu_
+LENGTH_out: 3_
+Message_out: K3_
+SerialAvailable_
+Message_in: C_
+Prinyato: essage_out: 
+CRC OK_
+Zhdem levuyu_
+LENGTH_out: 3_
+Message_out: K3_
+SerialAvailable_
+Message_in: C_
+Prinyato: essage_out: 
+CRC OK_
+Zhdem levuyu_
+LENGTH_out: 3_
+Message_out: K3_
+SerialAvailable_
+Message_in: C_
+Prinyato: essage_out: 
+CRC OK_
+Zhdem levuyu_
+LENGTH_out: 3_
+Message_out: K3_
+SerialAvailable_
+Message_in: C_
+Prinyato: essage_out: 
+CRC OK_
+Zhdem levuyu_
+LENGTH_out: 3_
+Message_out: K3_
+SerialAvailable_
+Message_in: C_
+Prinyato: essage_out: 
+CRC OK_
+Zhdem levuyu_
+LENGTH_out: 3_
+Message_out: K3_
+SerialAvailable_
+Message_in: C_
+Prinyato: essage_out: 
+CRC OK_
+Zhdem levuyu_
+LENGTH_out: 3_
+Message_out: K3_
+SerialAvailable_
+Message_in: C_
+Prinyato: essage_out: 
+CRC OK_
+Zhdem levuyu_
+LENGTH_out: 3_
+Message_out: K3_
+SerialAvailable_
+Message_in: C_
+Prinyato: essage_out: 
+CRC OK_
+Zhdem levuyu_
+LENGTH_out: 3_
+Message_out: K3_
+SerialAvailable_
+Message_in: C_
+Prinyato: essage_out: 
+CRC OK_
+Zhdem levuyu_
+LENGTH_out: 3_
+Message_out: K3_
+SerialAvailable_
+Message_in: C_
+Prinyato: essage_out: 
+CRC OK_
+SerLoading..
+SerialAvailable_
+M_in E   _
+N< 7
+CRC OK_
+Unknwn cmd
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+L-> 3
+M-> K3
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+Zhdem levuyu_
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+Zhdem levuyu_
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+Zhdem levuyu_
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+Zhdem levuyu_
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+Zhdem levuyu_
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+Zhdem levuyu_
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+Zhdem levuyu_
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+Zhdem levuyu_
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+Zhdem levuyu_
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+Zhdem levuyu_
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+SeriaLoading..
+SerialAvailable_
+M_in E   _
+N< 7
+CRC OK_
+Unknwn cmd
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+L-> 3
+M-> K3
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+SerialLoading..
+SerialAvailable_
+M_in E   _
+N< 7
+CRC OK_
+Unknwn cmd
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+L-> 3
+M-> K3
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+SerialASerialAvailable_
+M_in E   _
+N< 7
+CRC OK_
+CRC error
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+L-> 3
+M-> K3
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetLevoy_
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+L-> 3
+M-> g�
+SerialAvailable_
+M_in G_
+N< 3
+CRC OK_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+L-> 7
+Message_out: h����
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -6000
+L-> 3
+M-> g�
+SerialAvailable_
+M_in G_
+N< 3
+CRC OK_
+L-> 7
+Message_out: h����
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -6000
+L-> 7
+Message_out: i    g
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+CalOk_
+L-> 7
+Message_out: P�  
+L-> 7
+Message_out: P�  
+L-> 7
+Message_out: S'  �
+L-> 7
+Message_out: X'  �
+L-> 7
+Message_out: S'  �
+L-> 7
+Message_out: X'  �
+EnergySaveMode_
+30 Degree_
+I2C_Scanning...
+Loading..
+SerialAvailable_
+M_in E   _
+N< 7
+CRC OK_
+CRC error
+<<LegErr_>>_
+
+SerialAvailable_
+M_in E   _
+N< 7
+CRC OK_
+CRC error
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+L-> 3
+M-> K3
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetLevoy_
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+L-> 3
+M-> g�
+SerialAvailable_
+M_in G_
+N< 3
+CRC OK_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+L-> 7
+Message_out: h����
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -6000
+L-> 3
+M-> g�
+SerialAvailable_
+M_in G_
+N< 3
+CRC OK_
+L-> 7
+Message_out: h����
+SerialAvailable_
+M_in E   _
+N< 7
+CRC OK_
+CRC error
+<<LegErr_>>_
+
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -6000
+L-> 7
+Message_out: i    g
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+CalOk_
+L-> 7
+Message_out: P�  
+L-> 7
+Message_out: P�  
+L-> 7
+Message_out: S'  �
+L-> 7
+Message_out: X'  �
+L-> 7
+Message_out: S'  �
+L-> 7
+Message_out: X'  �
+EnergySaveMode_
+30 Degree_
+I2C_Scanning...
+Unknown error at address 0x01
+Unknown error at address 0x03
+SerialAvailable_
+M_in E   _
+N< 7
+CRC OK_
+CRC error
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+L-> 3
+M-> K3
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetLevoy_
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+L-> 3
+M-> g�
+SerialAvailable_
+M_in G_
+N< 3
+CRC OK_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+L-> 7
+Message_out: h����
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -6000
+L-> 3
+M-> g�
+SerialAvailable_
+M_in G_
+N< 3
+CRC OK_
+L-> 7
+Message_out: h����
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -6000
+L-> 7
+Message_out: i    g
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+CalOk_
+L-> 7
+Message_out: P�  
+L-> 7
+Message_out: P�  
+L-> 7
+Message_out: S'  �
+L-> 7
+Message_out: X'  �
+L-> 7
+Message_out: S'  �
+L-> 7
+Message_out: X'  �
+EnergySaveMode_
+30 Degree_
+I2C_Scanning...
+............done
+No EEPROM  Available_
+No Display Available_
+Starting-working_
+>>_
+backward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+L-> 7
+Message_out: c~����
+L-> 7
+Message_out: c�  �
+SerialAvailable_
+M_in B~���_
+N< 7
+CRC OK_
+D< -1666
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 1666
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+BreakOK=1_
+<<_
+>>_
+forward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+L-> 7
+Message_out: c�  �
+L-> 7
+Message_out: c~����
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 1666
+SerialAvailable_
+M_in B~���_
+N< 7
+CRC OK_
+D< -1666
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+L-> 7
+Message_out: c�  �
+L-> 7
+Message_out: c~����
+SerialAvailable_
+M_in B~���_
+N< 7
+CRC OK_
+D< -1666
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 1666
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+BreakOK=1_
+Break_steps_
+<<_
+>>_
+forward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+L-> 7
+Message_out: c�  �
+L-> 7
+Message_out: c~����
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 1666
+SerialAvailable_
+M_in B~���_
+N< 7
+CRC OK_
+D< -1666
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+L-> 7
+Message_out: c�  �
+L-> 7
+Message_out: c~����
+SerialAvailable_
+M_in B~���_
+N< 7
+CRC OK_
+D< -1666
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 1666
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+BreakOK=1_
+Break_steps_
+<<_
+>>_
+backward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+L-> 7
+Message_out: c~����
+L-> 7
+Message_out: c�  �
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 1666
+SerialAvailable_
+M_in B~���_
+N< 7
+CRC OK_
+D< -1666
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+L-> 7
+Message_out: c~����
+L-> 7
+Message_out: c�  �
+SerialAvailable_
+M_in B~���_
+N< 7
+CRC OK_
+D< -1666
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 1666
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+BreakOK=1_
+Break_steps_
+<<_
+>>_
+backward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+L-> 7
+Message_out: c~����
+L-> 7
+Message_out: c�  �
+SerialAvailable_
+M_in B~���_
+N< 7
+CRC OK_
+D< -1666
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 1666
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+BreakOK=1_
+<<_
+>>_
+backward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+L-> 7
+Message_out: c~����
+L-> 7
+Message_out: c�  �
+SerialAvailable_
+M_in B~���_
+N< 7
+CRC OK_
+D< -1666
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 1666
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+BreakOK=1_
+<<_
+>>_
+forward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+L-> 7
+Message_out: c�  �
+L-> 7
+Message_out: c~����
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 1666
+SerialAvailable_
+M_in B~���_
+N< 7
+CRC OK_
+D< -1666
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+L-> 7
+Message_out: c�  �
+L-> 7
+Message_out: c~����
+SerialAvailable_
+M_in B~���_
+N< 7
+CRC OK_
+D< -1666
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 1666
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+BreakOK=1_
+Break_steps_
+<<_
+>>_
+forward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+BreakOK=1_
+<<_
+>>_
+PovorotVlevoVpered_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+L-> 7
+Message_out: c���-
+L-> 7
+Message_out: c�  &
+SerialAvailable_
+M_in B���_
+N< 7
+CRC OK_
+D< -3300
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 3300
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+<<_
+>>_
+PovorotVlevoVpered_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+L-> 7
+Message_out: c8���,
+L-> 7
+Message_out: c�  ;
+SerialAvailable_
+M_in B8���_
+N< 7
+CRC OK_
+D< -6600
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 6600
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+<<_
+>>_
+PovorotVlevoNazad_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+L-> 7
+Message_out: c�&  $
+L-> 7
+Message_out: cT���/
+SerialAvailable_
+M_in B�&  _
+N< 7
+CRC OK_
+D< 9900
+SerialAvailable_
+M_in BT���_
+N< 7
+CRC OK_
+D< -9900
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+<<_
+>>_
+PovorotVlevoNazad_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+L-> 7
+Message_out: c�3  
+L-> 7
+Message_out: cp���.
+SerialAvailable_
+M_in B�3  _
+N< 7
+CRC OK_
+D< 13200
+SerialAvailable_
+M_in Bp���_
+N< 7
+CRC OK_
+D< -13200
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+<<_
+>>_
+MinStp=30_
+<<_
+>>_
+<<_
+>>_
+AbsUgolDo=120_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+1end_
+rbOrient:120_
+lastPreposition:-60_
+LeftFootCurrentSteps:-120_
+60>360_
+3start_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+L-> 7
+Message_out: c�  &
+L-> 7
+Message_out: c���-
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 3300
+SerialAvailable_
+M_in B���_
+N< 7
+CRC OK_
+D< -3300
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+3end_
+AbsUgolPosle=30_
+30_
+<<_
+>>_
+forward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+L-> 7
+Message_out: cf  �
+L-> 7
+Message_out: c�����
+SerialAvailable_
+M_in Bf  _
+N< 7
+CRC OK_
+D< 4966
+SerialAvailable_
+M_in B����_
+N< 7
+CRC OK_
+D< -4966
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+L-> 7
+Message_out: c�����
+L-> 7
+Message_out: cb  �
+SerialAvailable_
+M_in Bb  _
+N< 7
+CRC OK_
+D< 1634
+SerialAvailable_
+M_in B����_
+N< 7
+CRC OK_
+D< -1634
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+L-> 7
+Message_out: cf  �
+L-> 7
+Message_out: c�����
+SerialAvailable_
+M_in Bf  _
+N< 7
+CRC OK_
+D< 4966
+SerialAvailable_
+M_in B����_
+N< 7
+CRC OK_
+D< -4966
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+L-> 7
+Message_out: c�����
+L-> 7
+Message_out: cb  �
+SerialAvailable_
+M_in Bb  _
+N< 7
+CRC OK_
+D< 1634
+SerialAvailable_
+M_in B����_
+N< 7
+CRC OK_
+D< -1634
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+L-> 7
+Message_out: cf  �
+L-> 7
+Message_out: c�����
+SerialAvailable_
+M_in Bf  _
+N< 7
+CRC OK_
+D< 4966
+SerialAvailable_
+M_in B����_
+N< 7
+CRC OK_
+D< -4966
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+BreakOK=1_
+Break_steps_
+<<_
+Loading..
+CRC error
+<<LegErr_>>_
+
+CRC error
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+EstOtvetLevoy_
+EstOtvetPravoy_
+CalOk_
+EnergySaveMode_
+30 Degree_
+I2C_Scanning...
+Loading..
+Unknwn cmd
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+EstOtvetPravoy_
+EstOtvetLevoy_
+CalOk_
+No EEPROM  Available_
+No Display Available_
+Starting-working_
+>>_
+PovorotVlevoVpered_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+PovorotVlevoNazad_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+AbsUgolDo=60_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+SS|**>|&<_
+1end_
+rbOrient:60_
+lastPreposition:20_
+LeftFootCurrentSteps:-60_
+20>180_
+3start_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+3end_
+AbsUgolPosle=90_
+90_
+<<_
+>>_
+AbsUgolDo=90_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+SS|**>|&<_
+1end_
+rbOrient:90_
+lastPreposition:20_
+LeftFootCurrentSteps:-90_
+20>270_
+3start_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+3end_
+AbsUgolPosle=120_
+120_
+<<_
+>>_
+forward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+BreakOK=1_
+Break_steps_
+<<_
+>>_
+PovorotVpravoVpered_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+<<_
+>>_
+PovorotVpravoVpered_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+PovorotVpravoVpered_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+PovorotVpravoVpered_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+Leg_up/dn_
+Done: 0_
+<<_
+No Display Available_
+Starting-working_
+>>_
+<<_
+>>_
+UgolPovorotaR=10_
+PovorotVpravoVpered_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+rbOrient10_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+<<_
+>>_
+UgolPovorotaR=30_
+PovorotVpravoVpered_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+rbOrient40_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+<<_
+>>_
+UgolPovorotaL=-10_
+PovorotVlevoVpered_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+rbOrient30_
+mot.RightFootCurrentSteps3300_
+Leg_up/dn_
+LftAswrKneeIs:B_
+LEFT-KNEE-TIME-ERROR_
+Done: 1_
+<<_
+Telega_
+EstOtvetPravoy_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+>>_
+45 Degree_
+<<_
+>>_
+forward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+rbOrient0_
+Leg_up/dn_
+Done: 0_
+Leg_up/dn_
+LEFT-KNEE-TIME-ERROR_
+Done: 1_
+<<_
+>>_
+forward_
+Povorot_
+rbOrient0_
+mot.RightFootCurrentSteps-2500_
+Leg_up/dn_
+LEFT-KNEE-TIME-ERROR_
+No EEPROM  Available_
+No Display Available_
+Starting-working_
+>>_
+forward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:-3000_
+mot.LeftLegCurrentSteps:-3000_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+rbOrient0_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:-3000_
+mot.LeftLegCurrentSteps:-3000_
+mot.stepsDepthInSteps:3000_
+<LEFT TURN TERM ERROR>_
+Leg_up/dn_
+Done: 0_
+Leg_up/dn_
+LEFT-KNEE-TIME-ERROR_
+Done: 1_
+<<_
+CRC error
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+EstOtvetLevoy_
+EstOtvetPravoy_
+LEFT-KNEE-TIME-ERROR_
+No EEPROM  Available_
+No Display Available_
+Starting-working_
+CRC error
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+EstOtvetLevoy_
+EstOtvetPravoy_
+LEFT-KNEE-TIME-ERROR_
+No EEPROM  Available_
+No Display Available_
+Starting-working_
+>>_
+Starting-calibration_
+Telega_
+EstOtvetPravoy_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+>>_
+Starting-calibration_
+Telega_
+EstOtvetPravoy_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+EstOtvetLevoy_
+EstOtvetPravoy_
+LEFT-KNEE-TIME-ERROR_
+No EEPROM  Available_
+No Display Available_
+Starting-working_
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+L-> 3
+M-> g�
+SerialAvailable_
+M_in G_
+N< 3
+CRC OK_
+L-> 7
+Message_out: hH����
+LEFT-KNEE-TIME-ERROR_
+No EEPROM  Available_
+No Display Available_
+Starting-working_
+Loading..
+SerialAvailable_
+M_in E   �E   _
+N< 14
+CRC OK_
+<< SerialAmountError >>_
+DataIn:E   �E   _
+Lenght:14byte_
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+L-> 3
+M-> K3
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetLevoy_
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+L-> 3
+M-> g�
+SerialAvailable_
+M_in G_
+N< 3
+CRC OK_
+L-> 7
+Message_out: hH����
+Loading..
+SerialAvailable_
+M_in E   _
+N< 7
+CRC OK_
+CRC error
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+L-> 3
+M-> K3
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetLevoy_
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+L-> 3
+M-> g�
+SerialAvailable_
+M_in G_
+N< 3
+CRC OK_
+L-> 7
+Message_out: hH����
+LEFT-KNEE-TIME-ERROR_
+No EEPROM  Available_
+No Display Available_
+Starting-working_
+Loading..
+Starting-calibration_
+Telega_
+L-> 3
+M-> K3
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetLevoy_
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+L-> 3
+M-> g�
+SerialAvailable_
+M_in G_
+N< 3
+CRC OK_
+->0_Done_
+LLCS=-3000_
+L-> 7
+Message_out: hH����
+$h_
+LEFT-KNEE-TIME-ERROR_
+No EEPROM  Available_
+No Display Available_
+Starting-working_
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+L-> 3
+M-> g�
+SerialAvailable_
+M_in G_
+N< 3
+CRC OK_
+->0_Done_
+LLCS=-3000_
+L-> 7
+Message_out: hH����
+$h_
+LEFT-KNEE-TIME-ERROR_
+No EEPROM  Available_
+No Display Available_
+Starting-working_
+Loading..
+Starting-calibration_
+Telega_
+L-> 3
+M-> K3
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetLevoy_
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+L-> 3
+M-> g�
+SerialAvailable_
+M_in G_
+N< 3
+CRC OK_
+->0_Done_
+LLCS=-3000_
+L-> 7
+Message_out: hH����
+$h_
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+L-> 7
+Message_out: h����
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -6000
+LKnee:-6000_
+L-> 3
+M-> g�
+SerialAvailable_
+M_in G_
+N< 3
+CRC OK_
+L-> 7
+Message_out: h����
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -6000
+L-> 7
+Message_out: i    g
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+CalOk_
+L-> 7
+Message_out: P�  
+L-> 7
+Message_out: P�  
+L-> 7
+Message_out: S'  �
+L-> 7
+Message_out: X'  �
+L-> 7
+Message_out: S'  �
+L-> 7
+Message_out: X'  �
+No EEPROM  Available_
+No Display Available_
+Starting-working_
+>>_
+<<_
+>>_
+UgolPovorotaL=-45_
+PovorotVlevoVpered_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+Done: 0_
+Povorot_
+rbOrient-45_
+L-> 7
+Message_out: cV  �
+L-> 7
+Message_out: c�����
+mot.RightFootCurrentSteps-4950_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in BV  _
+N< 7
+CRC OK_
+D< 4950
+LftAswrKneeIs:B_
+LEFT-KNEE-TIME-ERROR_
+Done: 1_
+<<_
+SerialAvailable_
+M_in B����_
+N< 7
+CRC OK_
+Loading..
+Unknwn cmd
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+EstOtvetPravoy_
+EstOtvetLevoy_
+->0_Done_
+LLCS=-3000_
+$h_
+LKnee:-3000_
+LKnee:-6000_
+CalOk_
+No EEPROM  Available_
+No Display Available_
+Starting-working_
+>>_
+<<_
+>>_
+UgolPovorotaL=-10_
+PovorotVlevoVpered_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+LKnee:-3000_
+Done: 0_
+Povorot_
+rbOrient-10_
+mot.RightFootCurrentSteps-1100_
+Leg_up/dn_
+LftAswrKneeIs:B_
+LEFT-KNEE-TIME-ERROR_
+Done: 1_
+<<_
+Unknwn cmd
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+EstOtvetLevoy_
+EstOtvetPravoy_
+->0_Done_
+LLCS=-3000_
+$h_
+LKnee:-3000_
+LKnee:-6000_
+CalOk_
+No EEPROM  Available_
+No Display Available_
+Starting-working_
+>>_
+UgolPovorotaL=30_
+PovorotVlevoNazad_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+rbOrient30_
+Leg_up/dn_
+Done: 0_
+<<_
+>>_
+UgolPovorotaL=30_
+PovorotVlevoVpered_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+LKnee:-3000_
+Done: 0_
+Povorot_
+rbOrient60_
+mot.RightFootCurrentSteps6600_
+Leg_up/dn_
+LftAswrKneeIs:B_
+LEFT-KNEE-TIME-ERROR_
+Done: 1_
+<<_
+Loading..
+CRC error
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+EstOtvetLevoy_
+EstOtvetPravoy_
+->0_Done_
+LLCS=-3000_
+$h_
+LKnee:-3000_
+LKnee:-6000_
+CalOk_
+No EEPROM  Available_
+No Display Available_
+Starting-working_
+>>_
+forward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+Done: 0_
+Povorot_
+rbOrient0_
+LFoot: -1666_
+Leg_up/dn_
+Done: 0_
+Leg_up/dn_
+LKnee:-3000_
+Done: 0_
+Povorot_
+rbOrient0_
+mot.RightFootCurrentSteps-1666_
+Leg_up/dn_
+LftAswrKneeIs:B_
+LEFT-KNEE-TIME-ERROR_
+Done: 1_
+<<_
+>>_
+Stop_
+<<_
+Unknwn cmd
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+EstOtvetPravoy_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Zhdem pravuyu_
+Unknwn cmd
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+EstOtvetPravoy_
+EstOtvetLevoy_
+->0_Done_
+LLCS=-3000_
+$h_
+LKnee:-3000_
+LEFT-KNEE-TIME-ERROR_
+No EEPROM  Available_
+No Display Available_
+Starting-working_
+>>_
+backward_
+Povorot_
+rbOrient0_
+mot.RightFootCurrentSteps1666_
+Leg_up/dn_
+LEFT-KNEE-TIME-ERROR_
+Done: 1_
+<<_
+>>_
+Stop_
+<<_
+>>_
+RIGHT KNEE TIME ERROR_
+LEFT KNEE TIME ERROR_
+<<_
+>>_
+RIGHT KNEE TIME ERROR_
+LEFT KNEE TIME ERROR_
+<<_
+>>_
+Starting-calibration_
+Wrong CAP
+Wrong Direction_
+NoTelega_
+<<_
+Unknwn cmd
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+EstOtvetLevoy_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+CRC error
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+EstOtvetLevoy_
+EstOtvetPravoy_
+->0_Done_
+LLCS=-3000_
+$h_
+LKnee:-3000_
+LEFT-KNEE-TIME-ERROR_
+No EEPROM  Available_
+No Display Available_
+Starting-working_
+Loading..
+Unknwn cmd
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+EstOtvetLevoy_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+Zhdem levuyu_
+SerialAvailable_
+M_in E   _
+N< 7
+CRC OK_
+CRC error
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+L-> 3
+M-> K3
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetLevoy_
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+L-> 3
+M-> g�
+SerialAvailable_
+M_in G_
+N< 3
+CRC OK_
+->0_Done_
+LLCS=-3000_
+L-> 7
+Message_out: hH����
+$h_
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+L-> 7
+Message_out: h����
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: i�����
+No EEPROM  Available_
+No Display Available_
+Starting-working_
+Loading..
+SerialAvailable_
+M_in E   _
+N< 7
+CRC OK_
+Unknwn cmd
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+L-> 3
+M-> K3
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetLevoy_
+Zhdem levuyu_
+L-> 3
+M-> K3
+Zhdem levuyu_
+L-> 3
+M-> K3
+Zhdem levuyu_
+L-> 3
+M-> K3
+Zhdem levuyu_
+L-> 3
+M-> K3
+Zhdem levuyu_
+L-> 3
+M-> K3
+Zhdem levuyu_
+L-> 3
+M-> K3
+Zhdem levuyu_
+L-> 3
+M-> K3
+Zhdem levuyu_
+L-> 3
+M-> K3
+SeSerialAvailable_
+M_in E   _
+N< 7
+CRC OK_
+Unknwn cmd
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+L-> 3
+M-> K3
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetLevoy_
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+L-> 3
+M-> g�
+SerialAvailable_
+M_in G_
+N< 3
+CRC OK_
+L-> 7
+Message_out: hH����
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: hH����
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: hH����
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: hH����
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: hH����
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: hH����
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: hH����
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: hH����
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: hH����
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: hH����
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: hH����
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: hH����
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: hH����
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: hH����
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: hH����
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: hH����
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: hH����
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: hH����
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: hH����
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: hH����
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: hH����
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: hH����
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: hH����
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: hH����
+Loading..
+SerialAvailable_
+M_in E   _
+N< 7
+CRC OK_
+Unknwn cmd
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+L-> 3
+M-> K3
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetLevoy_
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+L-> 3
+M-> g�
+SerialAvailable_
+M_in G_
+N< 3
+CRC OK_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+L-> 7
+Message_out: h����
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: h����
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: h����
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: h����
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: h����
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: h����
+Loading..
+SerialAvailable_
+M_in E   _
+N< 7
+CRC OK_
+Unknwn cmd
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+L-> 3
+M-> K3
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetLevoy_
+Zhdem levuyu_
+L-> 3
+M-> K3
+Zhdem levuyu_
+L-> 3
+M-> K3
+Zhdem levuyu_
+L-> 3
+M-> K3
+Zhdem levuyu_
+L-> 3
+M-> K3
+Zhdem levuyu_
+L-> 3
+M-> K3
+SerialAvai
+
+-------------------------------------------------------------
+Loading..
+SerialAvailable_
+M_in E   _
+N< 7
+CRC OK_
+CRC error
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+L-> 3
+M-> K3
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+
+
+-------------------------------------------------------------
+Loading..
+SerialAvailable_
+M_in E   _
+N< 7
+CRC OK_
+CRC error
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+L-> 3
+M-> K3
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+L-> 3
+M-> K3
+Zhdem pravuyu_
+
+
+-------------------------------------------------------------
+Loading..
+SerialAvailable_
+M_in E   _
+N< 7
+CRC OK_
+CRC error
+<<LegErr_>>_
+
+SerialAvailable_
+M_in E   �E   _
+N< 14
+CRC OK_
+<< SerialAmountError >>_
+DataIn:E   �E   _
+Lenght:14byte_
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+L-> 3
+M-> K3
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetLevoy_
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+L-> 3
+M-> g�
+SerialAvailable_
+M_in G_
+N< 3
+CRC OK_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+L-> 7
+Message_out: h����
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -6000
+LKnee:-6000_
+L-> 3
+M-> g�
+SerialAvailable_
+M_in G_
+N< 3
+CRC OK_
+L-> 7
+Message_out: h����
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -6000
+L-> 7
+Message_out: i    g
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+CalOk_
+L-> 7
+Message_out: P�  
+L-> 7
+Message_out: P�  
+L-> 7
+Message_out: S'  �
+L-> 7
+Message_out: X'  �
+L-> 7
+Message_out: S'  �
+L-> 7
+Message_out: X'  �
+I2C_Scanning...
+>>_
+L-> 7
+Message_out: i    g
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+<<_
+>>_
+L-> 7
+Message_out: h�����
+L-> 7
+Message_out: h�����
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -8800
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -8800
+<<_
+>>_
+L-> 7
+Message_out: i    g
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+<<_
+>>_
+L-> 7
+Message_out: h�����
+L-> 7
+Message_out: h�����
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -8800
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -8800
+<<_
+>>_
+L-> 7
+Message_out: i    g
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+<<_
+>>_
+Vidvinut-levuyu_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+<<_
+>>_
+Vidvinut-levuyu_
+STANDING ON ONE LEG
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:-3000_
+mot.stepsDepthInSteps:3000_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+LKnee:0_
+<<_
+>>_
+L-> 7
+Message_out: h�����
+L-> 7
+Message_out: h�����
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -8800
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -8800
+L-> 7
+Message_out: h����J
+L-> 7
+Message_out: i|���J
+SerialAvailable_
+M_in A|���_
+N< 7
+CRC OK_
+D< -7300
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -10300
+<<_
+>>_
+STANDING ON ONE LEG
+L-> 7
+Message_out: h�����
+L-> 7
+Message_out: h�����
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -8800
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -8800
+L-> 7
+Message_out: i|���J
+L-> 7
+Message_out: h����J
+SerialAvailable_
+M_in A|���_
+N< 7
+CRC OK_
+D< -7300
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -10300
+<<_
+>>_
+STANDING ON ONE LEG
+L-> 7
+Message_out: h�����
+L-> 7
+Message_out: h�����
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -8800
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -8800
+L-> 7
+Message_out: h����J
+L-> 7
+Message_out: i|���J
+SerialAvailable_
+M_in A|���_
+N< 7
+CRC OK_
+D< -7300
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -10300
+<<_
+>>_
+STANDING ON ONE LEG
+L-> 7
+Message_out: h�����
+L-> 7
+Message_out: h�����
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -8800
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -8800
+L-> 7
+Message_out: i|���J
+L-> 7
+Message_out: h����J
+SerialAvailable_
+M_in A|���_
+N< 7
+CRC OK_
+D< -7300
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -10300
+<<_
+>>_
+STANDING ON ONE LEG
+L-> 7
+Message_out: h�����
+L-> 7
+Message_out: i����s
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -8800
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -8800
+L-> 7
+Message_out: i    g
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+<<_
+>>_
+UgolPovorotaL=-30_
+PovorotVlevoVpered_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+Done: 0_
+Povorot_
+rbOrient-30_
+L-> 7
+Message_out: c�  &
+L-> 7
+Message_out: c���-
+mot.RightFootCurrentSteps-3300_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 3300
+LftAswrKneeIs:B_
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+LKnee:0_
+Done: 0_
+<<_
+SerialAvailable_
+M_in B���_
+N< 7
+CRC OK_
+>>_
+UgolPovorotaL=-30_
+AbsUgolDo=-30_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+1end_
+rbOrient=-40_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+Done: 0_
+Povorot_
+rbOrient-40_
+L-> 7
+Message_out: c0  s
+L-> 7
+Message_out: c����\
+mot.RightFootCurrentSteps-4400_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in B0  _
+N< 7
+CRC OK_
+D< 4400
+LftAswrKneeIs:B_
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+LKnee:0_
+Done: 0_
+SS|&^_
+2run_
+rbOrient=-50_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in B����_
+N< 7
+CRC OK_
+D< -4400
+RGHT-NSWR-KNEE-IS:536872660_
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+rbOrient-50_
+L-> 7
+Message_out: c����
+L-> 7
+Message_out: c|  
+SerialAvailable_
+M_in B����_
+N< 7
+CRC OK_
+D< -5500
+SerialAvailable_
+M_in B|  _
+N< 7
+CRC OK_
+D< 5500
+LFoot: 5500_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+SS|&^_
+2run_
+3start_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+Done: 0_
+Povorot_
+rbOrient-60_
+L-> 7
+Message_out: c�  ;
+L-> 7
+Message_out: c8���,
+mot.RightFootCurrentSteps-6600_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 6600
+LftAswrKneeIs:B_
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+LKnee:0_
+Done: 0_
+3end_
+AbsUgolPosle=-60_
+<<_
+SerialAvailable_
+M_in B8���_
+N< 7
+CRC OK_
+>>_
+UgolPovorotaL=-30_
+PovorotVlevoVpered_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+Done: 0_
+Povorot_
+rbOrient-90_
+L-> 7
+Message_out: c�&  $
+L-> 7
+Message_out: cT���/
+mot.RightFootCurrentSteps-9900_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in B�&  _
+N< 7
+CRC OK_
+D< 9900
+LftAswrKneeIs:B_
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+LKnee:0_
+Done: 0_
+<<_
+SerialAvailable_
+M_in BT���_
+N< 7
+CRC OK_
+>>_
+UgolPovorotaL=-30_
+PovorotVlevoNazad_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+rbOrient-120_
+L-> 7
+Message_out: cp���.
+L-> 7
+Message_out: c�3  
+SerialAvailable_
+M_in B�3  _
+N< 7
+CRC OK_
+D< 13200
+LFoot: 13200_
+SerialAvailable_
+M_in Bp���_
+N< 7
+CRC OK_
+D< -13200
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+<<_
+>>_
+UgolPovorotaR=30_
+PovorotVpravoVpered_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+rbOrient-90_
+L-> 7
+Message_out: cT���/
+L-> 7
+Message_out: c�&  $
+SerialAvailable_
+M_in BT���_
+N< 7
+CRC OK_
+D< -9900
+SerialAvailable_
+M_in B�&  _
+N< 7
+CRC OK_
+D< 9900
+LFoot: 9900_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+<<_
+>>_
+UgolPovorotaL=-30_
+PovorotVlevoNazad_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+rbOrient-120_
+L-> 7
+Message_out: cp���.
+L-> 7
+Message_out: c�3  
+SerialAvailable_
+M_in Bp���_
+N< 7
+CRC OK_
+D< -13200
+SerialAvailable_
+M_in B�3  _
+N< 7
+CRC OK_
+D< 13200
+LFoot: 13200_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+<<_
+>>_
+UgolPovorotaL=-30_
+PovorotVlevoNazad_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+rbOrient-150_
+L-> 7
+Message_out: c����F
+L-> 7
+Message_out: ct@  M
+SerialAvailable_
+M_in B����_
+N< 7
+CRC OK_
+D< -16500
+SerialAvailable_
+M_in Bt@  _
+N< 7
+CRC OK_
+D< 16500
+LFoot: 16500_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+<<_
+>>_
+<<_
+>>_
+<<_
+>>_
+UgolPovorotaL=-45_
+PovorotVlevoVpered_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+Done: 0_
+Povorot_
+rbOrient-195_
+L-> 7
+Message_out: c�S  g
+L-> 7
+Message_out: c6���b
+mot.RightFootCurrentSteps-21450_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in B�S  _
+N< 7
+CRC OK_
+D< 21450
+LftAswrKneeIs:B_
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+LKnee:0_
+Done: 0_
+<<_
+SerialAvailable_
+M_in B6���_
+N< 7
+CRC OK_
+>>_
+backward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+rbOrient-195_
+L-> 7
+Message_out: c����2
+L-> 7
+Message_out: cLZ  9
+SerialAvailable_
+M_in B����_
+N< 7
+CRC OK_
+D< -23116
+SerialAvailable_
+M_in BLZ  _
+N< 7
+CRC OK_
+D< 23116
+LFoot: 23116_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+Done: 0_
+Povorot_
+rbOrient-195_
+L-> 7
+Message_out: cHM  
+L-> 7
+Message_out: c����
+mot.RightFootCurrentSteps-19784_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in BHM  _
+N< 7
+CRC OK_
+D< 19784
+LftAswrKneeIs:B_
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+LKnee:0_
+Done: 0_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in B����_
+N< 7
+CRC OK_
+D< -19784
+RGHT-NSWR-KNEE-IS:536872660_
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+rbOrient-195_
+L-> 7
+Message_out: c����2
+L-> 7
+Message_out: cLZ  9
+SerialAvailable_
+M_in B����_
+N< 7
+CRC OK_
+D< -23116
+SerialAvailable_
+M_in BLZ  _
+N< 7
+CRC OK_
+D< 23116
+LFoot: 23116_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+BreakOK=1_
+Break_steps_
+<<_
+>>_
+forward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+rbOrient-195_
+L-> 7
+Message_out: c����
+L-> 7
+Message_out: cHM  
+SerialAvailable_
+M_in B����_
+N< 7
+CRC OK_
+D< -19784
+SerialAvailable_
+M_in BHM  _
+N< 7
+CRC OK_
+D< 19784
+LFoot: 19784_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+Done: 0_
+Povorot_
+rbOrient-195_
+L-> 7
+Message_out: cLZ  9
+L-> 7
+Message_out: c����2
+mot.RightFootCurrentSteps-23116_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in BLZ  _
+N< 7
+CRC OK_
+D< 23116
+LftAswrKneeIs:B_
+LEFT-KNEE-TIME-ERROR_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+LKnee:0_
+Done: 0_
+BreakOK=1_
+Break_steps_
+<<_
+SerialAvailable_
+M_in B����_
+N< 7
+CRC OK_
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetLevoy_
+SerialAvailable_
+M_in E   _
+N< 7
+CRC OK_
+CRC error
+<<LegErr_>>_
+
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+L-> 3
+M-> g�
+SerialAvailable_
+M_in G_
+N< 3
+CRC OK_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+L-> 7
+Message_out: h����
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -6000
+LKnee:-6000_
+L-> 3
+M-> g�
+SerialAvailable_
+M_in G_
+N< 3
+CRC OK_
+L-> 7
+Message_out: h����
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -6000
+L-> 7
+Message_out: i    g
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+CalOk_
+L-> 7
+Message_out: P�  
+L-> 7
+Message_out: P�  
+L-> 7
+Message_out: S'  �
+L-> 7
+Message_out: X'  �
+L-> 7
+Message_out: S'  �
+L-> 7
+Message_out: X'  �
+I2C_Scanning...
+........EEPROM Available
+....done
+No Display Available_
+Starting-working_
+SerialAvailable_
+M_in _
+N< 1
+CRC ERROR_
+� <>  
+SerialAvailable_
+Shum:6020722322379223119127223223952221421581562825415815815822319922322322325525525595781881581581581581561581581582062071512232232552554679150223158158159282828158158142223223151223223223127207223207222142158156156158158222206223223159941162552232232232221581561561561581582222232232231592232232552232232221581581562815615815894223223223223183223111207159222222158158156156158158222223223223223205255255223223220301581581561561581581478223223223223255251223223222158142156282815815815815922221522315125522320778223158158156156156158158222223143223255255631117922322322215815815828156158158158142223223223711911072237022322215815828156156158158222222223198223223223223255223782221581581228282815815820420795207207223175207791592221581582915615815894207223223159223254239792222231581581581561561561581589522320522322325525522222321415815828158281581581582232212157922225512722322322215815815815628158158222223223223207952232551912222231583015815615615815822222322319922325578223159223158158158158281561582542072232232232232232232472211591591581583015615615615815814222322215946255127207222159206158158281561561581581422239520715255254251223781742221581421562815815815815822378159199223207239792231992232221581581561561561401422222322319922310325587206223158158158188282815815822222319815920725523925522322322215815815628281582231582232231592069525495239223223142142158223281561581581582231431512221592551251919520720615815815828281581581414222320722395223255143207199612231581581582828158207142229522222322315925515922279223158158158281561581581422222232232232232072071272077822315815815815628156142311582231592232227925511122379223301582231582828156158158223223222206207231255255223159222158281582815615815822322322222315922323122322320622215830122828156255301841422151432159525525171223159222158158156156281581581582221597222707879250255223223150142158281561591581582232232232232232542512072072222221583015615615815622221522322325522320725522314214158281562815815815822220722325521595255255223214158158156281581422222552239522315125525522322322015815628156158158223221220792231912432232232062041422215628158140142222223215223223255712238522314158158156282815822222315922394223772531279522215815815815628156159158229520794159222223111191151442221593015628156142158222223223151223255111255159223222222282815615815814158159782237915979472541592142221581582915615815822222161223223223126251223223142158158156156142301582222212212237112725420721522315815814156156156158222683122322325523920722315922222215815628158281582222231592231592552382212232231581582222815614215814222322331198223255255223207223301581562828158158222223223223214207255199773122215815628281581582221422232151522325511025521522330158158157281561581582222232232231592231032232151581582815625215615825522222370942062231272382232231581415815615615815815822395199223159207207255253222215281415615828281561581581581582551591592222071912432233122322315814214215815622230158142214142223223223223255255247223159222158158282815615815614158223222207207223191251792232221581581428156222158141422152232232239525563254712202221581581561562221581582232222232231822392222232221581581562815615815822220721522322320710920722322315922215815828282815830158214223207223223190255111223215222158142281562221581582223022321522322325512794214223941582828156156158301582202232222072232551112542152141581415815628156142143222223207223207191239110223222222301581582828158158302222237821420721512711022315922215815828281581581581587822322321525511125422379223158222156156158158222222159221159462552512232232072221582471101912392552542072072392542552232391272382202399525523922212720720722025520725520719112722323919123924725525479207239255239207631592392552232071742072391572552392232312552552392552392232391272062392552392076320614223925425525322325523912723925525525162255239239207190223239223207126207231255191207254191255255239239255127111207251255239239239125239239125254255220255220238207191255191254157255255239239255239127255255239239255
+M_in �O<�<�L�_
+N< 16
+CRC ERROR_
+� <> �
+>>_
+Stop_
+<<_
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+L-> 3
+M-> g�
+SerialAvailable_
+M_in G_
+N< 3
+CRC OK_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+L-> 7
+Message_out: h����
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -6000
+LKnee:-6000_
+L-> 3
+M-> g�
+SerialAvailable_
+M_in G_
+N< 3
+CRC OK_
+L-> 7
+Message_out: h����
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -6000
+L-> 7
+Message_out: i    g
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+CalOk_
+L-> 7
+Message_out: P�  
+L-> 7
+Message_out: P�  
+L-> 7
+Message_out: S'  �
+L-> 7
+Message_out: X'  �
+L-> 7
+Message_out: S'  �
+L-> 7
+Message_out: X'  �
+I2C_Scanning...
+........EEPROM Available
+....done
+No Display Available_
+Starting-working_
+>>_
+<<_
+>>_
+UgolPovorotaR=30_
+AbsUgolDo=0_
+rbOrient=10_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+Done: 0_
+Povorot_
+rbOrient10_
+L-> 7
+Message_out: c�����
+L-> 7
+Message_out: cL  �
+mot.RightFootCurrentSteps1100_
+SerialAvailable_
+M_in B����_
+N< 7
+CRC OK_
+D< -1100
+LFoot: -1100_
+SerialAvailable_
+M_in BL  _
+N< 7
+CRC OK_
+D< 1100
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+LKnee:0_
+Done: 0_
+SS|&^_
+2run_
+rbOrient=20_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+rbOrient20_
+L-> 7
+Message_out: c�  
+L-> 7
+Message_out: ch���
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 2200
+SerialAvailable_
+M_in Bh���_
+N< 7
+CRC OK_
+D< -2200
+LFoot: -2200_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+SS|&^_
+2run_
+3start_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+Done: 0_
+Povorot_
+rbOrient30_
+L-> 7
+Message_out: c���-
+L-> 7
+Message_out: c�  &
+mot.RightFootCurrentSteps3300_
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 3300
+SerialAvailable_
+M_in B���_
+N< 7
+CRC OK_
+D< -3300
+LFoot: -3300_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+LKnee:0_
+Done: 0_
+3end_
+AbsUgolPosle=30_
+<<_
+>>_
+forward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+rbOrient30_
+L-> 7
+Message_out: cf  �
+L-> 7
+Message_out: c�����
+SerialAvailable_
+M_in Bf  _
+N< 7
+CRC OK_
+D< 4966
+SerialAvailable_
+M_in B����_
+N< 7
+CRC OK_
+D< -4966
+LFoot: -4966_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+Done: 0_
+Povorot_
+rbOrient30_
+L-> 7
+Message_out: c�����
+L-> 7
+Message_out: cb  �
+mot.RightFootCurrentSteps1634_
+SerialAvailable_
+M_in Bb  _
+N< 7
+CRC OK_
+D< 1634
+SerialAvailable_
+M_in B����_
+N< 7
+CRC OK_
+D< -1634
+LFoot: -1634_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+LKnee:0_
+Done: 0_
+BreakOK=1_
+Break_steps_
+<<_
+>>_
+UgolPovorotaR=30_
+PovorotVpravoNazad_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+Done: 0_
+Povorot_
+rbOrient60_
+L-> 7
+Message_out: c8���,
+L-> 7
+Message_out: c�  ;
+mot.RightFootCurrentSteps6600_
+SerialAvailable_
+M_in B8���_
+N< 7
+CRC OK_
+D< -6600
+LFoot: -6600_
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 6600
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+LKnee:0_
+Done: 0_
+<<_
+>>_
+UgolPovorotaL=-30_
+PovorotVlevoNazad_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+rbOrient30_
+L-> 7
+Message_out: c�  &
+L-> 7
+Message_out: c���-
+SerialAvailable_
+M_in B���_
+N< 7
+CRC OK_
+D< -3300
+LFoot: -3300_
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 3300
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+<<_
+>>_
+UgolPovorotaL=-30_
+PovorotVlevoNazad_
+ChkPvrt_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+rbOrient0_
+mot.LeftFootCurrentSteps0_
+mot.RightFootCurrentSteps0_
+stepAngle0_
+mot.rbOrient0_
+L-> 7
+Message_out: c    �
+L-> 7
+Message_out: c    �
+SerialAvailable_
+M_in B    _
+N< 7
+CRC OK_
+D< 0
+SerialAvailable_
+M_in B    _
+N< 7
+CRC OK_
+D< 0
+LFoot: 0_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+<<_
+>>_
+forward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+rbOrient0_
+L-> 7
+Message_out: c�  �
+L-> 7
+Message_out: c~����
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 1666
+SerialAvailable_
+M_in B~���_
+N< 7
+CRC OK_
+D< -1666
+LFoot: -1666_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+Done: 0_
+Povorot_
+rbOrient0_
+L-> 7
+Message_out: c�  �
+L-> 7
+Message_out: c~����
+mot.RightFootCurrentSteps-1666_
+SerialAvailable_
+M_in B~���_
+N< 7
+CRC OK_
+D< -1666
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 1666
+LFoot: 1666_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+LKnee:0_
+Done: 0_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+rbOrient0_
+L-> 7
+Message_out: c�  �
+L-> 7
+Message_out: c~����
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 1666
+SerialAvailable_
+M_in B~���_
+N< 7
+CRC OK_
+D< -1666
+LFoot: -1666_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+Done: 0_
+Povorot_
+rbOrient0_
+L-> 7
+Message_out: c�  �
+L-> 7
+Message_out: c~����
+mot.RightFootCurrentSteps-1666_
+SerialAvailable_
+M_in B~���_
+N< 7
+CRC OK_
+D< -1666
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 1666
+LFoot: 1666_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+LKnee:0_
+Done: 0_
+BreakOK=1_
+Break_steps_
+<<_
+>>_
+backward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+Done: 0_
+Povorot_
+rbOrient0_
+L-> 7
+Message_out: c~����
+L-> 7
+Message_out: c�  �
+mot.RightFootCurrentSteps1666_
+SerialAvailable_
+M_in B~���_
+N< 7
+CRC OK_
+D< -1666
+LFoot: -1666_
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 1666
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+LKnee:0_
+Done: 0_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+rbOrient0_
+L-> 7
+Message_out: c~����
+L-> 7
+Message_out: c�  �
+SerialAvailable_
+M_in B~���_
+N< 7
+CRC OK_
+D< -1666
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 1666
+LFoot: 1666_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+BreakOK=1_
+<<_
+>>_
+RecIsOn
+<<_
+>>_
+backward_
+InfSendState_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+Done: 0_
+Povorot_
+rbOrient0_
+L-> 7
+Message_out: c~����
+L-> 7
+Message_out: c�  �
+mot.RightFootCurrentSteps1666_
+SerialAvailable_
+M_in B~���_
+N< 7
+CRC OK_
+D< -1666
+LFoot: -1666_
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 1666
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+LKnee:0_
+Done: 0_
+BreakOK=1_
+Break_steps_
+InfSendState_
+<<_
+>>_
+forward_
+InfSendState_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+Done: 0_
+Povorot_
+rbOrient0_
+L-> 7
+Message_out: c�  �
+L-> 7
+Message_out: c~����
+mot.RightFootCurrentSteps-1666_
+SerialAvailable_
+M_in B~���_
+N< 7
+CRC OK_
+D< -1666
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 1666
+LFoot: 1666_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+LKnee:0_
+Done: 0_
+BreakOK=1_
+Break_steps_
+InfSendState_
+<<_
+>>_
+InfSendState_
+UgolPovorotaL=-30_
+AbsUgolDo=0_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+Done: 0_
+Povorot_
+rbOrient0_
+mot.LeftFootCurrentSteps0_
+mot.RightFootCurrentSteps0_
+stepAngle0_
+mot.rbOrient0_
+L-> 7
+Message_out: c    �
+L-> 7
+Message_out: c    �
+SerialAvailable_
+M_in B    _
+N< 7
+CRC OK_
+D< 0
+LFoot: 0_
+SerialAvailable_
+M_in B    _
+N< 7
+CRC OK_
+D< 0
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+LKnee:0_
+Done: 0_
+SS|**<|&>_
+1end_
+rbOrient=-10_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+rbOrient-10_
+L-> 7
+Message_out: c�����
+L-> 7
+Message_out: cL  �
+SerialAvailable_
+M_in B����_
+N< 7
+CRC OK_
+D< -1100
+SerialAvailable_
+M_in BL  _
+N< 7
+CRC OK_
+D< 1100
+LFoot: 1100_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+SS|&^_
+2run_
+rbOrient=-20_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+Done: 0_
+Povorot_
+rbOrient-20_
+L-> 7
+Message_out: c�  
+L-> 7
+Message_out: ch���
+mot.RightFootCurrentSteps-2200_
+SerialAvailable_
+M_in Bh���_
+N< 7
+CRC OK_
+D< -2200
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 2200
+LFoot: 2200_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+LKnee:0_
+Done: 0_
+SS|&^_
+2run_
+3start_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+rbOrient-30_
+L-> 7
+Message_out: c���-
+L-> 7
+Message_out: c�  &
+SerialAvailable_
+M_in B���_
+N< 7
+CRC OK_
+D< -3300
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 3300
+LFoot: 3300_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+3end_
+AbsUgolPosle=-30_
+InfSendState_
+<<_
+>>_
+RecIsOff
+<<_
+
+
+-------------------------------------------------------------
+Loading..
+SerialAvailable_
+M_in E   �E   _
+N< 14
+CRC OK_
+<< SerialAmountError >>_
+DataIn:E   �E   _
+Lenght:14byte_
+<<LegErr_>>_
+
+SerialAvailable_
+M_in E   _
+N< 7
+CRC OK_
+CRC error
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+L-> 3
+M-> K3
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetLevoy_
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+L-> 3
+M-> g�
+SerialAvailable_
+M_in G_
+N< 3
+CRC OK_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+L-> 7
+Message_out: h����
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -6000
+LKnee:-6000_
+L-> 3
+M-> g�
+SerialAvailable_
+M_in G_
+N< 3
+CRC OK_
+L-> 7
+Message_out: h����
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -6000
+L-> 7
+Message_out: i    g
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+CalOk_
+L-> 7
+Message_out: P�  
+L-> 7
+Message_out: P�  
+L-> 7
+Message_out: S'  �
+L-> 7
+Message_out: X'  �
+L-> 7
+Message_out: S'  �
+L-> 7
+Message_out: X'  �
+I2C_Scanning...
+........EEPROM Available
+....done
+No Display Available_
+Starting-working_
+PlayStarts_
+ReadEprom_
+Done_
+NmbOfStrgs= 140_
+ReadEprom_
+Done_
+ReadEprom_
+Done_
+StrAdr= 10_
+buf= S2_
+SpeedLegs=2_
+L-> 7
+Message_out: P�  
+L-> 7
+Message_out: P�  
+L-> 7
+Message_out: Q�  v
+L-> 7
+Message_out: Q�  v
+<<_
+ReadEprom_
+Done_
+StrAdr= 20_
+buf= A2_
+AccelLegs=2_
+L-> 7
+Message_out: V�  �
+L-> 7
+Message_out: V�  �
+L-> 7
+Message_out: W�  *
+L-> 7
+Message_out: W�  *
+<<_
+ReadEprom_
+Done_
+StrAdr= 30_
+buf= K29_
+30 mm_
+<<_
+ReadEprom_
+Done_
+StrAdr= 40_
+buf= K22_
+30 Degree_
+<<_
+ReadEprom_
+Done_
+StrAdr= 50_
+buf= m10_
+MinStp=10_
+<<_
+ReadEprom_
+Done_
+StrAdr= 60_
+buf= D4722_
+<<_
+ReadEprom_
+Done_
+StrAdr= 70_
+buf= s1_
+maxStepsCount=1_
+<<_
+ReadEprom_
+Done_
+StrAdr= 80_
+buf= K13_
+backward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+rbOrient0_
+L-> 7
+Message_out: c~����
+L-> 7
+Message_out: c�  �
+SerialAvailable_
+M_in B~���_
+N< 7
+CRC OK_
+D< -1666
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 1666
+LFoot: 1666_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+PlMdMxStpsRched_
+<<_
+ReadEprom_
+Done_
+StrAdr= 90_
+buf= D13205_
+<<_
+ReadEprom_
+Done_
+StrAdr= 100_
+buf= s1_
+maxStepsCount=1_
+<<_
+ReadEprom_
+Done_
+StrAdr= 110_
+buf= K14_
+forward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+rbOrient0_
+L-> 7
+Message_out: c�  �
+L-> 7
+Message_out: c~����
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 1666
+SerialAvailable_
+M_in B~���_
+N< 7
+CRC OK_
+D< -1666
+LFoot: -1666_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+PlMdMxStpsRched_
+<<_
+ReadEprom_
+Done_
+StrAdr= 120_
+buf= D26504_
+<<_
+ReadEprom_
+Done_
+StrAdr= 130_
+buf= K65_
+UgolPovorotaL=-30_
+AbsUgolDo=0_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+1end_
+rbOrient=-10_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+rbOrient-10_
+L-> 7
+Message_out: c�����
+L-> 7
+Message_out: cL  �
+SerialAvailable_
+M_in B����_
+N< 7
+CRC OK_
+D< -1100
+SerialAvailable_
+M_in BL  _
+N< 7
+CRC OK_
+D< 1100
+LFoot: 1100_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+SS|&^_
+2run_
+rbOrient=-20_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+Done: 0_
+Povorot_
+rbOrient-20_
+L-> 7
+Message_out: c�  
+L-> 7
+Message_out: ch���
+mot.RightFootCurrentSteps-2200_
+SerialAvailable_
+M_in Bh���_
+N< 7
+CRC OK_
+D< -2200
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 2200
+LFoot: 2200_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+LKnee:0_
+Done: 0_
+SS|&^_
+2run_
+3start_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+rbOrient-30_
+L-> 7
+Message_out: c���-
+L-> 7
+Message_out: c�  &
+SerialAvailable_
+M_in B���_
+N< 7
+CRC OK_
+D< -3300
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 3300
+LFoot: 3300_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+3end_
+AbsUgolPosle=-30_
+<<_
+PlayStops
+SerialAvailable_
+M_in E   _
+N< 7
+CRC OK_
+CRC error
+<<LegErr_>>_
+
+SerialAvailable_
+M_in E   _
+N< 7
+CRC OK_
+CRC error
+<<LegErr_>>_
+
+Starting-calibration_
+Telega_
+L-> 3
+M-> K3
+L-> 3
+M-> K3
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetPravoy_
+SerialAvailable_
+M_in C_
+N< 3
+CRC OK_
+EstOtvetLevoy_
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: P�  �
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+L-> 3
+M-> g�
+SerialAvailable_
+M_in G_
+N< 3
+CRC OK_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+L-> 7
+Message_out: h����
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -6000
+LKnee:-6000_
+L-> 3
+M-> g�
+SerialAvailable_
+M_in G_
+N< 3
+CRC OK_
+L-> 7
+Message_out: h����
+SerialAvailable_
+M_in A����_
+N< 7
+CRC OK_
+D< -6000
+L-> 7
+Message_out: i    g
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+CalOk_
+L-> 7
+Message_out: P�  
+L-> 7
+Message_out: P�  
+L-> 7
+Message_out: S'  �
+L-> 7
+Message_out: X'  �
+L-> 7
+Message_out: S'  �
+L-> 7
+Message_out: X'  �
+I2C_Scanning...
+........EEPROM Available
+....done
+No Display Available_
+Starting-working_
+PlayStarts_
+ReadEprom_
+Done_
+NmbOfStrgs= 140_
+ReadEprom_
+Done_
+ReadEprom_
+Done_
+StrAdr= 10_
+buf= S2_
+SpeedLegs=2_
+L-> 7
+Message_out: P�  
+L-> 7
+Message_out: P�  
+L-> 7
+Message_out: Q�  v
+L-> 7
+Message_out: Q�  v
+<<_
+ReadEprom_
+Done_
+StrAdr= 20_
+buf= A2_
+AccelLegs=2_
+L-> 7
+Message_out: V�  �
+L-> 7
+Message_out: V�  �
+L-> 7
+Message_out: W�  *
+L-> 7
+Message_out: W�  *
+<<_
+ReadEprom_
+Done_
+StrAdr= 30_
+buf= K29_
+30 mm_
+<<_
+ReadEprom_
+Done_
+StrAdr= 40_
+buf= K22_
+30 Degree_
+<<_
+ReadEprom_
+Done_
+StrAdr= 50_
+buf= m10_
+MinStp=10_
+<<_
+ReadEprom_
+Done_
+StrAdr= 60_
+buf= D4722_
+<<_
+ReadEprom_
+Done_
+StrAdr= 70_
+buf= s1_
+maxStepsCount=1_
+<<_
+ReadEprom_
+Done_
+StrAdr= 80_
+buf= K13_
+backward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+rbOrient0_
+L-> 7
+Message_out: c~����
+L-> 7
+Message_out: c�  �
+SerialAvailable_
+M_in B~���_
+N< 7
+CRC OK_
+D< -1666
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 1666
+LFoot: 1666_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+PlMdMxStpsRched_
+<<_
+ReadEprom_
+Done_
+StrAdr= 90_
+buf= D13205_
+<<_
+ReadEprom_
+Done_
+StrAdr= 100_
+buf= s1_
+maxStepsCount=1_
+<<_
+ReadEprom_
+Done_
+StrAdr= 110_
+buf= K14_
+forward_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+rbOrient0_
+L-> 7
+Message_out: c�  �
+L-> 7
+Message_out: c~����
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 1666
+SerialAvailable_
+M_in B~���_
+N< 7
+CRC OK_
+D< -1666
+LFoot: -1666_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+PlMdMxStpsRched_
+<<_
+ReadEprom_
+Done_
+StrAdr= 120_
+buf= D26504_
+<<_
+ReadEprom_
+Done_
+StrAdr= 130_
+buf= K65_
+UgolPovorotaL=-30_
+AbsUgolDo=0_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+1end_
+rbOrient=-10_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+rbOrient-10_
+L-> 7
+Message_out: c�����
+L-> 7
+Message_out: cL  �
+SerialAvailable_
+M_in B����_
+N< 7
+CRC OK_
+D< -1100
+SerialAvailable_
+M_in BL  _
+N< 7
+CRC OK_
+D< 1100
+LFoot: 1100_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+SS|&^_
+2run_
+rbOrient=-20_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+LKnee:-3000_
+Done: 0_
+Povorot_
+rbOrient-20_
+L-> 7
+Message_out: c�  
+L-> 7
+Message_out: ch���
+mot.RightFootCurrentSteps-2200_
+SerialAvailable_
+M_in Bh���_
+N< 7
+CRC OK_
+D< -2200
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 2200
+LFoot: 2200_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+LKnee:0_
+Done: 0_
+SS|&^_
+2run_
+3start_
+RIGHT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+LEFT FOOT BLOCKED
+mot.RightLegCurrentSteps:0_
+mot.LeftLegCurrentSteps:0_
+mot.stepsDepthInSteps:3000_
+Leg_up/dn_
+L-> 7
+Message_out: hH����
+SerialAvailable_
+M_in AH���_
+N< 7
+CRC OK_
+D< -3000
+Done: 0_
+Povorot_
+rbOrient-30_
+L-> 7
+Message_out: c���-
+L-> 7
+Message_out: c�  &
+SerialAvailable_
+M_in B���_
+N< 7
+CRC OK_
+D< -3300
+SerialAvailable_
+M_in B�  _
+N< 7
+CRC OK_
+D< 3300
+LFoot: 3300_
+Leg_up/dn_
+L-> 7
+Message_out: i    g
+SerialAvailable_
+M_in A    _
+N< 7
+CRC OK_
+D< 0
+Done: 0_
+3end_
+AbsUgolPosle=-30_
+<<_
+PlayStops
