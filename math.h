@@ -1,4 +1,8 @@
 
+#ifndef MATH_H
+#define MATH_H
+
+
 
 long stepDephCalc(long lDist)
 {   if(lDist > (lengthPerLegRot*fullRotationLimit))
@@ -7,23 +11,22 @@ long stepDephCalc(long lDist)
 }
 
 
-long calc_angle(unsigned short angle, byte m_step)
+long angleToStep(unsigned short angle = 1)
 {
-  // if (angle > 360)
-  // {
-    // fErrorMes("Angle>360");
-    // delay(10000);
-    // return 0;
-  // }
-  // if (not((m_step == 1) || (m_step == 2) || (m_step == 4) || (m_step == 8) || (m_step == 16)))
-  // {
-    // fErrorMes("microstep err");
-    // delay(10000);
-    // return 0;
-  // }
-  // long result;
-  // short steps_rev = 200;
-  // short reductor = 50;
-  // result = (long)steps_rev * reductor * m_step * angle / 360;
-  return 55.56*angle;
+  if (angle > 360)
+  {
+    fErrorMes("Angle>360");
+    delay(10000);
+    return 0;
+  }
+  if (not((m_stp == 1) || (m_stp == 2) || (m_stp == 4) || (m_stp == 8) || (m_stp == 16)))
+  {
+    fErrorMes("microstep err");
+    delay(10000);
+    return 0;
+  }
+  constexpr long result = (long)steps_rev * reductor * m_stp / 360;
+  return result * angle;//55.56*angle;
 }
+
+#endif

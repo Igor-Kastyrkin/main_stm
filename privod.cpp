@@ -54,7 +54,10 @@ int privod::RotateStps4Step(AccelStepper *motorLink, motor stepper_num, long ste
     {
       motorLink[stepper_num].run();
 	  // если меньше нуля то вправо
-      (end_pos < 0) ? (dir_flg = left_right) : (dir_flg = right_left); 
+      dir_flg = 
+			end_pos < 0 ? 
+					left_right : 
+					right_left ; 
       //    if (fBreak(not_leg, knee)) return 1;
     }
   } else
@@ -62,7 +65,10 @@ int privod::RotateStps4Step(AccelStepper *motorLink, motor stepper_num, long ste
     while ((digitalRead(ENDCAP_R) == EC_LOW) && (motorLink[stepper_num].distanceToGo() != 0))
     {
       motorLink[stepper_num].run();
-      (end_pos > 0) ? (dir_flg = left_right) : (dir_flg = right_left);// 
+      dir_flg = 
+			end_pos > 0 ?
+					left_right :
+					right_left;// 
       //    if (fBreak(not_leg, knee)) return 1;
     }
   }
@@ -228,18 +234,13 @@ bool privod::RotateStpsOnly(AccelStepper *motorLink, motor stepper_num, long ste
     }
     motorLink[stepper_num].run();
   }
-  if (stepsPos > 0)
-  {  // приехал влево, если смотреть спереди
-    dir_flg = left;
-  }
-  if (stepsPos < 0)
-  {  // приехал вправо, если смотреть спереди
-    dir_flg = right;
-  }
-  if (stepsPos == 0)
-  {  // телега в середине
-    dir_flg = middle;
-  }
+  dir_flg = 
+	stepsPos > 0?      // приехал влево, если смотреть спереди
+		left:
+		stepsPos < 0?     // приехал вправо, если смотреть спереди
+			right:
+				stepsPos == 0?  // телега в середине
+					middle:dir_flg;
 
 #ifdef _BUILTIN_LED_ON_
   digitalWrite(LED_BUILTIN, HIGH);

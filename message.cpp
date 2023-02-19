@@ -1,5 +1,7 @@
 #include "message.h"
 
+#ifndef MESSAGE_H
+#define MESSAGE_H
 
 #define _DISP_
 
@@ -111,3 +113,6 @@ void fOtladkaMes(long mes)
 #endif
   delay(15);
 }
+
+
+#endif

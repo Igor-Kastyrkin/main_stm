@@ -1,6 +1,6 @@
 ﻿// class
-#ifndef _PRIVOD_
-#define _PRIVOD_
+#ifndef PRIVOD_H
+#define PRIVOD_H
 
 #include "AccelStepper.h"
 #include "proc.h"
@@ -52,6 +52,7 @@ class privod {
     }
 	
 	long DriveLeft(void);
+	
 	long DriveRight(void);
 	
 
