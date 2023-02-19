@@ -4463,10 +4463,17 @@ void topRight(posOfMotors & mot)
 
 // вращение стопой
 // может вращать в разные стороны по очереди или по отдельности
-void foot_rotation(robot_leg leg, short direction, short angle, short times, posOfMotors & mot)
+void foot_rotation(const robot_leg leg, const byte direction, short angle, short times, posOfMotors & mot)
 {
   // posOfMotors mot; // для совместимости
   long steps = angleToStep(angle);
+  
+  long angleL = -mot.GetOrient() * angleToStep() * 2;
+  long angleR =  mot.GetOrient() * angleToStep() * 2;
+  
+  //if(angle < 0) direction = 1;
+  if(direction == 1) steps = -steps; // направление по часовой стрелке?
+
   if (leg == left_leg)
   {
     if (readyForRotRightFoot(mot) ) // стоим на правой ноге?
@@ -4475,22 +4482,18 @@ void foot_rotation(robot_leg leg, short direction, short angle, short times, pos
       {
         while (times > 0)
         {
-          SerL.prepareMessage( 'c', mot.GetOrient() * angleToStep() * 2 - steps);
+          SerL.prepareMessage( 'c', angleL - steps);
           if (fAnswerWait(left_leg,  foot, mot)) return; //ждем
-          SerL.prepareMessage( 'c', -mot.GetOrient() * angleToStep() * 2 + steps);
+          SerL.prepareMessage( 'c', angleL + steps);
           if (fAnswerWait(left_leg,  foot, mot)) return; //ждем
           times--;
         }
-      }
-      if (direction == 1) // направление по часовой стрелке?
-      {
-        SerL.prepareMessage( 'c', mot.GetOrient() * angleToStep() * 2 - steps);
-        if (fAnswerWait(left_leg,  foot, mot)) return; //ждем
-      }
-      if (direction == 2) // направление против часовой стрелки?
-      {
-        SerL.prepareMessage( 'c', -mot.GetOrient() * angleToStep() * 2 + steps);
-        if (fAnswerWait(left_leg,  foot, mot)) return; //ждем
+      }else
+	  {
+        SerL.prepareMessage( 'c', angleL + steps);
+        if (fAnswerWait(leg,  foot, mot)) return; //ждем
+        SerL.prepareMessage( 'j', angleL);
+        if (fAnswerWait(leg,  foot, mot,'j','T')) return; //ждем
       }
     }
     else
@@ -4507,22 +4510,19 @@ void foot_rotation(robot_leg leg, short direction, short angle, short times, pos
       {
         while (times > 0)
         {
-          SerR.prepareMessage( 'c', mot.GetOrient() * angleToStep() * 2 - steps);
+          SerR.prepareMessage( 'c', angleR - steps);
           if (fAnswerWait(right_leg,  foot, mot)) return; //ждем
-          SerR.prepareMessage( 'c', mot.GetOrient() * angleToStep() * 2 + steps);
+          SerR.prepareMessage( 'c', angleR + steps);
           if (fAnswerWait(right_leg,  foot, mot)) return; //ждем
           times--;
         }
       }
-      if (direction == 1) // направление по часовой стрелке?
+      else // направление по часовой стрелке?
       {
-        SerR.prepareMessage( 'c', mot.GetOrient() * angleToStep() * 2 - steps);
-        if (fAnswerWait(right_leg,  foot, mot)) return; //ждем
-      }
-      if (direction == 2) // направление против часовой стрелки?
-      {
-        SerR.prepareMessage( 'c', mot.GetOrient() * angleToStep() * 2 + steps);
-        if (fAnswerWait(right_leg,  foot, mot)) return; //ждем
+        SerR.prepareMessage( 'c', angleR + steps);
+        if (fAnswerWait(leg,  foot, mot)) return; //ждем
+        SerR.prepareMessage( 'j', angleR);
+        if (fAnswerWait(leg,  foot, mot,'T','j')) return; //ждем
       }
     }
     else
@@ -5967,6 +5967,38 @@ byte goDnstears(posOfMotors & mot, step_dir dir, byte steps_height, byte steps_c
   }
 
   seetUpDown(mot, 1);  // привстаем
+
+
+  moveMassLeft(mot);
+  // втянем правую
+  mot.MoveRightLegCurrentSteps(-stepsPerLegRot * 15L / lengthPerLegRot,BTANYTb_CH);
+   if (fAnswerWait(right_leg, knee, mot, 'T', BTANYTb_CH)) return 1;
+ // повернем стопу до концевика
+  delay(pauseForSerial);
+  SerR.prepareMessage('g');
+  if (fAnswerWait(right_leg, zero, mot)) return 1;
+  // повернем правую стопу на 22 градуса
+  foot_rotation(right_leg, 1, 22, 1, mot);
+// опускаем
+  mot.MoveRightLegCurrentSteps(0,BbITANYTb_CH);
+  if (fAnswerWait(right_leg, knee, mot, 'T', BbITANYTb_CH)) return 1;
+  
+  delay(pauseForSerial);
+  moveMassRight(mot);
+
+  // тоже самое для левой ноги
+  mot.MoveLeftLegCurrentSteps(-stepsPerLegRot * 15L / lengthPerLegRot,BTANYTb_CH);
+  if (fAnswerWait(left_leg, knee, mot, 'h', 'T')) return 1;
+  delay(pauseForSerial);
+  SerL.prepareMessage('g');
+  if (fAnswerWait(left_leg, zero, mot)) return 1;
+  foot_rotation(left_leg, 1, 22, 1, mot);
+  mot.MoveLeftLegCurrentSteps(0,BbITANYTb_CH);
+  if (fAnswerWait(left_leg, knee, mot, 'T', BbITANYTb_CH)) return 1;
+
+
+
+ 
   // делаем шаги вверх по ступенке 3 раза
   if(dnStep(mot, dir, steps_height, steps_count)) fErrorMes("CantStepUp");
   seetUpDown(mot, 1);  // привстаем
