@@ -8,6 +8,7 @@
 void writeString(String data)
 {
   int stringSize = data.length();
+  if(stringSize > incriment) Serial1.println("EEPROM_INC_ERR"); 
   for (int i = 0; i < stringSize; i++)
   {
     writeEEPROM(disk1, StrAddr + i, data[i]);
@@ -24,7 +25,9 @@ void writeString(String data)
 
 void writeString(String data, unsigned int address)
 {
+
   int stringSize = data.length();
+  if(stringSize > incriment) Serial1.println("EEPROM_INC_ERR"); 
   for (int i = 0; i < stringSize; i++)
   {
     writeEEPROM(disk1, address + i, data[i]);
@@ -49,11 +52,11 @@ void writeString(String data, unsigned int address)
 String readString(int address)
 {
   fOtladkaMes("ReadEprom");
-  char data[10]; //Max 10 Bytes
+  char data[incriment]; //Max 15 Bytes
   int len = 0;
   unsigned char k;
   k = readEEPROM(disk1, address);
-  while (k != '\0' && len < 10)  //Read until null character
+  while (k != '\0' && len < incriment)  //Read until null character
   {
     k = readEEPROM(disk1, address + len);
     data[len] = k;
