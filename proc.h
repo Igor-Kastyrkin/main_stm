@@ -24,6 +24,20 @@ const short steps_rev = 200;
 const short reductor = 50;
 const short m_stp = 2;
 
+const byte incriment = 15;
+
+const unsigned int VtagSpeedAddr  = 0 + incriment;                  // 15
+const unsigned int VytagSpeedAddr = VtagSpeedAddr + incriment;      // 30
+const unsigned int VtagAccelAddr  = VytagSpeedAddr + incriment;     // 45
+const unsigned int VytagAccelAddr = VtagAccelAddr + incriment;      // 60
+const unsigned int FootRotSpeedAddr = VytagAccelAddr + incriment;   // 75
+const unsigned int FootRotAccelAddr = FootRotSpeedAddr + incriment; // 90
+const unsigned int TelegaSpeedAddr = FootRotAccelAddr + incriment;  // 105
+const unsigned int TelegaAccelAddr = TelegaSpeedAddr + incriment;   // 120
+
+
+
+
 class posOfMotors
 {
 
@@ -112,27 +126,30 @@ public:
   
   void Set_BTAHYTb_Speed(unsigned long Speed);
 
-  void Send_BTAHYTb_Speed(unsigned long);
+  void Send_BTAHYTb_Speed(unsigned long speed = 0);
   void Set_BbITAHYTb_Speed(unsigned long Speed);
 
-  void Send_BbITAHYTb_Speed(unsigned long );
+  void Send_BbITAHYTb_Speed(unsigned long speed = 0);
 
   
   void Set_BTAHYTb_Accel(unsigned long Accel);
 
-  void Send_BTAHYTb_Accel(unsigned long );
+  void Send_BTAHYTb_Accel(unsigned long accel = 0);
   void Set_BbITAHYTb_Accel(unsigned long Accel);
 
-  void Send_BbITAHYTb_Accel(unsigned long );
-
+  void Send_BbITAHYTb_Accel(unsigned long accel = 0);
+/*
   void Send_Estimated_BTAHYTb_Speed();
   void Send_Estimated_BbITAHYTb_Speed();
   void Send_Estimated_BTAHYTb_Accel();
   void Send_Estimated_BbITAHYTb_Accel();
+*/
   
+  void Set_Rot_Speed(unsigned long speed);
+  void Set_Rot_Accel(unsigned long accel);
   
-  void Set_Rot_Speed(unsigned long);
-  void Set_Rot_Accel(unsigned long);
+  void Send_Rot_Speed(unsigned long speed = 0);
+  void Send_Rot_Accel(unsigned long accel = 0);
   
   void Calibrate_left_leg(){SerL.prepareMessage('K');}
   void Calibrate_right_leg(){SerR.prepareMessage('K');}
@@ -140,6 +157,8 @@ public:
   void Calibrate_left_foot(){SerL.prepareMessage('g');}
   void Calibrate_right_foot(){SerR.prepareMessage('g');}
   
+  
+//  extern const unsigned int FootRotSpeedAddr;
 };
 // public:
 

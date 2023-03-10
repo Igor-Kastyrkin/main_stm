@@ -5,7 +5,7 @@
 #include <arduino.h>
 #include <Wire.h>
 #define disk1 0x50
-
+#include "proc.h"
 
 
 void writeString(String data);
@@ -25,4 +25,4 @@ void PlayFromEEPROM(bool zoom);
 #endif
 
 extern unsigned long StrAddr;
-extern const byte incriment;
+//extern const byte incriment;

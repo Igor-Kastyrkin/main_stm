@@ -31,8 +31,8 @@ class privod {
 	
     void setTelegaSpec(float speed, float accel)
     {
-      Speed = speed;
-      Accel = accel;
+      if(speed!=0.0) Speed = speed;
+      if(accel!=0.0) Accel = accel;
     }
 
     long getFullDist(void)

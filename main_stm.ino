@@ -179,13 +179,9 @@ unsigned long  vtagAccel = 6250;
 unsigned long vytagAccel = 8750;
 
 unsigned long  rotSpeed = 6000;
-unsigned long  rotAccel = 6500;
+//unsigned long  rotAccel = 6500;
 
 
-const unsigned int VtagSpeedAddr  = 10;
-const unsigned int VytagSpeedAddr = 20;
-const unsigned int VtagAccelAddr  = 30;
-const unsigned int VytagAccelAddr = 40;
 
 
 // long mot.rbOrient  = 0;  // угол направления движения в градусах
@@ -213,7 +209,7 @@ bool bPause = 0;
 const unsigned long return_time = 20000;
 
 
-byte minRbtStep = 10;
+byte minRbtStep = 15;
 
 long recordTimer = 0;
 long StartRecordTime = 0;
@@ -222,7 +218,7 @@ long playTimer = 0;
 #ifdef _EPROM1_
 const unsigned long StartEEPROM = 610;
 unsigned long StrAddr = StartEEPROM;
-const byte incriment = 15;
+
 
 #ifdef _TEL_EEPROM_
 const unsigned long StartTelEEPROM = 510;
@@ -337,15 +333,17 @@ void setup()
   digitalWrite(LED_BUILTIN, LOW);
 #endif
 
+// передача концевиков
   pr_telega.privod_init(ENDCAP, ENDCAP_R);
 
   // по результатам испытаний немного подразогнали
   // скорость была 9200, ускорение 10000
 
-  float telegaSpeed = 10000.0;
-  float telegaAccel = 10500.0; //8000
+  int telegaSpeed = readString(TelegaSpeedAddr).toInt();
+  int telegaAccel = readString(TelegaAccelAddr).toInt();
 
   pr_telega.setTelegaSpec(telegaSpeed, telegaAccel);
+  
   motorLink[0]->setMinPulseWidth(20);
 
   Serial1.begin(baudRateCom1);
@@ -467,18 +465,25 @@ void setup()
       radio.read(&RF_data, sizeof(RF_data));
 #else
 
+      // читам пока не наткнемся на конец строки или условие while
       while (Serial1.available() && (serialAmount < 30))
       {
         RF_data[serialAmount] = Serial1.read();
-        serialAmount++;
+		if(RF_data[serialAmount] == '\n') break;
+		serialAmount++;
         delayMicroseconds((10000000 / baudRateCom1) + 500);  //23.7.20 было +50мкс
+
       }
       RF_data[serialAmount] = '\0';
+
       while (Serial1.available())
       {
-        Serial1.read();
+		
+        if(Serial1.read()=='\r') break;
         delay(2);
+		// фильтр сообщений с ошибкой
         RadioAval = 0;
+		fErrorMes("MisData");
       }
       if (serialAmount < 2) {
         RadioAval = 0;
@@ -748,7 +753,7 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
               fOtladkaMes("EnergySaveMode");
               mode = energySaving;
 			  // для обратной связи
-			  Serial1.println("menergySaving");
+			  CheckUpMes("menergySaving");
               fAddInActionInRecordMode(goSlow);
             }
             else
@@ -756,7 +761,7 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
               fOtladkaMes("FastMode");
               mode = fast;
 			  // для обратной связи
-			  Serial1.println("mFastMode");
+			  CheckUpMes("mFastMode");
               fAddInActionInRecordMode(goFast);
             }
           }
@@ -800,12 +805,12 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
 #ifdef _EPROM1_
           if (stWork != StRec)
           {
-            Serial1.println("RecIsOff");
+            CheckUpMes("RecIsOff");
             recordTimer = 0;
           }
           if (stWork == StRec)
           {
-            Serial1.println("RecIsOn");
+            CheckUpMes("RecIsOn");
             StartRecordTime = millis();
             //           fOtladkaMes("StrAdr1 = " + String(StrAddr));
             StrAddr = StartEEPROM;
@@ -860,8 +865,8 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
           break;
         case 54: // режим записи с запоминанием времени
           withPauses == 1 ? withPauses = 0 : withPauses = 1;
-		  if(withPauses == 1) Serial1.println("withPauses");
-		  else Serial1.println("nooPauses");
+		  if(withPauses == 1) CheckUpMes("withPauses");
+		  else CheckUpMes("nooPauses");
           break;
         // качаем один раз
         case 60:
@@ -954,30 +959,44 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
 		  dataToUpload();
 		break;
 
+        case 73:
+		break;
       }
       break;
-    // s, L, R, S, A, Y, W, d, m, D, J, K,
+    // s, L, R, S, A, Y, W, d, m, D, J, H,
 	// q , h, p, o
     case 'q':
       // скорость вверх
+	  //записать в еепром
       mot.Set_BTAHYTb_Speed(x);
-	  mot.Send_Estimated_BTAHYTb_Speed();
+	  // прочесть скорость из епром и отправить ногам
+	  mot.Send_BTAHYTb_Speed();
+	  // отправить на телефон принятую комманду
+	  CheckUpMes("TT"+String(x));
     break;
     case 'h':
       // скорость вниз
       mot.Set_BbITAHYTb_Speed(x);
-	  mot.Send_Estimated_BbITAHYTb_Speed();
+	  // прочесть скорость с епром и отправить ногам
+	  mot.Send_BbITAHYTb_Speed();
+	  // отправить на телефон принятую комманду
+	  CheckUpMes("TT"+String(x));
     break;
 
     case 'p':
       // скорость вниз
       mot.Set_BTAHYTb_Accel(x);
-	  mot.Send_Estimated_BTAHYTb_Accel();
+	  // прочесть ускорение с еепром и отправить ногам
+	  mot.Send_BTAHYTb_Accel();
+	  // отправить на телефон принятую команду
+	  CheckUpMes("TT"+String(x));
     break;
     case 'o':
       // скорость вниз
       mot.Set_BbITAHYTb_Accel(x);
-	  mot.Send_Estimated_BbITAHYTb_Accel();
+	  // прочесть ускорение с еепром и отпрвить ногам
+	  mot.Send_BbITAHYTb_Accel();
+	  CheckUpMes("TT"+String(x));
     break;
 
 	
@@ -1012,6 +1031,7 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
 	    mot.Send_BbITAHYTb_Speed(vytagSpeed);
         //     fOtladkaMes("0");
       }
+	  
       else if (x == 1)
       {
         vtagSpeed  = 5000;
@@ -1020,16 +1040,18 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
 	    mot.Send_BTAHYTb_Speed(vtagSpeed);
 	    mot.Send_BbITAHYTb_Speed(vytagSpeed);
       }
+	  
       else if (x == 2)
       {
 		// х = 2 стандартные значения
   //      vtagSpeed  = 4500;
   //      vytagSpeed = 3500;
-	    mot.Send_Estimated_BTAHYTb_Speed();
-		mot.Send_Estimated_BbITAHYTb_Speed();
+	    mot.Send_BTAHYTb_Speed();
+		mot.Send_BbITAHYTb_Speed();
         currSpeed[1] = '2';
 
       }
+	  
       else if (x == 3)
       {
         vtagSpeed  = 4000;
@@ -1053,10 +1075,10 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
       fOtladkaMes("AccelLegs=" + String(x));
       if (x == 0)
       {
-        vtagAccel = 6250;
-        vytagAccel = 8750;
-	    mot.Send_Estimated_BTAHYTb_Accel();
-	    mot.Send_Estimated_BbITAHYTb_Accel();
+  //      vtagAccel = 6250;
+  //      vytagAccel = 8750;
+	    mot.Send_BTAHYTb_Accel();
+	    mot.Send_BbITAHYTb_Accel();
         currAccel[1] = '0';
       }
       else if (x == 1)
@@ -1091,6 +1113,7 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
 //      mot.Send_BbITAHYTb_Accel(vytagAccel);
 //      delay(pauseForSerial);
 //      SerR.prepareMessage( 'W', vytagAccel);
+
       delay(pauseForSerial);
       fAddInActionInRecordMode(legAccel, x);
 
@@ -1106,6 +1129,7 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
       delay(pauseForSerial);
 	  */
 	  rotSpeed = x;
+	  CheckUpMes("TT"+String(x));
       break;
 
     case 'W':
@@ -1117,7 +1141,8 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
       delay(pauseForSerial);
 	  */
 	  mot.Set_Rot_Accel(x);
-	  rotAccel = x;
+//	  rotAccel = x;
+	  CheckUpMes("TT"+String(x));
       break;
 
     case 'd':
@@ -1142,20 +1167,17 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
         bPause = 0;
       }
       break;
-    /*    case 'J': // поворот влево
-          turn_angle = x;
-          fAddInActionInRecordMode(wait);
-          rotateLeftFF(turn_angle,mode, mot);
-          fAddInActionInRecordMode(turnLfst, turn_angle);
-          break;
-        case 'H': // поворот вправо
-          turn_angle = x;
-          fAddInActionInRecordMode(wait);
-          rotateRightFF(turn_angle, mode, mot);
-          fAddInActionInRecordMode(turnRfst, turn_angle);
-
-          break;
-    */
+      case 'J': // скорость телеги
+        pr_telega.setTelegaSpec(x, 0);
+        writeString(String(x), TelegaSpeedAddr);
+	    CheckUpMes("TT"+String(x));
+	  break;
+	  
+      case 'H': // ускорение телеги
+        pr_telega.setTelegaSpec(0, x);
+        writeString(String(x), TelegaAccelAddr);
+	    CheckUpMes("TT"+String(x));
+      break;
     default:
       fErrorMes("unknownCmd:" + String(cmdR));
       fErrorMes(String(RF_data));
@@ -3527,7 +3549,7 @@ void PlayFromEEPROM(bool zoom,  posOfMotors& mot)
     }  // for..
   } while (zoom);
 #endif
-  Serial1.println("PlayStops");
+  CheckUpMes("PlayStops");
 }
 
 
@@ -4314,12 +4336,12 @@ byte rotateRightFF(short stepAngle, regimRaboty &mode, posOfMotors & mot)
 {
   fOtladkaMes(">Vpered");
 
-  long old_rotSpeed = rotSpeed;
+//  long old_rotSpeed = rotSpeed;
 
   if (fstandStill(mot) || readyForRotLeftFoot(mot))
   {
-    rotSpeed = 5000;
-	mot.Set_Rot_Speed(rotSpeed);
+    const long rotSpeed = 5000;
+	mot.Send_Rot_Speed(rotSpeed);
 /*
     SerL.prepareMessage( 'S', rotSpeed);
     delay(pauseForSerial);
@@ -4335,9 +4357,9 @@ byte rotateRightFF(short stepAngle, regimRaboty &mode, posOfMotors & mot)
     mot.OrientInc(stepAngle);
     if (orient_steps(0 , left_leg, forward, mot) && (stWork == StWork)) return 1;
     if (Leg_fn(right_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
-    rotSpeed=old_rotSpeed;
-
-	mot.Set_Rot_Speed(rotSpeed);
+//    rotSpeed=old_rotSpeed;
+    // считанная с еепром скорость
+	mot.Send_Rot_Speed();
 /*	
     SerL.prepareMessage( 'S', rotSpeed);
     delay(pauseForSerial);
@@ -4354,12 +4376,12 @@ byte rotateRightFF(short stepAngle, regimRaboty &mode, posOfMotors & mot)
 byte rotateRightBK(short stepAngle, regimRaboty &mode, posOfMotors & mot)
 {
   fOtladkaMes(">Nazad");
-  long old_rotSpeed = rotSpeed;
+ // long old_rotSpeed = rotSpeed;
 
   if (fstandStill(mot) || readyForRotRightFoot(mot))
   {
-    rotSpeed = 5000;
-	mot.Set_Rot_Speed(rotSpeed);
+    const long rotSpeed = 5000;
+	mot.Send_Rot_Speed(rotSpeed);
     delay(pauseForSerial);
     if (fChkOrientStpsAvailable(stepAngle, right_leg, backward, mot)) return 2;
     // перевозим тележку влево
@@ -4368,8 +4390,9 @@ byte rotateRightBK(short stepAngle, regimRaboty &mode, posOfMotors & mot)
     mot.OrientInc(stepAngle);
     if (orient_steps(0, right_leg, backward, mot) && (stWork == StWork)) return 1;
     if (Leg_fn(left_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
-    rotSpeed=old_rotSpeed;
-	mot.Set_Rot_Speed(rotSpeed);
+  //  rotSpeed=old_rotSpeed;
+	
+	mot.Send_Rot_Speed();
     delay(pauseForSerial);
 
     return 0;
@@ -4383,12 +4406,12 @@ byte rotateLeftFF(short stepAngle, regimRaboty &mode, posOfMotors & mot)
 {
   fOtladkaMes("<Vpered");
 
-  long old_rotSpeed = rotSpeed;
+//  long old_rotSpeed = rotSpeed;
 
   if (fstandStill(mot) || readyForRotRightFoot(mot))
   {
-    rotSpeed = 5000;
-	mot.Set_Rot_Speed(rotSpeed);
+    const long rotSpeed = 5000;
+	mot.Send_Rot_Speed(rotSpeed);
     delay(pauseForSerial);
     if (fChkOrientStpsAvailable(stepAngle, right_leg, forward, mot)) return 2;
     // перевозим тележку влево
@@ -4397,8 +4420,8 @@ byte rotateLeftFF(short stepAngle, regimRaboty &mode, posOfMotors & mot)
     mot.OrientInc(stepAngle);
     if (orient_steps(0, right_leg, forward, mot) && (stWork == StWork)) return 1;
     if (Leg_fn(left_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
-    rotSpeed=old_rotSpeed;
-	mot.Set_Rot_Speed(rotSpeed);
+//    rotSpeed=old_rotSpeed;
+	mot.Send_Rot_Speed();
     delay(pauseForSerial);
 
     return 0;
@@ -4410,11 +4433,11 @@ byte rotateLeftFF(short stepAngle, regimRaboty &mode, posOfMotors & mot)
 byte rotateLeftBK(short stepAngle, regimRaboty &mode, posOfMotors & mot)
 {
   fOtladkaMes("<Nazad");
-  long old_rotSpeed = rotSpeed;
+//  long old_rotSpeed = rotSpeed;
   if (fstandStill(mot) || readyForRotLeftFoot(mot))
   {
-    rotSpeed = 5000;
-	mot.Set_Rot_Speed(rotSpeed);
+    const long rotSpeed = 5000;
+	mot.Send_Rot_Speed(rotSpeed);
     delay(pauseForSerial);
     if (fChkOrientStpsAvailable(stepAngle, left_leg, backward, mot)) return 2;
     // перевозим тележку влево
@@ -4423,8 +4446,8 @@ byte rotateLeftBK(short stepAngle, regimRaboty &mode, posOfMotors & mot)
     mot.OrientInc(stepAngle);
     if (orient_steps(0, left_leg, backward, mot) && (stWork == StWork)) return 1;
     if (Leg_fn(right_leg, mode, vytianut, mot) && (stWork == StWork)) return 1;
-    rotSpeed=old_rotSpeed;
-	mot.Set_Rot_Speed(rotSpeed);
+//    rotSpeed=old_rotSpeed;
+	mot.Send_Rot_Speed();
     delay(pauseForSerial);
 
     return 0;
@@ -4528,7 +4551,7 @@ bool fShakeHandWithRotation(posOfMotors & mot, short stepAngle)
   unsigned long old_rotSpeed = rotSpeed;
 
   rotSpeed = 1000;
-  mot.Set_Rot_Speed(rotSpeed);
+  mot.Send_Rot_Speed(rotSpeed);
 //  SerR.prepareMessage( 'S', rotSpeed);
   delay(pauseForSerial);
 
@@ -4597,7 +4620,7 @@ bool fShakeHandWithRotation(posOfMotors & mot, short stepAngle)
     if (fAnswerWait(left_leg, knee, mot)) break;
   }
   rotSpeed = old_rotSpeed;
-  mot.Set_Rot_Speed(rotSpeed);
+  mot.Send_Rot_Speed();
 //  SerR.prepareMessage( 'S', rotSpeed);
   delay(pauseForSerial);
 
@@ -5384,26 +5407,56 @@ byte stepDnOneStep(posOfMotors & mot, step_dir dir,
 void dataToUpload()
 {
   String buff;
-  char pause = 50;
+  char pause = 10;
 
   buff = readString(VtagSpeedAddr);
-  Serial1.println("L_VtagSpd"+buff);
+  CheckUpMes("L_VtagSpd");
+  buff = "";
+  delay(pause);
+  CheckUpMes(buff);
   buff = "";
   delay(pause);
 
   buff = readString(VytagSpeedAddr);
-  Serial1.println("LVytagSpd"+buff);
+  CheckUpMes(buff);
   buff = "";
   delay(pause);
 
   buff = readString(VtagAccelAddr);
-  Serial1.println("L_VtagAcl"+buff);
+  CheckUpMes(buff);
   buff = "";
   delay(pause);
 
   buff = readString(VytagAccelAddr);
-  Serial1.println("LVytagAcl"+buff);
+  CheckUpMes(buff);
   buff = "";
   delay(pause);
+  
+  buff = readString(FootRotSpeedAddr);
+  CheckUpMes(buff);
+  buff = "";
+  delay(pause);
+  
+  buff = readString(FootRotAccelAddr);
+  CheckUpMes(buff);
+  buff = "";
+  delay(pause);
+/*  
+  buff = String(minRbtStep);
+  CheckUpMes(buff);
+  buff = "";
+  delay(pause);
+*/  
+  buff = readString(TelegaSpeedAddr);
+  CheckUpMes(buff);
+  buff = "";
+  delay(pause);
+
+  buff = readString(TelegaAccelAddr);
+  CheckUpMes(buff);
+  buff = "";
+  delay(pause);
+  
+  
   
 }

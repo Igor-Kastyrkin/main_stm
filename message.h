@@ -11,6 +11,8 @@ void fOtladkaMes(String mes);
 
 void fOtladkaMes(long mes);
 
+void CheckUpMes(String mes);
+
 extern LiquidCrystal_I2C_STM32 lcd;
 
 #endif

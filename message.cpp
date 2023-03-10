@@ -115,4 +115,34 @@ void fOtladkaMes(long mes)
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void CheckUpMes(String mes)
+{
+
+//#ifdef _OTLADKA_
+  delay(10);
+  delay(mes.length() + 1);
+  mes += "_\r\n";
+  Serial1.print(mes);
+  delay(mes.length() + 1);
+  delay(15);
+//#endif
+}
+
+
+
 #endif
