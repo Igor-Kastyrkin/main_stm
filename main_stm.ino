@@ -178,7 +178,7 @@ unsigned long vytagSpeed = 4500;
 unsigned long  vtagAccel = 6250;
 unsigned long vytagAccel = 8750;
 
-unsigned long  rotSpeed = 6000;
+unsigned long  rotSpeed = 3000;
 //unsigned long  rotAccel = 6500;
 
 
@@ -5061,21 +5061,21 @@ byte upStep(posOfMotors & mot, step_dir dir,        // FF\BK
 {
   long zapas_na_povorot = 30L;
   // 1. Проверяем стоим ли на обеих ногах
-
+  short angle = 90;
   long StepDepth = stepDephCalc(BbIcoTa_CTYnEHbKU);
   long DeltaStep = stepDephCalc(zapas_na_povorot);
 
   if(fstandStill(mot))
   {
 
-    StepUpWhenBothStepsTogether(mot, dir, StepDepth, DeltaStep);
+    StepUpWhenBothStepsTogether(mot, dir, angle, StepDepth, DeltaStep);
 
   // 1.2. Если стоим на противоположной ноге, то
   // 1.2.1 проверяем, поднята ли одна нога выше другой на величину ступеньки
   }else{
     for(int i = 0; i < stpsCnt - 1 ;++i)
 	{
-      stepUpOneStepAlg1(mot, dir, 180, StepDepth, DeltaStep);
+      stepUpOneStepAlg1(mot, dir, angle, StepDepth, DeltaStep);
 	}
     // делаем последний шаг чтобы встать обеими ногами на ступеньки
       stepUpOneStepAlg1(mot, dir, 0, StepDepth, DeltaStep);
@@ -5145,11 +5145,13 @@ byte stepUpOneStepAlg1(posOfMotors & mot, step_dir dir,
     // поворачиваемся на 180	
       if (orient_steps(angle, static_cast<robot_leg>(!legUp), dir, mot)) return 1;
   // 4. Опускаем ногу на ступеньку
-      if(angle == 180)
+      if(angle == 90)
 	  {
 	     if (LegXXXMoveTo(mot, -BbIcoTa_CTYnEHbKU, BTANYTb_CH, legUp)) return 1;
-        
-	  }
+	  }else{
+          fErrorMes("WrongAngle");
+          return 1;
+      }
 
   // 4. Опускаем ногу на ступеньку
 
@@ -5163,6 +5165,7 @@ byte stepUpOneStepAlg1(posOfMotors & mot, step_dir dir,
 // Поднять ногу на ступеньку когда две ноги на земле
 
 byte StepUpWhenBothStepsTogether(posOfMotors & mot, step_dir dir, 
+                                 short angle,
 								 long StepDepth,
 								 long DeltaStep)  // BbIcoTa CTYnEHbKU, mm
 {
@@ -5180,7 +5183,7 @@ byte StepUpWhenBothStepsTogether(posOfMotors & mot, step_dir dir,
 	V          
  */	
 
-   if (orient_steps(180 , right_leg, dir, mot)) return 1;
+   if (orient_steps(angle , right_leg, dir, mot)) return 1;
     // опускаем ногу на 30 мм
     if (LegToPos(left_leg, vytianut, mot, DeltaStep)) return 1;
 	
@@ -5211,12 +5214,6 @@ byte goDnstears(posOfMotors & mot, step_dir dir, byte steps_height, byte steps_c
     fErrorMes("DepthError");
 	delay(1000);
 	return 1;
-  }
-  if((steps_count<0)||(steps_count>5))
-  {
-    fErrorMes("StepsCountError");
-	delay(1000);
-	return 2;
   }
 
   seetUpDown(mot, 1);  // привстаем
@@ -5272,7 +5269,7 @@ byte dnStep(posOfMotors & mot, step_dir dir,        // FF\BK
                                byte BbIcoTa_CTYnEHbKU, byte stpsCnt)   // BbIcoTa CTYnEHbKU, mm
 {
   long zapas_na_povorot = 30L;
-
+  short angle = 90;
   long StepDepth = stepDephCalc(BbIcoTa_CTYnEHbKU);
   long DeltaStep = stepDephCalc(zapas_na_povorot);
 
@@ -5280,14 +5277,14 @@ byte dnStep(posOfMotors & mot, step_dir dir,        // FF\BK
   if(fstandStill(mot))
   {
 
-    StepDnWhenBothStepsTogether(mot, dir, StepDepth, DeltaStep);
+    StepDnWhenBothStepsTogether(mot, dir, angle, StepDepth, DeltaStep);
 
   // 1.2. Если стоим на противоположной ноге, то
   // 1.2.1 проверяем, поднята ли одна нога выше другой на величину ступеньки
   }else{
     for(int i = 0; i < stpsCnt - 1;++i)
 	{
-      stepDnOneStep(mot, dir, 180,  StepDepth, DeltaStep);
+      stepDnOneStep(mot, dir, angle,  StepDepth, DeltaStep);
 
 	}
     // делаем последний шаг чтобы встать обеими ногами на ступеньки
@@ -5303,6 +5300,7 @@ byte dnStep(posOfMotors & mot, step_dir dir,        // FF\BK
 // Поднять ногу на ступеньку когда две ноги на земле
 
 byte StepDnWhenBothStepsTogether(posOfMotors & mot, step_dir dir, 
+                                 short angle,
 								 long StepDepth,  // BbIcoTa CTYnEHbKU, mm
 								 long DeltaStep)  
 {
@@ -5321,7 +5319,7 @@ byte StepDnWhenBothStepsTogether(posOfMotors & mot, step_dir dir,
 	V          
  */	
 
-    if (orient_steps(180 , right_leg, dir, mot)) return 1;
+    if (orient_steps(angle , right_leg, dir, mot)) return 1;
     // поставить ногу на ступеньку
  //   if (LegToPos(legUp, vytianut, mot, DeltaStep) && (stWork == StWork)) return 1;
     if(LegsMoveTo(mot, 0, BbITANYTb_CH, -StepDepth, BTANYTb_CH)) return 1;
@@ -5367,7 +5365,7 @@ byte stepDnOneStep(posOfMotors & mot, step_dir dir,
       if (orient_steps(angle, static_cast<robot_leg>(!legUp), dir, mot)) return 1;
 	  
 	  // угол поворота равен 180, когда шагаем по лестгнице
-	  if(angle == 180)
+	  if(angle == 90)
 	  {
 	     // чтобы спуститься на ступеньку ниже, нужно вытянуть на максимум рабочую ногу
 		 // Если рабочая нога левая то legUp =0 и выражение будет выглядеть так:
@@ -5378,6 +5376,10 @@ byte stepDnOneStep(posOfMotors & mot, step_dir dir,
 		 legUp?BbITANYTb_CH:BTANYTb_CH)) return 1;
          if (legUp == left_leg)   if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft()))  return 1;
          if (legUp == right_leg)  if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1;
+      }else
+      {
+          fErrorMes("Chk_angle");
+          return 1;
       }
   /*
       if(legUp == left_leg)

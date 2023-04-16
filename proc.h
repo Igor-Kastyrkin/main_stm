@@ -22,7 +22,7 @@ const long fullRotationLimit = 22;
 
 const short steps_rev = 200;
 const short reductor = 50;
-const short m_stp = 2;
+const short m_stp = 4;
 
 const byte incriment = 15;
 
@@ -248,6 +248,7 @@ byte dnStep(posOfMotors & mot, step_dir dir,        // FF\BK
                                byte BbIcoTa_CTYnEHbKU, byte stpsCnt = 3);
 							   
 byte StepDnWhenBothStepsTogether(posOfMotors & mot, step_dir dir, 
+                                  short Angle,
 								 long StepDepth,  // BbIcoTa CTYnEHbKU, mm
 								 long DeltaStep) ; 
 
