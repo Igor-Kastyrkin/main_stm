@@ -18,7 +18,7 @@
 //byte stepDepth = 15; // мм
 const short stepsPerLegRot    = 800;//3200; // количество шагов на оборот
 const byte lengthPerLegRot   = 4; // за один оборот винта нога перемещается на 8мм
-const long fullRotationLimit = 22;
+const long fullRotationLimit = 25;
 
 const short steps_rev = 200;
 const short reductor = 50;
@@ -38,6 +38,7 @@ const unsigned int TelegaAccelAddr = TelegaSpeedAddr + incriment;   // 120
 
 
 
+
 class posOfMotors
 {
 
@@ -51,8 +52,8 @@ class posOfMotors
   long LeftLegCurrentSteps   = 0;
   long RightLegCurrentSteps  = 0;
   
-  long OldLeftLegCurrentSteps   = 0;
-  long OldRightLegCurrentSteps  = 0;
+  long OldLeftLegCurrentSteps   = -100;
+  long OldRightLegCurrentSteps  = -100;
   
 
   long LeftFootCurrentSteps  = 0;

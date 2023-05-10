@@ -1,6 +1,7 @@
 //eeprom.cpp
 #include "eeprom.h"
 #include "proc.h"
+#include "message.h"
 
 
 #ifdef _eeprom_
@@ -141,7 +142,7 @@ bool i2cScan(bool &bEeprom, bool &bDisplay)
 {
   byte error, address;
   int nDevices;
-  Serial1.println("I2C_Scanning...");
+  fOtladkaMes("I2C_Scanning..."); delay(1000);
   nDevices = 0;
   bDisplay = 0;
   bEeprom  = 0;
@@ -155,12 +156,12 @@ bool i2cScan(bool &bEeprom, bool &bDisplay)
     error = Wire.endTransmission();
     
     if (error == 0) {
-      if (address == disk1) {
-      Serial1.println("EEPROM Available");
-      bEeprom = 1;}
       if(address == 0x3F){
 	  Serial1.println("Display Available");
 	  bDisplay = 1;}
+      if (address == disk1) {
+       Serial1.println("EEPROM Available");
+      bEeprom = 1;}
       nDevices++;
     }
     else if (error == 4) {
@@ -172,10 +173,10 @@ bool i2cScan(bool &bEeprom, bool &bDisplay)
     }    
   }
   if (nDevices == 0)
-    Serial1.println("No I2C devices found"); 
+    fOtladkaMes("No I2C devices found"); 
   else
-    Serial1.println("done");
-  
+    fOtladkaMes("done");
+  delay(1000);
   return 0;
 //  delay(5000);           // wait 5 seconds for next scan
 

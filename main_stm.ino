@@ -110,7 +110,7 @@
 
 #include "privod.h"
 
-//#define _OTLADKA_
+#define _OTLADKA_
 #include "message.h"
 
 
@@ -327,7 +327,7 @@ void setup()
 #endif
   delay(200); // +200
   motorLink[0] = new AccelStepper(AccelStepper::DRIVER, StepPin, DirPin);
-
+  fOtladkaMes("AccelStepper"); delay(1000);
   delay(2000); // +3400
 #ifdef _BUILTIN_LED_ON_
   digitalWrite(LED_BUILTIN, LOW);
@@ -335,13 +335,32 @@ void setup()
 
 // передача концевиков
   pr_telega.privod_init(ENDCAP, ENDCAP_R);
+//  fOtladkaMes("Caps"); delay(1000);
+
+
+
+/*
+  writeString(String(2000), VtagSpeedAddr);
+  writeString(String(2000), VytagSpeedAddr);
+  writeString(String(2000), VtagAccelAddr);
+  writeString(String(2000), VytagAccelAddr);
+  writeString(String(2000), FootRotSpeedAddr);
+  writeString(String(2000), FootRotAccelAddr);
+  writeString(String(2000), TelegaSpeedAddr);
+  writeString(String(2000), TelegaAccelAddr);
+*/
+
+
 
   // по результатам испытаний немного подразогнали
   // скорость была 9200, ускорение 10000
 
-  int telegaSpeed = readString(TelegaSpeedAddr).toInt();
-  int telegaAccel = readString(TelegaAccelAddr).toInt();
-
+  int telegaSpeed = 9000;//readString(TelegaSpeedAddr).toInt();
+//  fOtladkaMes(telegaSpeed); delay(1000);
+  int telegaAccel = 9000;//readString(TelegaAccelAddr).toInt();
+//  fOtladkaMes(telegaAccel); delay(1000);
+//  fOtladkaMes("Caps"); delay(1000);
+//  fOtladkaMes("Read_Ok"); delay(1000);
   pr_telega.setTelegaSpec(telegaSpeed, telegaAccel);
   
   motorLink[0]->setMinPulseWidth(20);
@@ -365,7 +384,7 @@ void setup()
   Serial1.println("-_-_-_-_-_-_-_-_-_-_-_-");
   delay(50);
   Serial1.println("");
-  Serial1.println("Loading..");
+  Serial1.println("Loading............");
   delay(10);
 
 #ifdef _CHKDATA_
@@ -415,12 +434,15 @@ void setup()
 #ifdef _BUILTIN_LED_ON_
   digitalWrite(LED_BUILTIN, HIGH);
 #endif
-
+  
   fCalibration(SerL, SerR, mot);
+  fOtladkaMes("End_Cal"); delay(1000);
+
   i2cScan(bEeprom, bDisplay);
   delay(300);
   if (!bEeprom)  fErrorMes("No EEPROM  Available");
   if (!bDisplay) fErrorMes("No Display Available");
+  fOtladkaMes("ScanDone"); delay(1000);
   fErrorMes("Starting-working");
   /*
     #ifdef SERIAL_USB
@@ -551,7 +573,7 @@ byte RF_messege_handle(char *RF_data, posOfMotors & mot)
   
   
   
-  char step_height = 10; // высота ступеньки
+  char step_height = 93; // высота ступеньки 170
   char steps_cnt = 3;    // количество ступенек
 
   //  fOtladkaMes("Radio_in: "); //    for (unsigned int i = 0; i < sizeOfRFdata; i++) Serial.print((char)RF_data[i]);
@@ -1815,6 +1837,7 @@ bool fCalibration(UART_Serial & lSer, UART_Serial & rSer, posOfMotors & mot)
   delay(pauseForSerial);
 
   // втянем правую
+  fOtladkaMes("Vtyag");delay(1000);
   mot.MoveRightLegCurrentSteps(-stepsPerLegRot * 15L / lengthPerLegRot,BTANYTb_CH);
 //  mot.RightLegCurrentSteps = -stepsPerLegRot * 15L / lengthPerLegRot;
 //  rSer.prepareMessage( 'h', mot.RightLegCurrentSteps);
@@ -1886,8 +1909,8 @@ bool fCalibration(UART_Serial & lSer, UART_Serial & rSer, posOfMotors & mot)
 
   // скорости и ускорения стоп
 
-  mot.Set_Rot_Speed(10000UL);
-  mot.Set_Rot_Accel(10000UL);
+  mot.Set_Rot_Speed(4000UL);
+  mot.Set_Rot_Accel(3000UL);
 
   /*
   SerL.prepareMessage( 'S', 10000);
@@ -2654,7 +2677,7 @@ byte LegsMoveTo(posOfMotors & mot, long LeftLegPos, char L_BTAHYTb, long RightLe
 {
   
   if(mot.GetCurrentZero()!=0){
-    fErrorMes("LegsMoveTo: CurrZer!=0");
+    fErrorMes("LegsMoveTo: CurrZer!=0"); delay(5000);
     return 1;
   }
   int out = 0;
@@ -5041,6 +5064,7 @@ byte goUpstears(posOfMotors & mot, step_dir dir, byte steps_height, byte steps_c
 
   seetUpDown(mot, 1);  // привстаем
   // делаем шаги вверх по ступенке 3 раза
+
   if(upStep(mot, dir, steps_height, steps_count/*ступеньки*/)) fErrorMes("CantStepUp");
   seetUpDown(mot, 1);  // привстаем
   
@@ -5059,7 +5083,7 @@ byte goUpstears(posOfMotors & mot, step_dir dir, byte steps_height, byte steps_c
 byte upStep(posOfMotors & mot, step_dir dir,        // FF\BK
                                byte BbIcoTa_CTYnEHbKU, byte stpsCnt)   // BbIcoTa CTYnEHbKU, mm
 {
-  long zapas_na_povorot = 30L;
+  long zapas_na_povorot = 6L;
   // 1. Проверяем стоим ли на обеих ногах
   short angle = 90;
   long StepDepth = stepDephCalc(BbIcoTa_CTYnEHbKU);
@@ -5069,16 +5093,28 @@ byte upStep(posOfMotors & mot, step_dir dir,        // FF\BK
   {
 
     StepUpWhenBothStepsTogether(mot, dir, angle, StepDepth, DeltaStep);
+//    for(int i = 0; i < stpsCnt - 1 ;++i)
+//	{
+	  mot.Send_BbITAHYTb_Speed(2500);
+      mot.Send_BTAHYTb_Speed(3500);
+      mot.Set_Rot_Accel(2500);
+      stepUpOneStepAlg1(mot, dir, angle, StepDepth, DeltaStep, left_leg);
+      stepUpOneStepAlg1(mot, dir, angle, StepDepth, DeltaStep, right_leg);
+//      stepUpOneStepAlg1(mot, dir, angle, StepDepth, DeltaStep);
+//	}
+    // делаем последний шаг чтобы встать обеими ногами на ступеньки
+      stepUpOneStepAlg1(mot, dir, 0, StepDepth, DeltaStep, left_leg);
+      StepsManage(mot, energySaving);
 
   // 1.2. Если стоим на противоположной ноге, то
   // 1.2.1 проверяем, поднята ли одна нога выше другой на величину ступеньки
   }else{
     for(int i = 0; i < stpsCnt - 1 ;++i)
 	{
-      stepUpOneStepAlg1(mot, dir, angle, StepDepth, DeltaStep);
+ //     stepUpOneStepAlg1(mot, dir, angle*2, StepDepth, DeltaStep);
 	}
     // делаем последний шаг чтобы встать обеими ногами на ступеньки
-      stepUpOneStepAlg1(mot, dir, 0, StepDepth, DeltaStep);
+      stepUpOneStepAlg1(mot, dir, 0, StepDepth, DeltaStep, right_leg);
       StepsManage(mot, energySaving);
   }
 //  Serial1.println(String(raznica_v_polozhenii) + " = " + String(stepDephCalc(steps_height)));
@@ -5091,8 +5127,8 @@ byte upStep(posOfMotors & mot, step_dir dir,        // FF\BK
 // сделать шаг вверх по лестнице
 byte stepUpOneStepAlg1(posOfMotors & mot, step_dir dir,
                                  short angle, 
-                                 byte BbIcoTa_CTYnEHbKU,
-								 long leg_up_for_rotate)
+                                 long BbIcoTa_CTYnEHbKU,
+								 long leg_up_for_rotate, robot_leg legUp)
 {
 
     if(fstandStill(mot))
@@ -5101,14 +5137,15 @@ byte stepUpOneStepAlg1(posOfMotors & mot, step_dir dir,
 	  return 1;
 	}
     long raznica_v_polozhenii = fRaznost_v_polozhenii(mot);	
-	
+/*	
 	    robot_leg legUp = raznica_v_polozhenii<0?
 	                                          left_leg:
 			          raznica_v_polozhenii>0?
 			                                  right_leg:legUp;
 
 	
-
+*/
+         long DeltaStep = stepDephCalc(6L);
 
 // Если разность в положении равна высоте ступеньки
     if(abs(raznica_v_polozhenii) == BbIcoTa_CTYnEHbKU)
@@ -5117,47 +5154,97 @@ byte stepUpOneStepAlg1(posOfMotors & mot, step_dir dir,
    //   calcLegForStep(raznica_v_polozhenii, legRot, legUp, legDn);
 //  1.2.2 перевозим тележку
   //  если нужно поднять левую ногу, то телегу двиаем вправо
-      if(legUp == left_leg) if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1;
-  //  если нужно поднять правую ногу, то телегу двиаем влево
-      if(legUp == right_leg) if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1;
-  	// Вытягиваем одну ногу на которой тележка до конца
-//      if (Leg_pfn(legDn, energySaving, vytianut, mot) && (stWork == StWork)) return 1;
-//      delay(pauseForSerial);
-	// Втягиваем противоположную ногу на заданное положение
-		/*
-		if (Leg_pfn(legUp, energySaving, vtianut, mot, stepDephCalc(leg_up_for_rotate)) && (stWork == StWork)) return 1;
-    // поворачиваемся на 180	
-      if (orient_steps(angle, legRot, dir, mot)) return 1;
-	  */
+      if(legUp == left_leg)
+	  {
+	//	  if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1;
+		  
+		if (LegsMoveTo(mot, 0, BbITANYTb_CH,(-BbIcoTa_CTYnEHbKU-leg_up_for_rotate),BTANYTb_CH)) return 1;
+
+        if (orient_steps(angleToStep(angle), left_leg, dir, mot)) return 1;
+		
 	  
-  	// Вытягиваем одну ногу на которой тележка до конца
-	// Втягиваем противоположную ногу на заданное положение
-	  // когда тележка справа, правую ногу вытягиваем полностью до 0
-	  
-      if (LegsMoveTo(mot, !legUp*(-BbIcoTa_CTYnEHbKU-leg_up_for_rotate), 
-	  legUp?BbITANYTb_CH:BTANYTb_CH,
-	  legUp*(-BbIcoTa_CTYnEHbKU-leg_up_for_rotate),
-	  legUp?BTANYTb_CH:BbITANYTb_CH)) return 1;
-	
-//      if (Leg_pfn(legDn, energySaving, vytianut, mot) && (stWork == StWork)) return 1;
-//      delay(pauseForSerial);
-//      if (Leg_pfn(legUp, energySaving, vtianut, mot, stepDephCalc(leg_up_for_rotate)) && (stWork == StWork)) return 1;
-    // поворачиваемся на 180	
-      if (orient_steps(angle, static_cast<robot_leg>(!legUp), dir, mot)) return 1;
-  // 4. Опускаем ногу на ступеньку
       if(angle == 90)
 	  {
-	     if (LegXXXMoveTo(mot, -BbIcoTa_CTYnEHbKU, BTANYTb_CH, legUp)) return 1;
+         if (LegToPos(right_leg, vytianut, mot, leg_up_for_rotate)) return 1;
+	    // if (LegXXXMoveTo(mot, -BbIcoTa_CTYnEHbKU, BTANYTb_CH, right_leg)) return 1;
 	  }else{
           fErrorMes("WrongAngle");
           return 1;
       }
 
+		if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveRight())) return 1;
+
+            	// Вытягиваем одну ногу на которой тележка до конца
+//          if (Leg_pfn(right_leg, energySaving, vytianut, mot) && (stWork == StWork)) return 1;
+//          delay(pauseForSerial);
+	// Втягиваем противоположную ногу на заданное положение
+		
+//     	  if (Leg_pfn(legUp, energySaving, vtianut, mot, stepDephCalc(leg_up_for_rotate)) && (stWork == StWork)) return 1;
+    // поворачиваемся на 180
+//          if (orient_steps(angleToStep(angle), legRot, dir, mot)) return 1;
+	  }
+  //  если нужно поднять правую ногу, то телегу двиаем влево
+      if(legUp == right_leg)
+	  {
+//		  if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1;
+
+          if (LegsMoveTo(mot, (-BbIcoTa_CTYnEHbKU-leg_up_for_rotate), BTANYTb_CH, 0, BbITANYTb_CH)) return 1;
+
+          if (orient_steps(angleToStep(angle), right_leg, dir, mot)) return 1;
+
+
+      if(angle == 90)
+	  {
+//	     if (LegXXXMoveTo(mot, -BbIcoTa_CTYnEHbKU, BTANYTb_CH, left_leg)) return 1;
+         if (LegToPos(left_leg, vytianut, mot, leg_up_for_rotate)) return 1;
+	  }else{
+          fErrorMes("WrongAngle");
+          return 1;
+      }
+	  if (pr_telega.RotateStpsOnly(*motorLink, telega, pr_telega.DriveLeft())) return 1;
+
+//          if (Leg_pfn(left_leg, energySaving, vytianut, mot) && (stWork == StWork)) return 1;/
+//          delay(pauseForSerial);
+
+	// Втягиваем противоположную ногу на заданное положение
+		
+ //    	  if (Leg_pfn(legUp, energySaving, vtianut, mot, stepDephCalc(leg_up_for_rotate)) && (stWork == StWork)) return 1;
+    // поворачиваемся на 180
+//          if (orient_steps(angleToStep(angle), legRot, dir, mot)) return 1;
+	  }
+  	// Вытягиваем одну ногу на которой тележка до конца
+ //     if (Leg_pfn(legDn, energySaving, vytianut, mot) && (stWork == StWork)) return 1;
+ //     delay(pauseForSerial);
+	// Втягиваем противоположную ногу на заданное положение
+		
+//	  if (Leg_pfn(legUp, energySaving, vtianut, mot, stepDephCalc(leg_up_for_rotate)) && (stWork == StWork)) return 1;
+    // поворачиваемся на 180
+ //     if (orient_steps(angle, legRot, dir, mot)) return 1;
+	  
+	  
+  	// Вытягиваем одну ногу на которой тележка до конца
+	// Втягиваем противоположную ногу на заданное положение
+	  // когда тележка справа, правую ногу вытягиваем полностью до 0
+	  /*
+      if (LegsMoveTo(mot, !legUp*(-BbIcoTa_CTYnEHbKU-leg_up_for_rotate), 
+	  legUp?BbITANYTb_CH:BTANYTb_CH,
+	  legUp*(-BbIcoTa_CTYnEHbKU-leg_up_for_rotate),
+	  legUp?BTANYTb_CH:BbITANYTb_CH)) return 1;
+	*/
+ //     if (Leg_pfn(static_cast<robot_leg>(!legUp), energySaving, vytianut, mot) && (stWork == StWork)) return 1;
+ //     delay(pauseForSerial);
+ //     if (Leg_pfn(legUp, energySaving, vtianut, mot, stepDephCalc(leg_up_for_rotate)) && (stWork == StWork)) return 1;
+    // поворачиваемся на 180	
+//      if (orient_steps(angleToStep(angle), static_cast<robot_leg>(!legUp), dir, mot)) return 1;
+  // 4. Опускаем ногу на ступеньку
+
   // 4. Опускаем ногу на ступеньку
 
     }
-	else Serial1.println(static_cast<String>(raznica_v_polozhenii) + " = " + static_cast<String>(stepDephCalc(BbIcoTa_CTYnEHbKU)));
-	
+	else{
+		fOtladkaMes(static_cast<String>(raznica_v_polozhenii) + " = " + static_cast<String>(stepDephCalc(BbIcoTa_CTYnEHbKU)));
+        delay(5000);
+ }	
 	return 0;
 }
 
@@ -5183,7 +5270,7 @@ byte StepUpWhenBothStepsTogether(posOfMotors & mot, step_dir dir,
 	V          
  */	
 
-   if (orient_steps(angle , right_leg, dir, mot)) return 1;
+   if (orient_steps(angleToStep(angle) , right_leg, dir, mot)) return 1;
     // опускаем ногу на 30 мм
     if (LegToPos(left_leg, vytianut, mot, DeltaStep)) return 1;
 	
@@ -5268,7 +5355,7 @@ byte goDnstears(posOfMotors & mot, step_dir dir, byte steps_height, byte steps_c
 byte dnStep(posOfMotors & mot, step_dir dir,        // FF\BK
                                byte BbIcoTa_CTYnEHbKU, byte stpsCnt)   // BbIcoTa CTYnEHbKU, mm
 {
-  long zapas_na_povorot = 30L;
+  long zapas_na_povorot = 5L;
   short angle = 90;
   long StepDepth = stepDephCalc(BbIcoTa_CTYnEHbKU);
   long DeltaStep = stepDephCalc(zapas_na_povorot);

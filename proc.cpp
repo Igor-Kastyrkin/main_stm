@@ -8,15 +8,16 @@ void posOfMotors::SendRightLegCurrentSteps(char BTEHYTb)
 {
   static int i = 0;
   ++i;
-  if(((BTEHYTb=='h')&&(RightLegCurrentSteps - OldRightLegCurrentSteps<0))||
-  ((BTEHYTb=='i')&&(RightLegCurrentSteps - OldRightLegCurrentSteps>0)))
+  if(((BTEHYTb=='h')&&(RightLegCurrentSteps - OldRightLegCurrentSteps>=0))||
+  ((BTEHYTb=='i')&&(RightLegCurrentSteps - OldRightLegCurrentSteps<=0)&&(RightLegCurrentSteps!=0)))
   {
      fErrorMes("WrongRightLegDir"+(String)--i);
 	 delay(500);
 	 return;
   }
-  else if ((BTEHYTb!='h'||(BTEHYTb!='i'))){ 
+  else if ((BTEHYTb!='h')&&(BTEHYTb!='i')){ 
      fErrorMes("WrongRDirChar");
+  //   fErrorMes(BTEHYTb); delay(5000);
 	 delay(500);
      return;
   }
@@ -30,14 +31,14 @@ void posOfMotors::SendLeftLegCurrentSteps(char BTEHYTb)
 {
   static int i = 0;
   ++i;
-  if(((BTEHYTb=='h')&&(LeftLegCurrentSteps - OldLeftLegCurrentSteps<0))||
-  ((BTEHYTb=='i')&&(LeftLegCurrentSteps - OldLeftLegCurrentSteps>0)))
+  if(((BTEHYTb=='h')&&(LeftLegCurrentSteps - OldLeftLegCurrentSteps>=0))||
+  ((BTEHYTb=='i')&&(LeftLegCurrentSteps - OldLeftLegCurrentSteps<=0)&&(LeftLegCurrentSteps!=0)))
   {
      fErrorMes("WrongLeftLegDir"+(String)--i);
 	 delay(500);
 	 return;
   }
-  else if ((BTEHYTb!='h'||(BTEHYTb!='i'))){ 
+  else if ((BTEHYTb!='h')&&(BTEHYTb!='i')){ 
      fErrorMes("WrongLDirChar");
 	 delay(500);
      return;
