@@ -27,7 +27,7 @@ void fErrorMes(String mes)
 #else
   delay(mes.length() + 1);
   mes += "_\r\n";
-  //  Serial.print(mes);
+  Serial1.print(millis()/1000 + " ");
   Serial1.print(mes);
 #endif
   delay(mes.length() + 1);

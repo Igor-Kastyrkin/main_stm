@@ -97,6 +97,7 @@ void posOfMotors::Send_BTAHYTb_Speed(unsigned long Speed)
   SerL.prepareMessage('P', Speed);
   delay(15);
   SerR.prepareMessage('P', Speed);
+  delay(15);
 }
 
 void posOfMotors::Send_BbITAHYTb_Speed(unsigned long Speed)
@@ -110,6 +111,7 @@ void posOfMotors::Send_BbITAHYTb_Speed(unsigned long Speed)
   SerL.prepareMessage('Q', Speed);
   delay(15);
   SerR.prepareMessage('Q', Speed);
+  delay(15);
 }
 
 void posOfMotors::Send_BTAHYTb_Accel(unsigned long Accel)
@@ -138,41 +140,6 @@ void posOfMotors::Send_BbITAHYTb_Accel(unsigned long Accel)
   SerR.prepareMessage( 'W', Accel);
 }
 
-/*
-void posOfMotors::Send_Estimated_BTAHYTb_Speed()
-{
-  delay(15);
-  SerL.prepareMessage('P', vtagSpeed);
-  delay(15);
-  SerR.prepareMessage('P', vtagSpeed);  
-}
-
-void posOfMotors::Send_Estimated_BbITAHYTb_Speed()
-{
-  delay(15);
-  SerL.prepareMessage('Q', vytagSpeed);
-  delay(15);
-  SerR.prepareMessage('Q', vytagSpeed);
-}
-
-void posOfMotors::Send_Estimated_BTAHYTb_Accel()
-{
-//  vtagAccel = Accel;
-  delay(15);
-  SerL.prepareMessage( 'V', vtagAccel);
-  delay(15);
-  SerR.prepareMessage( 'V', vtagAccel);
-}
-
-void posOfMotors::Send_Estimated_BbITAHYTb_Accel()
-{
-//  vytagAccel = Accel;
-  delay(15);
-  SerL.prepareMessage( 'W', vytagAccel);
-  delay(15);
-  SerR.prepareMessage( 'W', vytagAccel);
-}
-*/
 
   void posOfMotors::Set_Rot_Speed(unsigned long Speed)
   {
@@ -217,7 +184,7 @@ void posOfMotors::Send_Estimated_BbITAHYTb_Accel()
 
   }
 
-
+  // save current value of left leg position
   void posOfMotors::SetLeftLegCurrentSteps(long val)
   {
     if(val > 0)
@@ -229,6 +196,7 @@ void posOfMotors::Send_Estimated_BbITAHYTb_Accel()
     LeftLegCurrentSteps = val;
   }
 
+  // save current value of right leg posititon
   void posOfMotors::SetRightLegCurrentSteps(long val)
   {
     if(val > 0)

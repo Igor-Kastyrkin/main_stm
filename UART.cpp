@@ -17,7 +17,10 @@
 
 #include "Arduino.h"
 #include "UART.h"
+#include "message.h"
+
 //#define _OTLADKA1_
+
 //#define _LED_ON_
 
 
@@ -32,6 +35,7 @@ int8_t UART_Serial::handle_serial(void)
   {
 #ifdef _OTLADKA1_
     Serial1.println("SerialAvailable_");
+	fOtladkaMes("SerialAvailable_");
 #endif
 #ifdef _LED_ON_
     digitalWrite(LED_BUILTIN, LOW);
@@ -70,11 +74,16 @@ int8_t UART_Serial::handle_serial(void)
     }
 #ifdef _OTLADKA1_
     Serial1.print("M_in "); // для отладки
+    fOtladkaMes("M_in");	
     for (int j = 0; j < (Serial_amount - 1); j++)
+	{
       Serial1.print(tmp_buffer[j]);
-    Serial1.println("_"); // для отладки
+	  fOtladkaMes(tmp_buffer[j]);
+    }
+	Serial1.println("_"); // для отладки
     Serial1.print("N< "); // для отладки
     Serial1.println(Serial_amount); // для отладки
+    fOtladkaMes(Serial_amount);
 #endif
 
     char CRC; // для хранения расчетной КС
@@ -271,6 +280,7 @@ void UART_Serial::getString1(char &cmd, long &data)
 #ifdef _OTLADKA1_
   Serial1.print("D< ");
   Serial1.println(String(data));
+  fOtladkaMes("D<"+String(data));
 #endif
 }
 /*

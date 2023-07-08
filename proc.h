@@ -43,6 +43,7 @@ class posOfMotors
 {
 
   long rbOrient  = 0;  // угол направления движения в градусах
+  // поднимать на 15мм
   long stepsDepthInSteps = 800L * 15L / 4L;  //12800  
 
   long CurrentZero = 0;
@@ -98,7 +99,9 @@ public:
 
   void SetCurrentZero(long _CurrentZero){CurrentZero = _CurrentZero;}
   
+  // save current value of right leg posititon  
   void SetRightLegCurrentSteps(long val);
+  // save current value of left leg position
   void SetLeftLegCurrentSteps(long val);
 
   void SetRightFootCurrentSteps(long val){RightFootCurrentSteps = val;};
@@ -191,7 +194,8 @@ enum step_dir {forward, backward, unknown};
 enum leedLeg {leftLeed, rightLeed, noLeed};
 enum mkLegCmd {lSpeedUp, lSpeedDn, lAccelUp, lAccelDn, calibrate, fRollEndCup,
          fSpeed, fAccel, fSetPos};
-
+enum my_error{no_errors, general_error};
+static my_error err;
 
 byte rotPlace(	  posOfMotors & mot, // структура с исходными данными двигателей
                   short minStep,      // угол маленькие шашки, для полного поворота
@@ -236,23 +240,27 @@ byte seetUpDown(posOfMotors & mot,  const byte mode = 0);
 
 void fAddInActionInRecordMode(actions Action, long param = 0);
 
-void fErrorMes(String mes);
-
-void fOtladkaMes(String mes);
-
 bool fShakeHandWithRotation(posOfMotors & mot, const short stepAngle = 360);
 
 byte upStep(posOfMotors & mot, step_dir dir,        // FF\BK
-                               byte BbIcoTa_CTYnEHbKU, byte stpsCnt = 3);
+                               byte BbIcoTa_CTYnEHbKU, long zapas_na_povorot, byte stpsCnt = 3);
 							   
 byte dnStep(posOfMotors & mot, step_dir dir,        // FF\BK
-                               byte BbIcoTa_CTYnEHbKU, byte stpsCnt = 3);
+                               byte BbIcoTa_CTYnEHbKU, long zapas_na_povorot, byte stpsCnt = 3);
 							   
 byte StepDnWhenBothStepsTogether(posOfMotors & mot, step_dir dir, 
                                   short Angle,
 								 long StepDepth,  // BbIcoTa CTYnEHbKU, mm
 								 long DeltaStep) ; 
 
+// Изменения режима хотьбы быстрый или энергоэффективный
+// b = 2 - изменить текущий режим работы на противолополжный
+// b = 1 - изменить на режим энергосбережения
+// b = 0 - изменить на режим быстрый
+void change_mode(regimRaboty &mode, byte b = 2);
+
+								 
+								 
 extern const unsigned int VtagSpeedAddr;
 extern const unsigned int VytagSpeedAddr;
 extern const unsigned int VtagAccelAddr;
