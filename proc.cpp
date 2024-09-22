@@ -4,47 +4,47 @@
 
 
 
-void posOfMotors::SendRightLegCurrentSteps(char BTEHYTb)
+void posOfMotors::SendRightLegCurrentSteps(const char BTEHYTb)
 {
   static int i = 0;
   ++i;
-  if(((BTEHYTb=='h')&&(RightLegCurrentSteps - OldRightLegCurrentSteps>=0))||
-  ((BTEHYTb=='i')&&(RightLegCurrentSteps - OldRightLegCurrentSteps<=0)&&(RightLegCurrentSteps!=0)))
+  if (((BTEHYTb == 'h') && (RightLegCurrentSteps - OldRightLegCurrentSteps >= 0)) ||
+      ((BTEHYTb == 'i') && (RightLegCurrentSteps - OldRightLegCurrentSteps <= 0) && (RightLegCurrentSteps != 0)))
   {
-     fErrorMes("WrongRightLegDir"+(String)--i);
-	 delay(500);
-	 return;
+    fErrorMes("WrongRightLegDir", --i);
+    delay(500);
+    return;
   }
-  else if ((BTEHYTb!='h')&&(BTEHYTb!='i')){ 
-     fErrorMes("WrongRDirChar");
-  //   fErrorMes(BTEHYTb); delay(5000);
-	 delay(500);
-     return;
+  else if ((BTEHYTb != 'h') && (BTEHYTb != 'i')) {
+    fErrorMes("WrongRDirChar");
+    //   fErrorMes(BTEHYTb); delay(5000);
+    delay(500);
+    return;
   }
 
-  char c = BTEHYTb?'h':'i';
-  
+  char c = BTEHYTb ? 'h' : 'i';
+
   SerR.prepareMessage(c, RightLegCurrentSteps);
 }
 
-void posOfMotors::SendLeftLegCurrentSteps(char BTEHYTb)
+void posOfMotors::SendLeftLegCurrentSteps(const char BTEHYTb)
 {
   static int i = 0;
   ++i;
-  if(((BTEHYTb=='h')&&(LeftLegCurrentSteps - OldLeftLegCurrentSteps>=0))||
-  ((BTEHYTb=='i')&&(LeftLegCurrentSteps - OldLeftLegCurrentSteps<=0)&&(LeftLegCurrentSteps!=0)))
+  if (((BTEHYTb == 'h') && (LeftLegCurrentSteps - OldLeftLegCurrentSteps >= 0)) ||
+      ((BTEHYTb == 'i') && (LeftLegCurrentSteps - OldLeftLegCurrentSteps <= 0) && (LeftLegCurrentSteps != 0)))
   {
-     fErrorMes("WrongLeftLegDir"+(String)--i);
-	 delay(500);
-	 return;
+    fErrorMes("WrongLeftLegDir", --i);
+    delay(500);
+    return;
   }
-  else if ((BTEHYTb!='h')&&(BTEHYTb!='i')){ 
-     fErrorMes("WrongLDirChar");
-	 delay(500);
-     return;
+  else if ((BTEHYTb != 'h') && (BTEHYTb != 'i')) {
+    fErrorMes("WrongLDirChar");
+    delay(500);
+    return;
   }
-  char c = BTEHYTb?'h':'i';
-  
+  char c = BTEHYTb ? 'h' : 'i';
+
   SerL.prepareMessage(c, LeftLegCurrentSteps);
 }
 
@@ -60,13 +60,13 @@ void posOfMotors::SendLeftFootCurrentSteps()
 
 
 
-void posOfMotors::MoveRightLegCurrentSteps(long val, char BTEHYTb)
+void posOfMotors::MoveRightLegCurrentSteps(short val, char BTEHYTb)
 {
   SetRightLegCurrentSteps(val);
   SendRightLegCurrentSteps(BTEHYTb);
 }
 
-void posOfMotors::MoveLeftLegCurrentSteps(long val, char BTEHYTb)
+void posOfMotors::MoveLeftLegCurrentSteps(short val, char BTEHYTb)
 {
   SetLeftLegCurrentSteps(val);
   SendLeftLegCurrentSteps(BTEHYTb);
@@ -86,27 +86,32 @@ void posOfMotors::MoveLeftFootCurrentSteps(long val)
 
 
 
-void posOfMotors::Send_BTAHYTb_Speed(unsigned long Speed)
+void posOfMotors::Send_BTAHYTb_Speed(unsigned short Speed)
 {
-  if(Speed == 0) 
+  char tmp1[15];
+  if (Speed == 0)
   {
-	Speed = readString(VtagSpeedAddr).toInt();
+    readString(VtagSpeedAddr, tmp1);
+    Speed = atoi(tmp1);
   }
-//  else vtagSpeed = Speed;
-  delay(15);
+  //  else vtagSpeed = Speed;
+  // увеличил делей с 15 до 25, потому что однажды при калибровке скорости ног отличались
+  delay(25);
   SerL.prepareMessage('P', Speed);
-  delay(15);
+  delay(25);
   SerR.prepareMessage('P', Speed);
   delay(15);
 }
 
-void posOfMotors::Send_BbITAHYTb_Speed(unsigned long Speed)
+void posOfMotors::Send_BbITAHYTb_Speed(unsigned short Speed)
 {
-  if(Speed == 0) 
+  char tmp1[15];
+  if (Speed == 0)
   {
-	Speed = readString(VytagSpeedAddr).toInt();
+    readString(VytagSpeedAddr, tmp1);
+    Speed = atoi(tmp1);
   }
-//  else vytagSpeed = Speed;
+  //  else vytagSpeed = Speed;
   delay(15);
   SerL.prepareMessage('Q', Speed);
   delay(15);
@@ -114,26 +119,30 @@ void posOfMotors::Send_BbITAHYTb_Speed(unsigned long Speed)
   delay(15);
 }
 
-void posOfMotors::Send_BTAHYTb_Accel(unsigned long Accel)
+void posOfMotors::Send_BTAHYTb_Accel(unsigned short Accel)
 {
-  if(Accel == 0) 
+  char tmp1[15];
+  if (Accel == 0)
   {
-	Accel = readString(VtagAccelAddr).toInt();
+    readString(VtagAccelAddr, tmp1);
+    Accel = atoi(tmp1);
   }
-//  else vtagAccel = Accel;
+  //  else vtagAccel = Accel;
   delay(15);
   SerL.prepareMessage( 'V', Accel);
   delay(15);
   SerR.prepareMessage( 'V', Accel);
 }
 
-void posOfMotors::Send_BbITAHYTb_Accel(unsigned long Accel)
+void posOfMotors::Send_BbITAHYTb_Accel(unsigned short Accel)
 {
-  if(Accel == 0)
+  char tmp1[15];
+  if (Accel == 0)
   {
-	Accel = readString(VytagAccelAddr).toInt();
+    readString(VytagAccelAddr, tmp1);
+    Accel = atoi(tmp1);
   }
-//  else vytagAccel = Accel;
+  //  else vytagAccel = Accel;
   delay(15);
   SerL.prepareMessage( 'W', Accel);
   delay(15);
@@ -141,95 +150,117 @@ void posOfMotors::Send_BbITAHYTb_Accel(unsigned long Accel)
 }
 
 
-  void posOfMotors::Set_Rot_Speed(unsigned long Speed)
+void posOfMotors::Set_Rot_Speed(unsigned short Speed)
+{
+  //    char temp1[15];
+  //	itoa(Speed, temp1,DEC);
+  writeStringA(Speed, FootRotSpeedAddr);
+  rotSpeed = Speed;
+  delay(15);
+  SerL.prepareMessage( 'S', rotSpeed);
+  delay(15);
+  SerR.prepareMessage( 'S', rotSpeed);
+
+}
+void posOfMotors::Set_Rot_Accel(unsigned short Accel)
+{
+  //    char temp1[15];
+  //	itoa(Accel, temp1,DEC);
+  writeStringA(Accel, FootRotAccelAddr);
+  rotAccel = Accel;
+  delay(15);
+  SerL.prepareMessage( 'X', rotAccel);
+  delay(15);
+  SerR.prepareMessage( 'X', rotAccel);
+
+}
+
+
+void posOfMotors::Send_Rot_Speed(unsigned short speed)
+{
+  char tmp1[15];
+  if (speed == 0)
   {
-    writeString(String(Speed), FootRotSpeedAddr);
-    rotSpeed = Speed;
-    delay(15);
-    SerL.prepareMessage( 'S', rotSpeed);
-	delay(15);
-    SerR.prepareMessage( 'S', rotSpeed);
-
+    readString(FootRotSpeedAddr, tmp1);
+    rotSpeed = atoi(tmp1);
   }
-  void posOfMotors::Set_Rot_Accel(unsigned long Accel)
+  else rotSpeed = speed;
+  delay(25);
+  SerL.prepareMessage( 'S', rotSpeed);
+  delay(25);
+  SerR.prepareMessage( 'S', rotSpeed);
+}
+
+void posOfMotors::Send_Rot_Accel(unsigned short accel)
+{
+  char tmp1[15];
+  if (accel == 0)
   {
-	writeString(String(Accel), FootRotAccelAddr);
-    rotAccel = Accel;
-    delay(15);
-	SerL.prepareMessage( 'X', rotAccel);
-    delay(15);
-    SerR.prepareMessage( 'X', rotAccel);
-
+    readString(FootRotAccelAddr, tmp1);
+    rotAccel = atoi(tmp1);
   }
+  else rotAccel = accel;
+  delay(25);
+  SerL.prepareMessage( 'X', rotAccel);
+  delay(25);
+  SerR.prepareMessage( 'X', rotAccel);
 
+}
 
-  void posOfMotors::Send_Rot_Speed(unsigned long speed)
+// save current value of left leg position
+void posOfMotors::SetLeftLegCurrentSteps(const short val)
+{
+  if (val > 0)
   {
-    if(speed == 0)  rotSpeed = readString(FootRotSpeedAddr).toInt();
-    else rotSpeed = speed;
-    delay(15);
-    SerL.prepareMessage( 'S', rotSpeed);
-	delay(15);
-    SerR.prepareMessage( 'S', rotSpeed);
+    fErrorMes("LEFT LEG>0 ERR");
+    return;
   }
+  OldLeftLegCurrentSteps = LeftLegCurrentSteps;
+  LeftLegCurrentSteps = val;
+}
 
-  void posOfMotors::Send_Rot_Accel(unsigned long accel)
+// save current value of right leg posititon
+void posOfMotors::SetRightLegCurrentSteps(const short val)
+{
+  if (val > 0)
   {
-    if(accel == 0) rotAccel = readString(FootRotAccelAddr).toInt();
-	else rotAccel = accel;
-    delay(15);
-	SerL.prepareMessage( 'X', rotAccel);
-    delay(15);
-    SerR.prepareMessage( 'X', rotAccel);
-
+    fErrorMes("RIGHT LEG>0 ERR");
+    return;
   }
-
-  // save current value of left leg position
-  void posOfMotors::SetLeftLegCurrentSteps(long val)
-  {
-    if(val > 0)
-	{
-	   fErrorMes("LEFT LEG>0 ERR");
-	   return;
-	}
-    OldLeftLegCurrentSteps = LeftLegCurrentSteps;
-    LeftLegCurrentSteps = val;
-  }
-
-  // save current value of right leg posititon
-  void posOfMotors::SetRightLegCurrentSteps(long val)
-  {
-    if(val > 0)
-	{
-	   fErrorMes("RIGHT LEG>0 ERR");
-	   return;
-	}
-    OldRightLegCurrentSteps = RightLegCurrentSteps;
-    RightLegCurrentSteps = val;
-  }
+  OldRightLegCurrentSteps = RightLegCurrentSteps;
+  RightLegCurrentSteps = val;
+}
 
 
-  void posOfMotors::Set_BTAHYTb_Speed(unsigned long Speed)
-  {
-    vtagSpeed = Speed;
-	writeString(String(Speed), VtagSpeedAddr);
-  }
-  
-  void posOfMotors::Set_BbITAHYTb_Speed(unsigned long Speed)
-  {
-    vytagSpeed = Speed;
-	writeString(String(Speed), VytagSpeedAddr);
-  }
+void posOfMotors::Set_BTAHYTb_Speed(unsigned short Speed)
+{
+  vtagSpeed = Speed;
+  // char temp1[15];
+  // itoa(Speed, temp1,DEC);
+  writeStringA(Speed, VtagSpeedAddr);
+}
 
-  
-  void posOfMotors::Set_BTAHYTb_Accel(unsigned long Accel)
-  {
-    vtagAccel = Accel;
-	writeString(String(Accel), VtagAccelAddr);	
-  }
+void posOfMotors::Set_BbITAHYTb_Speed(unsigned short Speed)
+{
+  vytagSpeed = Speed;
+  //	char temp1[15];
+  //	itoa(Speed, temp1,DEC);
+  writeStringA(Speed, VytagSpeedAddr);
+}
 
-  void posOfMotors::Set_BbITAHYTb_Accel(unsigned long Accel)
-  {
-    vytagAccel = Accel;
-	writeString(String(Accel), VytagAccelAddr);	
-  }
+
+void posOfMotors::Set_BTAHYTb_Accel(unsigned short Accel)
+{
+  vtagAccel = Accel;
+  //	char temp1[15];
+  //	itoa(Accel, temp1,DEC);
+  writeStringA(Accel, VtagAccelAddr);
+}
+
+void posOfMotors::Set_BbITAHYTb_Accel(unsigned short Accel)
+{
+  vytagAccel = Accel;
+  //	char temp1[15];
+  //	itoa(Accel, temp1,DEC);
+  writeStringA(Accel, VytagAccelAddr);
+}

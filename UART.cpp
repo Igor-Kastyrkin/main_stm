@@ -35,7 +35,7 @@ int8_t UART_Serial::handle_serial(void)
   {
 #ifdef _OTLADKA1_
     Serial1.println("SerialAvailable_");
-	fOtladkaMes("SerialAvailable_");
+    fOtladkaMes("SerialAvailable_");
 #endif
 #ifdef _LED_ON_
     digitalWrite(LED_BUILTIN, LOW);
@@ -62,25 +62,25 @@ int8_t UART_Serial::handle_serial(void)
       delayMicroseconds(byteDelay);
     }
     //label:
-    if(MySerial.available())
-	{
-	  Serial1.print("Shum:");
+    if (MySerial.available())
+    {
+      Serial1.print("Shum:");
       while (MySerial.available())  // читаем лишний мусор
       {
         delayMicroseconds(byteDelay);
         Serial1.print(MySerial.read());
-	  }										   
+      }
       Serial1.println("");
     }
 #ifdef _OTLADKA1_
     Serial1.print("M_in "); // для отладки
-    fOtladkaMes("M_in");	
+    fOtladkaMes("M_in");
     for (int j = 0; j < (Serial_amount - 1); j++)
-	{
+    {
       Serial1.print(tmp_buffer[j]);
-	  fOtladkaMes(tmp_buffer[j]);
+      fOtladkaMes(tmp_buffer[j]);
     }
-	Serial1.println("_"); // для отладки
+    Serial1.println("_"); // для отладки
     Serial1.print("N< "); // для отладки
     Serial1.println(Serial_amount); // для отладки
     fOtladkaMes(Serial_amount);
@@ -185,25 +185,25 @@ int8_t UART_Serial::handle_serial(void)
             Serial1.print(tmp_buffer[j]);
           Serial1.println("_"); // для отладки
           Serial1.print("Lenght:"); // для отладки
-          Serial1.print(String(Serial_amount)); // для отладки
+          Serial1.print(Serial_amount); // для отладки
           Serial1.println("byte_"); // для отладки
           i_ = -1;
       }
-	  if(command == 'E')
-	  {
-	    long a = dtStrIn.dt.data;
-		String b = String("<<LegErr_") /* + String(a)*/ + String(">>_\r\n"); 
-		if(a == 1) Serial1.println("Unknwn cmd");
-		if(a == 2) Serial1.println("EndOfScrew");
-		if(a == 3) Serial1.println("UporMeshaet");
-		if(a == 4) Serial1.println("Unknown err");
-		
-		if(a == 5) Serial1.println("TooBigAngle");
-		if(a == 7) Serial1.println("COM error");
-		if(a == 8) Serial1.println("CRC error");
-		Serial1.println(b);
-		i_ = 0;
-	  }
+      if (command == 'E')
+      {
+        long a = dtStrIn.dt.data;
+        char b[] = "<<LegErr>>_\r\n";
+        if (a == 1) Serial1.println("Unknwn cmd");
+        if (a == 2) Serial1.println("EndOfScrew");
+        if (a == 3) Serial1.println("UporMeshaet");
+        if (a == 4) Serial1.println("Unknown err");
+
+        if (a == 5) Serial1.println("TooBigAngle");
+        if (a == 7) Serial1.println("COM error");
+        if (a == 8) Serial1.println("CRC error");
+        Serial1.println(b);
+        i_ = 0;
+      }
     }
     else
     {
@@ -280,7 +280,7 @@ void UART_Serial::getString1(char &cmd, long &data)
 #ifdef _OTLADKA1_
   Serial1.print("D< ");
   Serial1.println(String(data));
-  fOtladkaMes("D<"+String(data));
+  fOtladkaMes("D<" + String(data));
 #endif
 }
 /*
@@ -346,7 +346,7 @@ void UART_Serial::getString1(char &cmd, long &data)
   #endif
   }
 */
-	// юинт8т переписать в чар	 
+// юинт8т переписать в чар
 void UART_Serial::prepareMessage(uint8_t cmd)
 {
 #ifdef _LED_ON_
@@ -476,8 +476,8 @@ void UART_Serial::prepareMessage(uint8_t cmd, long data)
 UART_Serial SerL(Serial2);
 UART_Serial SerR(Serial3);
 #else
-UART_Serial SerL(Serial2);//SerL(Serial1);
-UART_Serial SerR(Serial3);//SerR(Serial2);
+UART_Serial SerL(Serial1);
+UART_Serial SerR(Serial2);
 #endif
 
 

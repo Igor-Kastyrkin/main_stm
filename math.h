@@ -1,13 +1,19 @@
 
 #ifndef MATH_H
 #define MATH_H
+#include "proc.h"
 
 
-
-long stepDephCalc(long lDist)
-{   if(lDist > (lengthPerLegRot*fullRotationLimit))
-    	lDist = lengthPerLegRot*fullRotationLimit; // 22*4=88
-	return stepsPerLegRot * lDist / lengthPerLegRot;
+template<typename T>
+unsigned short stepDephCalc(const T &lDist)
+{
+  if (lDist > (fullRotLengthLimit))
+  {
+//    lDist = fullRotLengthLimit;      // ограничиваем в случае перехода за границы
+    fErrorMes("Out of max leg dist");
+    return stepsByMillimeters * fullRotLengthLimit;
+  }
+  return stepsByMillimeters * lDist;
 }
 
 
@@ -25,8 +31,8 @@ long angleToStep(unsigned short angle = 1)
     delay(10000);
     return 0;
   }
-  constexpr long result = (long)steps_rev * reductor * m_stp / 360;
-  return result * angle;//55.56*angle;
+  //constexpr long result = (long)steps_rev * reductor * m_stp / 360;
+  return anglePerStep * angle;  //55.56*angle;
 }
 
 #endif

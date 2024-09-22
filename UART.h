@@ -47,21 +47,21 @@ class UART_Serial
       char b[11];
 #pragma pack(pop)
     };
-
-    union unionDtStr3 {
-#pragma pack(push, 1)
-      struct Data {
-        uint8_t dev;
-        char command;
-        long data1;
-        long data2;
-        long data3;
-        char CRC;
-      } dt;
-      char b[15];
-#pragma pack(pop)
-    };
-
+    /*
+        union unionDtStr3 {
+      #pragma pack(push, 1)
+          struct Data {
+            uint8_t dev;
+            char command;
+            long data1;
+            long data2;
+            long data3;
+            char CRC;
+          } dt;
+          char b[15];
+      #pragma pack(pop)
+        };
+    */
     /*
         union unionDtStr4 {
       #pragma pack(push, 1)
@@ -121,13 +121,13 @@ class UART_Serial
     unionDtStr0 dtStrOut0, dtStrIn0;
     unionDtStr  dtStrOut,  dtStrIn;
     unionDtStr2 dtStrOut2, dtStrIn2;
-    unionDtStr3 dtStrOut3, dtStrIn3;
+    //    unionDtStr3 dtStrOut3, dtStrIn3;
     //   unionDtStr4 dtStrOut4, dtStrIn4;
     //    unionDtStr5 dtStrIn5;
     void getString0(char &cmd);
     void getString1(char &cmd, long & data);
     void getString2(char &cmd, long & data1, long & data2);
-    void getString3(char &cmd, long & data1, long & data2, long & data3);
+    //    void getString3(char &cmd, long & data1, long & data2, long & data3);
     //   void getString4(char &cmd, long & dt1, long & dt2, long & dt3, long & dt4);
     //    void getString5(char &cmd, long & dt1, long & dt2, long & dt3, long & dt4, long & dt5, long & dt6);
     //    void prepareMessage0(/*uint8_t dev, */uint8_t cmd, uint8_t length);
